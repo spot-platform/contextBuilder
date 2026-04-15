@@ -1,0 +1,14 @@
+{
+  "naturalness_score": 0.55,
+  "consistency_score": 0.7,
+  "regional_fit_score": 0.9,
+  "persona_fit_score": 0.5,
+  "safety_score": 0.98,
+  "peer_tone_score": 0.48,
+  "reject": true,
+  "reasons": [
+    "톤이 지나치게 기계적",
+    "persona_tone 반영 부족",
+    "프로 강사 어휘가 섞여 있음"
+  ]
+}

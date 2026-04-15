@@ -1,0 +1,35 @@
+{
+  "spot_id": "G_EXERCISE_PARK_MORNING",
+  "region": "수원시 광교동",
+  "category": "exercise",
+  "spot_type": "casual_meetup",
+  "host_persona": {
+    "type": "supporter_coach",
+    "tone": "에너지 있고 격려하는",
+    "communication_style": "리드미컬하고 명확한"
+  },
+  "participants": {
+    "expected_count": 6,
+    "persona_mix": ["morning_active"]
+  },
+  "schedule": {
+    "date": "2026-04-18",
+    "start_time": "07:30",
+    "duration_minutes": 90
+  },
+  "budget": {
+    "price_band": 1,
+    "expected_cost_per_person": 8000
+  },
+  "activity_constraints": {
+    "indoor": false,
+    "beginner_friendly": true,
+    "supporter_required": true
+  },
+  "plan_outline": [
+    "스트레칭으로 워밍업",
+    "메인 활동 함께하기",
+    "정리 운동과 후기 공유"
+  ],
+  "activity_result": null
+}

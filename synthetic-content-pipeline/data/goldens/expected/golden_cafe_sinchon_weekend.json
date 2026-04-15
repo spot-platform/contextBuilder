@@ -1,0 +1,7 @@
+{
+  "spec": "golden_cafe_sinchon_weekend.json",
+  "layer1_schema_pass": true,
+  "layer2_rule_pass": false,
+  "layer2_expected_rule_mismatch": ["region_mismatch"],
+  "comment": "stub default.json text '연무동' vs spec '신촌동' — region_consistency reject 예상."
+}

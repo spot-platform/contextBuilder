@@ -1,0 +1,68 @@
+{
+  "spot_id": "S_0014",
+  "region": "신촌동",
+  "category": "러닝",
+  "spot_type": "casual_meetup",
+  "host_persona": {
+    "type": "supporter_coach",
+    "tone": "친근하고 가벼운 또래 톤",
+    "communication_style": "같이 해보자는 제안형 친구 말투"
+  },
+  "participants": {
+    "expected_count": 4,
+    "persona_mix": []
+  },
+  "schedule": {
+    "date": "2026-04-18",
+    "start_time": "04:00",
+    "duration_minutes": 120
+  },
+  "budget": {
+    "price_band": 2,
+    "expected_cost_per_person": 8932
+  },
+  "activity_constraints": {
+    "indoor": false,
+    "beginner_friendly": true,
+    "supporter_required": true
+  },
+  "plan_outline": [
+    "가볍게 인사하고 오늘 배울 내용 간단 소개",
+    "러닝 함께 해보며 중간 피드백",
+    "마무리 정리하고 다음 세션 제안 혹은 인사"
+  ],
+  "activity_result": {
+    "actual_participants": 2,
+    "no_show_count": 0,
+    "duration_actual_minutes": 105,
+    "issues": [],
+    "overall_sentiment": "neutral"
+  },
+  "skill_topic": "러닝",
+  "host_skill_level": 4,
+  "teach_mode": "small_group",
+  "venue_type": "park",
+  "fee_breakdown": {
+    "peer_labor_fee": 8932,
+    "material_cost": 0,
+    "venue_rental": 0,
+    "equipment_rental": 0
+  },
+  "origination_mode": "offer",
+  "originating_voice": "host",
+  "originating_request_summary": null,
+  "responded_at_tick": null,
+  "is_request_matched": false,
+  "had_renegotiation": false,
+  "renegotiation_history": [],
+  "original_target_partner_count": null,
+  "final_partner_count": null,
+  "bonded_partner_count": 0,
+  "bond_updates_at_settlement": [],
+  "friend_upgrades": [],
+  "referrals_triggered": [],
+  "host_reputation_before": 0.5042,
+  "host_reputation_after": 0.5108,
+  "host_earn_from_this_spot": 17864,
+  "peer_tone_required": true
+}

@@ -1,0 +1,86 @@
+# Layer 3 Cross-Reference 임계값.
+#
+# 출처: synthetic_content_pipeline_plan.md §5 Layer 3 표.
+# 소유자: validator-engineer (Phase 2).
+# 사용처: pipeline.validators.cross_reference.validate_cross_reference()
+#
+# 한 스팟의 feed / detail / plan / messages / review 를 비교할 때
+# deterministic 으로 모순을 잡기 위한 파라미터.
+
+# 지역/키워드 partial_ratio 최소 점수 (rapidfuzz 없으면 difflib 으로 환산).
+fuzzy_threshold: 70
+
+# plan total_duration vs spec.schedule.duration_minutes / detail 설명 내 duration ±분.
+duration_tolerance_minutes: 5
+
+# detail.cost_breakdown 합계 vs spec.budget.expected_cost_per_person 배수 범위.
+# 금액 일관성에서 Layer 2(rules.py) 보다 타이트하게 (±30% → 0.7/1.5).
+price_tolerance_low: 0.7
+price_tolerance_high: 1.5
+
+# feed.time_label 에 적힌 시각과 messages.day_of_notice 내 시각의 허용 편차(분).
+time_tolerance_minutes: 30
+
+# review 총원 긍정 금기어 — activity_result.no_show_count > 0 이면 본문에 등장 금지.
+forbidden_unanimous_terms:
+  - "전원"
+  - "모두"
+  - "빠짐없이"
+  - "모든 참가자"
+  - "한 명도 빠지지"
+
+# 카테고리 별 대표 키워드. detail↔review 활동 종류 일치(feed↔detail 카테고리 일치) 체크용.
+# rules.py::rule_category_consistency 의 feed_rules.yaml deny/allow 와 역할이 겹치지만,
+# cross-reference 는 "활동 종류 모순" 을 잡기 위해 allow 키워드만 별도로 둔다.
+category_keywords:
+  food:
+    - "식사"
+    - "밥"
+    - "먹"
+    - "맛"
+    - "저녁"
+    - "점심"
+    - "브런치"
+    - "한 끼"
+    - "한끼"
+  cafe:
+    - "카페"
+    - "커피"
+    - "디저트"
+    - "빵"
+    - "차"
+  exercise:
+    - "운동"
+    - "러닝"
+    - "걷"
+    - "등산"
+    - "요가"
+    - "스트레칭"
+    - "헬스"
+  nature:
+    - "산책"
+    - "공원"
+    - "자연"
+    - "숲"
+    - "나들이"
+    - "등산"
+  bar:
+    - "술"
+    - "와인"
+    - "맥주"
+    - "칵테일"
+    - "바"
+  culture:
+    - "전시"
+    - "공연"
+    - "영화"
+    - "책"
+    - "문화"
+    - "그림"
+    - "드로잉"
+    - "스케치"
+    - "미술"
+
+# feed↔messages, feed↔detail 등에서 "다른 카테고리 키워드가 역류" 할 때 판정 기준.
+# 최소 N 개 대표 키워드가 review/detail 에서 발견되어야 같은 활동으로 판정.
+min_category_keyword_hits: 1

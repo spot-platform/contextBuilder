@@ -1,0 +1,22 @@
+{
+  "spot_id": "S_0021",
+  "origination_mode": "offer",
+  "skill_topic": "타로",
+  "teach_mode": "1:1",
+  "venue_type": "cafe",
+  "fee_breakdown_total": 15652,
+  "peer_labor_fee": 13652,
+  "peer_labor_share_min": 0.4,
+  "passthrough_total": 2000,
+  "price_band": 4,
+  "notes": {
+    "title_max_len": 40,
+    "summary_max_len": 120,
+    "forbidden_tokens": [
+      "할인",
+      "특가",
+      "!!",
+      "100%"
+    ]
+  }
+}

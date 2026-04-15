@@ -1,0 +1,10 @@
+{
+  "steps": [
+    {"time": "19:00", "activity": "식당 앞 모여 인사 나누기"},
+    {"time": "19:10", "activity": "메뉴 주문하며 간단한 소개"},
+    {"time": "19:30", "activity": "편안하게 식사하며 대화"},
+    {"time": "20:30", "activity": "오늘 하루 이야기 나누기"},
+    {"time": "20:50", "activity": "가볍게 마무리 인사"}
+  ],
+  "total_duration_minutes": 120
+}

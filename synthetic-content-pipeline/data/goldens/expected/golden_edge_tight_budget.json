@@ -1,0 +1,7 @@
+{
+  "spec": "golden_edge_tight_budget.json",
+  "layer1_schema_pass": true,
+  "layer2_rule_pass": false,
+  "layer2_expected_rule_mismatch": ["region_mismatch", "price_out_of_range"],
+  "comment": "stub default.json price_label '1.5~2만원' (15000~20000원). spec expected_cost_per_person=9000 기준 허용 범위 4500~22500 → 통과. 하지만 region 매탄동 불일치로 region_mismatch 발생 예상."
+}

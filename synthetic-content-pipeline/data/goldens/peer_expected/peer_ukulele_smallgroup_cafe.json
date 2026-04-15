@@ -1,0 +1,22 @@
+{
+  "spot_id": "S_0060",
+  "origination_mode": "offer",
+  "skill_topic": "우쿨렐레",
+  "teach_mode": "small_group",
+  "venue_type": "cafe",
+  "fee_breakdown_total": 10644,
+  "peer_labor_fee": 8644,
+  "peer_labor_share_min": 0.4,
+  "passthrough_total": 2000,
+  "price_band": 3,
+  "notes": {
+    "title_max_len": 40,
+    "summary_max_len": 120,
+    "forbidden_tokens": [
+      "할인",
+      "특가",
+      "!!",
+      "100%"
+    ]
+  }
+}

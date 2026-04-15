@@ -1,0 +1,35 @@
+{
+  "spot_id": "G_FOOD_JANGAN_WEEKDAY",
+  "region": "수원시 장안동",
+  "category": "food",
+  "spot_type": "casual_meetup",
+  "host_persona": {
+    "type": "supporter_neutral",
+    "tone": "편안하고 차분한",
+    "communication_style": "정돈된 말투"
+  },
+  "participants": {
+    "expected_count": 5,
+    "persona_mix": ["casual_foodie"]
+  },
+  "schedule": {
+    "date": "2026-04-15",
+    "start_time": "12:30",
+    "duration_minutes": 90
+  },
+  "budget": {
+    "price_band": 3,
+    "expected_cost_per_person": 27000
+  },
+  "activity_constraints": {
+    "indoor": true,
+    "beginner_friendly": true,
+    "supporter_required": true
+  },
+  "plan_outline": [
+    "가볍게 인사",
+    "점심 식사",
+    "마무리 인사"
+  ],
+  "activity_result": null
+}

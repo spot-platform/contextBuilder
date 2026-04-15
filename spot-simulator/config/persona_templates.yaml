@@ -1,0 +1,236 @@
+# Persona templates — Phase 1~3 (legacy) + Phase Peer-A (skills / assets).
+#
+# Filled by sim-data-integrator on top of sim-infra-architect's schema skeleton.
+#
+# ─── Phase 1~3 legacy invariants (preserved as-is — DO NOT CHANGE) ─────
+#   1) host_score has a detectable spread (homebody < weekend_explorer < planner
+#      < night_social < spontaneous) — sim-analyst-qa uses this to validate the
+#      host_score -> CREATE_SPOT correlation check.
+#   2) dawn time_preferences are all < 0.1 so the "dawn filter" validation passes.
+#   3) weekday/weekend coverage reflects the persona's real-world archetype.
+#   4) budget_level spans 1..3 so budget_penalty() has variance.
+#
+# schedule_weights keys follow the format "{day_type}_{time_slot}" where
+#   day_type  in {weekday, weekend}
+#   time_slot in {dawn, morning, late_morning, lunch, afternoon, evening, night}
+# All 14 keys are always present for each persona.
+#
+# ─── Phase Peer-A append-only fields (plan §4 / §4-1 / §4-3) ───────────
+#   `_base_persona` anchor supplies defaults for peer-pivot fields.
+#   YAML merge key `<<: *base_persona` merges those defaults **without
+#   overwriting** any key already set on the persona — so every legacy
+#   field (host_score / join_score / home_region / preferred_categories /
+#   budget_level / time_preferences) is untouched.
+#
+#   peer fields added per persona:
+#     role_preference, wallet_monthly, pocket_money_motivation,
+#     time_budget_weekday, time_budget_weekend, space_level, space_type,
+#     equipment, social_capital, reputation_score, skills{}
+#
+#   Invariants (loader checks — plan §4-3):
+#     - skills dict keys  ∈ skills_catalog.yaml keys (=== SkillTopic values)
+#     - equipment items   ∈ skills_catalog.yaml keys
+#     - home_region       ∈ region_features.json region_ids
+#     - each skill teach / learn appetite in [0,1]
+#     - non-zero skill entries count in [3, 6]
+#     - wallet_monthly    ∈ [10000, 60000]
+#     - pocket_money_motivation ∈ [0, 1]
+
+# ─────────────────────────────────────────────────────────────────────
+# Base template (anchor) — plan §4-1
+# ─────────────────────────────────────────────────────────────────────
+_base_persona: &base_persona
+  role_preference: "both"
+  pocket_money_motivation: 0.50
+  wallet_monthly: 25000
+  time_budget_weekday: 3
+  time_budget_weekend: 10
+  space_level: 1
+  space_type: "cafe"
+  equipment: []
+  social_capital: 0.5
+  reputation_score: 0.5
+  skills: {}
+
+# ─────────────────────────────────────────────────────────────────────
+# MVP 5 persona (legacy fields preserved verbatim + peer fields merged)
+# ─────────────────────────────────────────────────────────────────────
+
+night_social:
+  # --- Phase 1~3 legacy fields (unchanged) ---
+  host_score: 0.70
+  join_score: 0.75
+  home_region: "emd_yeonmu"
+  preferred_categories: ["food", "bar", "cafe"]
+  budget_level: 2
+  time_preferences:
+    weekday_dawn: 0.02
+    weekday_morning: 0.05
+    weekday_late_morning: 0.10
+    weekday_lunch: 0.25
+    weekday_afternoon: 0.20
+    weekday_evening: 0.85
+    weekday_night: 0.90
+    weekend_dawn: 0.03
+    weekend_morning: 0.10
+    weekend_late_morning: 0.20
+    weekend_lunch: 0.35
+    weekend_afternoon: 0.45
+    weekend_evening: 0.90
+    weekend_night: 0.95
+  # --- Phase Peer-A extensions ---
+  <<: *base_persona
+  wallet_monthly: 30000
+  pocket_money_motivation: 0.75
+  space_level: 2
+  space_type: "home"
+  social_capital: 0.65
+  equipment: ["핸드드립", "보드게임"]
+  skills:
+    홈쿡:     { level: 3, years_exp: 2.0, teach: 0.65, learn: 0.20 }
+    핸드드립: { level: 4, years_exp: 4.0, teach: 0.80, learn: 0.10 }
+    보드게임: { level: 3, years_exp: 3.0, teach: 0.55, learn: 0.25 }
+    기타:     { level: 0, years_exp: 0.0, teach: 0.00, learn: 0.70 }
+
+weekend_explorer:
+  # --- Phase 1~3 legacy fields (unchanged) ---
+  host_score: 0.50
+  join_score: 0.80
+  home_region: "emd_sinchon"
+  preferred_categories: ["exercise", "nature", "cafe"]
+  budget_level: 2
+  time_preferences:
+    weekday_dawn: 0.02
+    weekday_morning: 0.25
+    weekday_late_morning: 0.20
+    weekday_lunch: 0.30
+    weekday_afternoon: 0.25
+    weekday_evening: 0.35
+    weekday_night: 0.15
+    weekend_dawn: 0.05
+    weekend_morning: 0.70
+    weekend_late_morning: 0.80
+    weekend_lunch: 0.70
+    weekend_afternoon: 0.85
+    weekend_evening: 0.75
+    weekend_night: 0.30
+  # --- Phase Peer-A extensions ---
+  <<: *base_persona
+  wallet_monthly: 40000
+  pocket_money_motivation: 0.55
+  time_budget_weekend: 12
+  space_level: 1
+  space_type: "park"
+  social_capital: 0.55
+  equipment: ["러닝", "가벼운 등산", "스마트폰 사진"]
+  skills:
+    러닝:          { level: 4, years_exp: 3.5, teach: 0.75, learn: 0.15 }
+    가벼운 등산:   { level: 4, years_exp: 4.0, teach: 0.70, learn: 0.20 }
+    스마트폰 사진: { level: 3, years_exp: 2.0, teach: 0.55, learn: 0.30 }
+    영어 프리토킹: { level: 2, years_exp: 1.0, teach: 0.25, learn: 0.50 }
+
+planner:
+  # --- Phase 1~3 legacy fields (unchanged) ---
+  host_score: 0.60
+  join_score: 0.40
+  home_region: "emd_jangan"
+  preferred_categories: ["food", "culture"]
+  budget_level: 3
+  time_preferences:
+    weekday_dawn: 0.02
+    weekday_morning: 0.15
+    weekday_late_morning: 0.20
+    weekday_lunch: 0.35
+    weekday_afternoon: 0.30
+    weekday_evening: 0.55
+    weekday_night: 0.35
+    weekend_dawn: 0.03
+    weekend_morning: 0.35
+    weekend_late_morning: 0.50
+    weekend_lunch: 0.60
+    weekend_afternoon: 0.65
+    weekend_evening: 0.65
+    weekend_night: 0.40
+  # --- Phase Peer-A extensions ---
+  <<: *base_persona
+  wallet_monthly: 50000
+  pocket_money_motivation: 0.40
+  space_level: 2
+  space_type: "home"
+  social_capital: 0.45
+  equipment: ["드로잉", "캘리그라피", "코딩 입문"]
+  skills:
+    드로잉:     { level: 4, years_exp: 5.0, teach: 0.70, learn: 0.10 }
+    캘리그라피: { level: 4, years_exp: 4.0, teach: 0.65, learn: 0.15 }
+    코딩 입문:  { level: 3, years_exp: 3.0, teach: 0.45, learn: 0.25 }
+    요가 입문:  { level: 2, years_exp: 1.0, teach: 0.10, learn: 0.60 }
+
+spontaneous:
+  # --- Phase 1~3 legacy fields (unchanged) ---
+  host_score: 0.75
+  join_score: 0.65
+  home_region: "emd_yeonmu"
+  preferred_categories: ["food", "bar", "exercise"]
+  budget_level: 1
+  time_preferences:
+    weekday_dawn: 0.03
+    weekday_morning: 0.20
+    weekday_late_morning: 0.30
+    weekday_lunch: 0.45
+    weekday_afternoon: 0.40
+    weekday_evening: 0.85
+    weekday_night: 0.80
+    weekend_dawn: 0.05
+    weekend_morning: 0.30
+    weekend_late_morning: 0.45
+    weekend_lunch: 0.55
+    weekend_afternoon: 0.60
+    weekend_evening: 0.80
+    weekend_night: 0.75
+  # --- Phase Peer-A extensions ---
+  <<: *base_persona
+  wallet_monthly: 22000
+  pocket_money_motivation: 0.85
+  social_capital: 0.70
+  space_type: "cafe"
+  equipment: ["우쿨렐레", "보드게임"]
+  skills:
+    우쿨렐레: { level: 3, years_exp: 2.5, teach: 0.60, learn: 0.25 }
+    홈쿡:     { level: 2, years_exp: 1.0, teach: 0.25, learn: 0.55 }
+    보드게임: { level: 4, years_exp: 3.5, teach: 0.75, learn: 0.20 }
+    볼더링:   { level: 2, years_exp: 1.0, teach: 0.20, learn: 0.65 }
+
+homebody:
+  # --- Phase 1~3 legacy fields (unchanged) ---
+  host_score: 0.15
+  join_score: 0.25
+  home_region: "emd_sinchon"
+  preferred_categories: ["cafe", "culture"]
+  budget_level: 1
+  time_preferences:
+    weekday_dawn: 0.01
+    weekday_morning: 0.05
+    weekday_late_morning: 0.08
+    weekday_lunch: 0.12
+    weekday_afternoon: 0.10
+    weekday_evening: 0.20
+    weekday_night: 0.15
+    weekend_dawn: 0.02
+    weekend_morning: 0.10
+    weekend_late_morning: 0.15
+    weekend_lunch: 0.20
+    weekend_afternoon: 0.25
+    weekend_evening: 0.25
+    weekend_night: 0.15
+  # --- Phase Peer-A extensions ---
+  <<: *base_persona
+  wallet_monthly: 15000
+  space_level: 2
+  space_type: "home"
+  social_capital: 0.35
+  equipment: ["홈베이킹", "원예", "타로"]
+  skills:
+    홈베이킹:  { level: 3, years_exp: 2.5, teach: 0.40, learn: 0.30 }
+    원예:      { level: 4, years_exp: 4.0, teach: 0.55, learn: 0.20 }
+    타로:      { level: 3, years_exp: 2.0, teach: 0.45, learn: 0.25 }
+    요가 입문: { level: 2, years_exp: 1.0, teach: 0.15, learn: 0.50 }

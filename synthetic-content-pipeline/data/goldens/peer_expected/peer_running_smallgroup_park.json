@@ -1,0 +1,22 @@
+{
+  "spot_id": "S_0014",
+  "origination_mode": "offer",
+  "skill_topic": "러닝",
+  "teach_mode": "small_group",
+  "venue_type": "park",
+  "fee_breakdown_total": 8932,
+  "peer_labor_fee": 8932,
+  "peer_labor_share_min": 0.4,
+  "passthrough_total": 0,
+  "price_band": 2,
+  "notes": {
+    "title_max_len": 40,
+    "summary_max_len": 120,
+    "forbidden_tokens": [
+      "할인",
+      "특가",
+      "!!",
+      "100%"
+    ]
+  }
+}

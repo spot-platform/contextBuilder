@@ -1,0 +1,68 @@
+{
+  "spot_id": "S_0279",
+  "region": "신촌동",
+  "category": "홈베이킹",
+  "spot_type": "casual_meetup",
+  "host_persona": {
+    "type": "supporter_neutral",
+    "tone": "친근하고 가벼운 또래 톤",
+    "communication_style": "같이 해보자는 제안형 친구 말투"
+  },
+  "participants": {
+    "expected_count": 4,
+    "persona_mix": []
+  },
+  "schedule": {
+    "date": "2026-04-20",
+    "start_time": "13:30",
+    "duration_minutes": 120
+  },
+  "budget": {
+    "price_band": 3,
+    "expected_cost_per_person": 12464
+  },
+  "activity_constraints": {
+    "indoor": true,
+    "beginner_friendly": true,
+    "supporter_required": true
+  },
+  "plan_outline": [
+    "가볍게 인사하고 오늘 배울 내용 간단 소개",
+    "홈베이킹 함께 해보며 중간 피드백",
+    "마무리 정리하고 다음 세션 제안 혹은 인사"
+  ],
+  "activity_result": {
+    "actual_participants": 2,
+    "no_show_count": 1,
+    "duration_actual_minutes": 120,
+    "issues": [],
+    "overall_sentiment": "negative"
+  },
+  "skill_topic": "홈베이킹",
+  "host_skill_level": 3,
+  "teach_mode": "small_group",
+  "venue_type": "home",
+  "fee_breakdown": {
+    "peer_labor_fee": 7964,
+    "material_cost": 4500,
+    "venue_rental": 0,
+    "equipment_rental": 0
+  },
+  "origination_mode": "offer",
+  "originating_voice": "host",
+  "originating_request_summary": null,
+  "responded_at_tick": null,
+  "is_request_matched": false,
+  "had_renegotiation": false,
+  "renegotiation_history": [],
+  "original_target_partner_count": null,
+  "final_partner_count": null,
+  "bonded_partner_count": 0,
+  "bond_updates_at_settlement": [],
+  "friend_upgrades": [],
+  "referrals_triggered": [],
+  "host_reputation_before": 0.4848,
+  "host_reputation_after": 0.4734,
+  "host_earn_from_this_spot": 15928,
+  "peer_tone_required": true
+}

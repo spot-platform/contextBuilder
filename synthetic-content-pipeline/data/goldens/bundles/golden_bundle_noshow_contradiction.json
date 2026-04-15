@@ -1,0 +1,88 @@
+{
+  "_comment": "Layer 3 negative bundle for review↔activity_result pair. spec_inline 으로 activity_result.no_show_count=2 를 강제. review_text 에 '전원' 표현이 들어가 review_noshow_contradiction reject 가 발생해야 한다.",
+  "spec_inline": {
+    "spot_id": "G_NOSHOW_BUNDLE",
+    "region": "수원시 연무동",
+    "category": "food",
+    "spot_type": "casual_meetup",
+    "host_persona": {
+      "type": "supporter_teacher",
+      "tone": "친절하고 실용적",
+      "communication_style": "가볍고 직접적"
+    },
+    "participants": {
+      "expected_count": 4,
+      "persona_mix": ["night_social"]
+    },
+    "schedule": {
+      "date": "2026-04-17",
+      "start_time": "19:00",
+      "duration_minutes": 120
+    },
+    "budget": {
+      "price_band": 2,
+      "expected_cost_per_person": 18000
+    },
+    "activity_constraints": {
+      "indoor": true,
+      "beginner_friendly": true,
+      "supporter_required": true
+    },
+    "plan_outline": ["가볍게 인사", "식사와 대화", "다음 모임 취향 공유"],
+    "activity_result": {
+      "actual_participants": 2,
+      "no_show_count": 2,
+      "duration_actual_minutes": 110,
+      "issues": [],
+      "overall_sentiment": "neutral"
+    }
+  },
+  "feed": {
+    "title": "연무동 저녁 한 끼 같이할 4명 모집",
+    "summary": "수원시 연무동에서 4/17(금) 저녁에 가볍게 한 끼 나누는 4인 식사 모임이에요.",
+    "tags": ["연무동", "food", "evening", "초면환영"],
+    "price_label": "1인 약 1.8만원",
+    "region_label": "수원시 연무동",
+    "time_label": "4/17(금) 19:00",
+    "status": "recruiting",
+    "supporter_label": "supporter_teacher"
+  },
+  "detail": {
+    "title": "연무동 저녁 한 끼 같이할 4명 모집 - 취향이 통하는 소규모 식사 모임",
+    "description": "퇴근 후 혼자 먹기 아쉬운 저녁, 연무동 근처에서 취향이 맞는 4명이 가볍게 모여 식사하는 모임이에요. 부담 없는 분위기에서 오늘 있었던 이야기, 요즘 관심 있는 것들을 나누다 보면 어느새 친해져 있을 거예요. 처음 오시는 분도 어색하지 않게 진행하니 편하게 신청해 주세요.",
+    "activity_purpose": "퇴근 후 가볍게 식사하며 연무동 이웃과 취향을 나누는 것",
+    "progress_style": "19:00 장소 집결 후 간단히 인사, 메뉴 주문, 자유로운 식사와 대화, 마무리 취향 공유 순으로 진행합니다. 호스트가 어색한 침묵이 없도록 부드럽게 대화를 이끌어요.",
+    "materials": [],
+    "target_audience": "연무동 근처 직장인/거주자 중 초면 모임이 괜찮은 분",
+    "cost_breakdown": [
+      {"item": "식사비 (1인)", "amount": 16000},
+      {"item": "음료/차 (1인)", "amount": 2000}
+    ],
+    "host_intro": "연무동에서 3년째 살고 있는 supporter_teacher 호스트예요. 평소 동네 맛집 탐방이 취미라 편안한 식사 자리를 만들어 드릴게요. 처음 오시는 분도 금방 적응하실 수 있어요.",
+    "policy_notes": "당일 노쇼는 다음 모집부터 참여가 제한될 수 있어요."
+  },
+  "plan": {
+    "steps": [
+      {"time": "19:00", "activity": "연무동 식당 집결 및 인사"},
+      {"time": "19:10", "activity": "메뉴 주문과 아이스브레이킹"},
+      {"time": "19:30", "activity": "식사와 자유로운 대화"},
+      {"time": "20:30", "activity": "오늘의 취향 한 문장 공유"},
+      {"time": "20:50", "activity": "마무리 인사 및 해산"}
+    ],
+    "total_duration_minutes": 120
+  },
+  "messages": {
+    "recruiting_intro": "연무동에서 4/17(금) 저녁 7시에 가볍게 식사할 4명을 모집해요. 퇴근 후 혼자 먹기 아쉬운 분들 환영합니다.",
+    "join_approval": "신청 감사해요. 4/17(금) 19:00 연무동 식당 앞에서 봬요. 자리 확정됐어요.",
+    "day_of_notice": "오늘 저녁 7시 연무동 식당에서 봬요. 혹시 늦으시면 미리 알려주시고 편한 차림으로 오세요.",
+    "post_thanks": "오늘 연무동 저녁 모임 함께해 주셔서 고맙습니다. 다음에도 편하게 뵐 수 있기를 기대할게요."
+  },
+  "review": {
+    "rating": 4,
+    "review_text": "연무동에서 부담 없이 저녁 식사 모임을 했어요. 전원 즐겁게 식사를 나눴고, 호스트분이 분위기를 잘 풀어주셔서 초면인데도 편안했습니다. 다음에도 참여해 볼 생각이에요.",
+    "satisfaction_tags": ["분위기좋음", "호스트친절", "동네맛집"],
+    "recommend": true,
+    "will_rejoin": true,
+    "sentiment": "positive"
+  }
+}

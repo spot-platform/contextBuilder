@@ -1,0 +1,22 @@
+{
+  "spot_id": "S_0279",
+  "origination_mode": "offer",
+  "skill_topic": "홈베이킹",
+  "teach_mode": "small_group",
+  "venue_type": "home",
+  "fee_breakdown_total": 12464,
+  "peer_labor_fee": 7964,
+  "peer_labor_share_min": 0.4,
+  "passthrough_total": 4500,
+  "price_band": 3,
+  "notes": {
+    "title_max_len": 40,
+    "summary_max_len": 120,
+    "forbidden_tokens": [
+      "할인",
+      "특가",
+      "!!",
+      "100%"
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "spec": "golden_food_jangan_weekday.json",
+  "layer1_schema_pass": true,
+  "layer2_rule_pass": false,
+  "layer2_expected_rule_mismatch": ["region_mismatch"],
+  "comment": "stub default.json은 '연무동' 텍스트. region='장안동' 와 불일치 — Layer 2 region_consistency rule 에서 reject 예상."
+}

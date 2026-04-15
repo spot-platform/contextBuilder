@@ -1,0 +1,35 @@
+{
+  "spot_id": "G_CAFE_SINCHON_WEEKEND",
+  "region": "수원시 신촌동",
+  "category": "cafe",
+  "spot_type": "casual_meetup",
+  "host_persona": {
+    "type": "supporter_neutral",
+    "tone": "차분하고 부드러운",
+    "communication_style": "여유 있는 톤"
+  },
+  "participants": {
+    "expected_count": 4,
+    "persona_mix": ["quiet_reader", "casual_foodie"]
+  },
+  "schedule": {
+    "date": "2026-04-18",
+    "start_time": "14:30",
+    "duration_minutes": 120
+  },
+  "budget": {
+    "price_band": 2,
+    "expected_cost_per_person": 15000
+  },
+  "activity_constraints": {
+    "indoor": true,
+    "beginner_friendly": true,
+    "supporter_required": true
+  },
+  "plan_outline": [
+    "가볍게 인사",
+    "음료 주문 후 자기소개",
+    "취향 카드 한 장씩 공유"
+  ],
+  "activity_result": null
+}

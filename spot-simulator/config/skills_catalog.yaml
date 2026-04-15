@@ -1,0 +1,161 @@
+# Skills catalog — plan §3-4 (Fee 2층 구조 + 실비 프로파일).
+#
+# 18 SkillTopic × (material / venue / equipment / mode distribution).
+#
+# 필드 규약:
+#   material_cost_per_partner: int      — 식재료 / 물감 / 씨앗 등 실비 (원/인)
+#   studio_rental_total:       int      — 스튜디오 대관료 총액 (원). 미사용 시 생략.
+#   gym_rental_total:          int      — 클라이밍장/체육관 대관료 총액 (원). 미사용 시 생략.
+#   equipment_rental_per_partner: int   — 장비 대여료 (원/인). host 미보유 시만 청구.
+#   default_venue:             str      — "cafe" | "home" | "studio" | "park" | "gym"
+#   teach_mode_distribution:   dict     — {mode: prob}. 합 == 1.0 (loader 검증).
+#   level_floor_to_teach:      int      — 이 level 미만이면 teach 불가 (p_teach=0).
+#
+# 특수 venue 규칙 (엔진의 suggest_fee_breakdown 에서 처리):
+#   - home / park  : venue_rental = 0
+#   - cafe         : venue_rental = 2000 // expected_partners (catalog 에 명시 안 함)
+#   - studio       : venue_rental = studio_rental_total // expected_partners
+#   - gym          : venue_rental = gym_rental_total // expected_partners
+#
+# material_cost_per_partner 은 **필수** 키. 0 이어도 반드시 선언.
+
+# ───────── 음악 / 악기 ─────────
+
+기타:
+  material_cost_per_partner: 0
+  equipment_rental_per_partner: 3000     # 기타 미보유 partner 용 (host 보유 시 0)
+  default_venue: "cafe"
+  teach_mode_distribution: { "1:1": 0.6, "small_group": 0.3, "workshop": 0.1 }
+  level_floor_to_teach: 3
+
+우쿨렐레:
+  material_cost_per_partner: 0
+  equipment_rental_per_partner: 2000
+  default_venue: "cafe"
+  teach_mode_distribution: { "1:1": 0.5, "small_group": 0.4, "workshop": 0.1 }
+  level_floor_to_teach: 3
+
+피아노 기초:
+  material_cost_per_partner: 0
+  studio_rental_total: 12000             # 연습실 시간당 (실비)
+  equipment_rental_per_partner: 0
+  default_venue: "studio"
+  teach_mode_distribution: { "1:1": 0.7, "small_group": 0.3 }
+  level_floor_to_teach: 3
+
+# ───────── 요리 / 베이킹 ─────────
+
+홈쿡:
+  material_cost_per_partner: 3500        # 식재료 1인분
+  equipment_rental_per_partner: 0
+  default_venue: "home"
+  teach_mode_distribution: { "small_group": 0.7, "workshop": 0.3 }
+  level_floor_to_teach: 2
+
+홈베이킹:
+  material_cost_per_partner: 4500        # 밀가루 + 버터 + 토핑 1인분
+  equipment_rental_per_partner: 0
+  default_venue: "home"
+  teach_mode_distribution: { "small_group": 0.6, "workshop": 0.3, "1:1": 0.1 }
+  level_floor_to_teach: 2
+
+핸드드립:
+  material_cost_per_partner: 2500        # 원두 + 필터 1인분
+  equipment_rental_per_partner: 0
+  default_venue: "home"
+  teach_mode_distribution: { "small_group": 0.6, "1:1": 0.4 }
+  level_floor_to_teach: 3
+
+# ───────── 운동 / 신체 ─────────
+
+러닝:
+  material_cost_per_partner: 0
+  equipment_rental_per_partner: 0
+  default_venue: "park"
+  teach_mode_distribution: { "small_group": 0.7, "workshop": 0.3 }
+  level_floor_to_teach: 2
+
+요가 입문:
+  material_cost_per_partner: 0
+  studio_rental_total: 20000             # 요가 스튜디오 시간당
+  equipment_rental_per_partner: 1500     # 매트 대여
+  default_venue: "studio"
+  teach_mode_distribution: { "small_group": 0.8, "workshop": 0.2 }
+  level_floor_to_teach: 3
+
+볼더링:
+  material_cost_per_partner: 0
+  gym_rental_total: 14000                # 클라이밍장 시간당
+  equipment_rental_per_partner: 2500     # 클라이밍 슈즈 대여
+  default_venue: "gym"
+  teach_mode_distribution: { "small_group": 0.7, "1:1": 0.2, "workshop": 0.1 }
+  level_floor_to_teach: 3
+
+가벼운 등산:
+  material_cost_per_partner: 0
+  equipment_rental_per_partner: 0
+  default_venue: "park"
+  teach_mode_distribution: { "small_group": 0.7, "workshop": 0.3 }
+  level_floor_to_teach: 2
+
+# ───────── 창작 / 예술 ─────────
+
+드로잉:
+  material_cost_per_partner: 3000        # 종이 + 연필 + 파스텔
+  equipment_rental_per_partner: 0
+  default_venue: "home"
+  teach_mode_distribution: { "small_group": 0.6, "workshop": 0.4 }
+  level_floor_to_teach: 3
+
+스마트폰 사진:
+  material_cost_per_partner: 0
+  equipment_rental_per_partner: 0
+  default_venue: "park"
+  teach_mode_distribution: { "small_group": 0.6, "workshop": 0.4 }
+  level_floor_to_teach: 2
+
+캘리그라피:
+  material_cost_per_partner: 2500        # 붓펜 + 한지
+  equipment_rental_per_partner: 0
+  default_venue: "home"
+  teach_mode_distribution: { "small_group": 0.6, "workshop": 0.4 }
+  level_floor_to_teach: 3
+
+# ───────── 언어 / 학습 ─────────
+
+영어 프리토킹:
+  material_cost_per_partner: 0
+  equipment_rental_per_partner: 0
+  default_venue: "cafe"
+  teach_mode_distribution: { "small_group": 0.7, "1:1": 0.3 }
+  level_floor_to_teach: 2
+
+코딩 입문:
+  material_cost_per_partner: 0
+  equipment_rental_per_partner: 0
+  default_venue: "cafe"
+  teach_mode_distribution: { "1:1": 0.5, "small_group": 0.5 }
+  level_floor_to_teach: 3
+
+# ───────── 생활 ─────────
+
+원예:
+  material_cost_per_partner: 5000        # 씨앗 + 흙 + 화분
+  equipment_rental_per_partner: 0
+  default_venue: "home"
+  teach_mode_distribution: { "small_group": 0.7, "workshop": 0.3 }
+  level_floor_to_teach: 3
+
+보드게임:
+  material_cost_per_partner: 0
+  equipment_rental_per_partner: 0
+  default_venue: "cafe"
+  teach_mode_distribution: { "small_group": 0.7, "workshop": 0.3 }
+  level_floor_to_teach: 2
+
+타로:
+  material_cost_per_partner: 0
+  equipment_rental_per_partner: 0
+  default_venue: "cafe"
+  teach_mode_distribution: { "1:1": 0.8, "small_group": 0.2 }
+  level_floor_to_teach: 3

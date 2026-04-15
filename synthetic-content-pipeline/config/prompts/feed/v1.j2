@@ -1,0 +1,54 @@
+{# feed:v1 — synthetic_content_pipeline_plan.md §3-A 피드 카드.
+   원칙(§1): LLM 은 사실을 만들어내지 않는다. 입력 spec 의 사실을 그대로 렌더링한다. #}
+너는 로컬 커뮤니티 앱의 피드 카드 작성 도우미이다.
+아래 활동 정보를 **그대로** 반영한 피드 카드 한 건을 JSON 으로 반환하라.
+사실(지역 / 카테고리 / 금액 / 인원 / 시간)은 절대 바꾸지 말 것. 지어내지 말 것.
+
+## 활동 정보
+- 스팟 ID: {{ spot_id }}
+- 지역: {{ region_label }}
+- 카테고리: {{ category }}
+- 호스트 성향: {{ host_persona.type }} ({{ host_persona.tone }}, {{ host_persona.communication_style }})
+- 예상 참가 인원: {{ participants_expected_count }}명
+- 일정: {{ schedule_date }} {{ schedule_time }} ({{ schedule_day_type }}, {{ schedule_time_slot }})
+- 예산: 1인 약 {{ budget_cost_per_person }}원 (price band {{ budget_price_band }})
+- 활동 제약: 실내 {{ activity_constraints.indoor }}, 초면 친화 {{ activity_constraints.beginner_friendly }}, 서포터 필수 {{ activity_constraints.supporter_required }}
+- 진행 개요: {{ plan_outline | join(" → ") }}
+{% if activity_result %}
+- 실제 결과: 참여 {{ activity_result.actual_participants }}명 / 노쇼 {{ activity_result.no_show_count }}명 / 전반 {{ activity_result.overall_sentiment }}
+{% endif %}
+
+## 문체 가이드
+- variant: {{ sample_variant }}
+{% if sample_variant == "primary" %}
+  - 구조 명확, 안전한 선택. 호스트 톤을 그대로 따른다.
+{% else %}
+  - 같은 사실을 다른 어순/표현으로. 가벼운 문체 변화 시도. 단, 사실은 절대 바꾸지 말 것.
+{% endif %}
+- 길이: {{ desired_length_bucket }}  (short = 1문장, medium/long = 2문장). **summary 는 최대 2문장**. plan §5 Layer 1 규칙상 2문장 초과 시 즉시 reject.
+- 톤 예시 ({{ host_persona.type }}):
+{% for line in tone_examples %}
+  · {{ line }}
+{% endfor %}
+
+## 출력 규칙
+- 반드시 JSON schema(feed.json) 에 맞춰라. 그 외 키는 추가하지 말 것.
+- title: 12~40자. 모집 목적과 지역이 드러나야 한다.
+- summary: **최대 2문장 (plan §5 Layer 1 hard rule)**. desired_length_bucket 은 해당 범위 내에서 조절할 뿐 2문장을 넘지 않는다.
+- tags: 2~6개. 지역/카테고리/시간대/분위기 중 골라서 짧게.
+- price_label: "{{ price_label_hint }}" 같은 표현 또는 동등한 한국어 라벨.
+- region_label: "{{ region_label }}" 그대로 또는 자연스러운 축약.
+- time_label: "{{ time_label_hint }}" 처럼 한국어 친숙 포맷.
+- status: "recruiting" 으로 고정 (Phase 1).
+- supporter_label: "{{ supporter_label_hint }}" 그대로.
+
+{% if previous_rejections %}
+## 이전 시도 실패 사유 (반드시 반영)
+{% for r in previous_rejections %}
+- 필드 `{{ r.rejected_field }}`: {{ r.reason }} — {{ r.detail }}
+  → {{ r.instruction }}
+{% endfor %}
+{% endif %}
+
+## 출력 형식
+JSON 만 반환하라. 마크다운 코드펜스도 붙이지 말 것.

@@ -1,0 +1,8 @@
+{
+  "_doc": "synthetic_content_pipeline_plan.md §7-2 콘텐츠 길이 분포. content-generator-engineer가 spot_id deterministic seed로 샘플링.",
+  "buckets": [
+    {"name": "short", "weight": 0.30, "hint": "1문장"},
+    {"name": "medium", "weight": 0.50, "hint": "2문장"},
+    {"name": "long", "weight": 0.20, "hint": "3문장"}
+  ]
+}

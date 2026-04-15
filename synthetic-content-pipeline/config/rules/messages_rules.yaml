@@ -1,0 +1,26 @@
+# SpotCommunicationSnippets Layer 2 rule 파라미터.
+#
+# 출처: synthetic_content_pipeline_plan.md §5 Layer 2 + §3 Messages 표.
+# 소유자: validator-engineer (Phase 2).
+
+# rule_recruit_status_match — recruiting 일 때 recruiting_intro 가 반드시 포함해야 하는 모집 어휘
+recruit_intent_keywords:
+  - "모집"
+  - "참여"
+  - "신청"
+  - "함께해"
+  - "같이"
+  - "초대"
+
+# rule_forbidden_phrases — 4 snippet 전체 대상 금기어
+forbidden_phrases:
+  - "환불"
+  - "위약금"
+  - "법적 대응"
+  - "소송"
+  - "계약 위반"
+
+# rule_day_of_notice_has_time — day_of_notice 에 들어가야 하는 시간 표현 패턴
+time_indicator_patterns:
+  - "시"
+  - ":"

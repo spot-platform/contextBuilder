@@ -1,0 +1,21 @@
+# SpotPlan Layer 2 rule 파라미터.
+#
+# 출처: synthetic_content_pipeline_plan.md §5 Layer 1/2 + §3 SpotPlan 표.
+# 소유자: validator-engineer (Phase 2).
+
+# rule_total_duration_match — total_duration_minutes vs spec.schedule.duration_minutes
+duration_tolerance_minutes: 5
+
+# rule_step_count_range — schema 와 중복 안전망
+step_min_count: 3
+step_max_count: 7
+
+# rule_first_step_is_intro — 첫 step 에 '인사' / '도착' 계열 키워드 (warn)
+intro_step_keywords:
+  - "인사"
+  - "도착"
+  - "집결"
+  - "만나"
+  - "소개"
+  - "아이스브레이킹"
+  - "오리엔테이션"

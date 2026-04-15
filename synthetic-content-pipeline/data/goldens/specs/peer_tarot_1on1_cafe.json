@@ -1,0 +1,62 @@
+{
+  "spot_id": "S_0021",
+  "region": "신촌동",
+  "category": "타로",
+  "spot_type": "casual_meetup",
+  "host_persona": {
+    "type": "supporter_teacher",
+    "tone": "가볍고 집중된 또래 톤",
+    "communication_style": "편하게 한 명한테 설명해주는 친구 말투"
+  },
+  "participants": {
+    "expected_count": 3,
+    "persona_mix": []
+  },
+  "schedule": {
+    "date": "2026-04-18",
+    "start_time": "07:30",
+    "duration_minutes": 120
+  },
+  "budget": {
+    "price_band": 4,
+    "expected_cost_per_person": 15652
+  },
+  "activity_constraints": {
+    "indoor": true,
+    "beginner_friendly": true,
+    "supporter_required": true
+  },
+  "plan_outline": [
+    "가볍게 인사하고 오늘 배울 내용 간단 소개",
+    "타로 함께 해보며 중간 피드백",
+    "마무리 정리하고 다음 세션 제안 혹은 인사"
+  ],
+  "activity_result": null,
+  "skill_topic": "타로",
+  "host_skill_level": 3,
+  "teach_mode": "1:1",
+  "venue_type": "cafe",
+  "fee_breakdown": {
+    "peer_labor_fee": 13652,
+    "material_cost": 0,
+    "venue_rental": 2000,
+    "equipment_rental": 0
+  },
+  "origination_mode": "offer",
+  "originating_voice": "host",
+  "originating_request_summary": null,
+  "responded_at_tick": null,
+  "is_request_matched": false,
+  "had_renegotiation": false,
+  "renegotiation_history": [],
+  "original_target_partner_count": null,
+  "final_partner_count": null,
+  "bonded_partner_count": 0,
+  "bond_updates_at_settlement": [],
+  "friend_upgrades": [],
+  "referrals_triggered": [],
+  "host_reputation_before": null,
+  "host_reputation_after": null,
+  "host_earn_from_this_spot": null,
+  "peer_tone_required": true
+}

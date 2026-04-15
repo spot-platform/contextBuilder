@@ -1,0 +1,36 @@
+# simulation_mode dispatches the tick loop entry point (peer-pivot §7-3).
+#   - "legacy" : runs the Phase 1~3 byte-identical tick loop. Default so
+#                existing tests / runs stay reproducible.
+#   - "peer"   : runs the peer-pivot Phase B tick loop (p_teach, p_learn,
+#                counter-offer, request_lifecycle). Requires
+#                config/skills_catalog.yaml loaded at startup.
+simulation_mode: "legacy"
+
+# Peer-mode knobs — only read when simulation_mode == "peer".
+peer:
+  request_wait_deadline_ticks: 12     # wait_deadline_tick = created + 12
+  counter_offer_response_ticks: 3     # counter_offer 응답 수집 기간
+  max_open_requests_per_learner: 2    # 학생 1 명당 동시 open 요청 상한
+  region_match_bonus: 1.0             # home_region 동일 시 가중 (p_learn)
+
+phase_1:
+  agents: 50
+  total_ticks: 48
+  seed: 42
+  time_resolution_hours: 1
+  action_count: 3
+  target_runtime_seconds: 5
+phase_2:
+  agents: 500
+  total_ticks: 168
+  seed: 42
+  time_resolution_hours: 1
+  action_count: 7
+  target_runtime_seconds: 30
+phase_3:
+  agents: 2000
+  total_ticks: 336
+  seed: 42
+  time_resolution_hours: 1
+  action_count: 11
+  target_runtime_seconds: 180

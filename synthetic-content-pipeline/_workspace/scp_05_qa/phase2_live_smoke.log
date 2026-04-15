@@ -1,0 +1,27 @@
+============================= test session starts ==============================
+collecting ... collected 2 items
+
+tests/test_codex_bridge_phase2_smoke_live.py::test_live_feed_one_call PASSED [ 50%]
+tests/test_codex_bridge_phase2_smoke_live.py::test_live_detail_one_call FAILED [100%]
+
+=================================== FAILURES ===================================
+__________________________ test_live_detail_one_call ___________________________
+tests/test_codex_bridge_phase2_smoke_live.py:78: in test_live_detail_one_call
+    payload = call_codex(
+src/pipeline/llm/codex_client.py:217: in call_codex
+    response = _invoke_codex(prompt, schema_path, resolved_model)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/pipeline/llm/codex_client.py:148: in _invoke_codex
+    raise CodexCallError(proc.returncode, tail)
+E   pipeline.llm.errors.CodexCallError: codex exec exited with 1
+E   --- stderr (tail) ---
+E   Reading additional input from stdin...
+=============================== warnings summary ===============================
+tests/test_codex_bridge_phase2_smoke_live.py::test_live_feed_one_call
+  /home/seojingyu/project/spotContextBuilder/synthetic-content-pipeline/src/pipeline/llm/cache.py:65: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    "timestamp": _dt.datetime.utcnow().isoformat() + "Z",
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_codex_bridge_phase2_smoke_live.py::test_live_detail_one_call
+=================== 1 failed, 1 passed, 1 warning in 13.17s ====================

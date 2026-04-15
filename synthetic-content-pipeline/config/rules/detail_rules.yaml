@@ -1,0 +1,30 @@
+# SpotDetail Layer 2 rule 파라미터.
+#
+# 출처: synthetic_content_pipeline_plan.md §5 Layer 2 + §3 SpotDetail 표.
+# 소유자: validator-engineer (Phase 2).
+# 사용처:
+#   - pipeline.validators.detail_rules.load_detail_rules()
+#
+# 설계 노트:
+#   - feed_rules 와 공유되는 category deny/allow 는 feed_rules.yaml 을 재사용 (rules.py::load_feed_rules).
+#   - 이 yaml 은 "detail 고유" rule 파라미터만 담는다.
+
+# rule_description_sentence_count (schema는 길이만, 문장 수는 이 rule 이 담당)
+description_min_sentences: 3
+description_max_sentences: 6
+
+# rule_cost_breakdown_total — sum(cost_breakdown.amount) 허용 배수 (vs. expected_cost_per_person)
+cost_total_tolerance_low: 0.7
+cost_total_tolerance_high: 1.5
+
+# rule_host_intro_length — supporter_required=True 일 때 host_intro 최소 길이
+host_intro_min_length_when_supporter: 60
+
+# rule_policy_notes_safe — policy_notes 금기어 (환불 불가/계약/법적 분쟁 암시)
+policy_forbidden_terms:
+  - "환불 불가"
+  - "절대 환불"
+  - "계약"
+  - "법적 대응"
+  - "소송"
+  - "위약금"

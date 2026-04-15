@@ -1,0 +1,109 @@
+# Feed 콘텐츠 Layer 2 rule 파라미터.
+#
+# 출처: synthetic_content_pipeline_plan.md §5 Layer 2 표.
+# 소유자: validator-engineer.
+# 사용처:
+#   - pipeline.validators.rules.load_feed_rules()
+#   - pipeline.validators.rules.rule_category_consistency()
+#   - pipeline.validators.rules.rule_realism_duration()
+#
+# 튜닝 정책:
+#   - Phase 1: 아래 기본값 그대로 사용 (deterministic floor).
+#   - Phase 3: pipeline-qa 가 goldens로 false-positive 측정 후 키워드 정제.
+
+categories:
+  food:
+    allow_keywords:
+      - "식사"
+      - "밥"
+      - "맛집"
+      - "카페"
+      - "저녁"
+      - "점심"
+      - "브런치"
+      - "야식"
+      - "한 끼"
+      - "한끼"
+    deny_keywords:
+      - "드로잉"
+      - "러닝화"
+      - "요가매트"
+      - "운동복"
+      - "등산화"
+      - "컴퓨터"
+      - "코딩"
+
+  cafe:
+    allow_keywords:
+      - "카페"
+      - "디저트"
+      - "커피"
+      - "수다"
+      - "차"
+    deny_keywords:
+      - "러닝"
+      - "등산"
+      - "운동복"
+      - "야식"
+
+  exercise:
+    allow_keywords:
+      - "운동"
+      - "러닝"
+      - "스트레칭"
+      - "요가"
+      - "헬스"
+      - "등산"
+    deny_keywords:
+      - "음주"
+      - "야식"
+      - "디저트"
+      - "와인"
+
+  nature:
+    allow_keywords:
+      - "산책"
+      - "공원"
+      - "나들이"
+      - "자연"
+      - "등산"
+    deny_keywords:
+      - "술집"
+      - "야식"
+      - "클럽"
+
+  bar:
+    allow_keywords:
+      - "술"
+      - "와인"
+      - "맥주"
+      - "칵테일"
+      - "바"
+      - "저녁"
+    deny_keywords:
+      - "운동"
+      - "등산"
+      - "아침"
+      - "조깅"
+
+  culture:
+    allow_keywords:
+      - "전시"
+      - "공연"
+      - "책"
+      - "영화"
+      - "문화"
+    deny_keywords:
+      - "등산"
+      - "러닝"
+      - "헬스"
+
+# Rule 8: realism_duration 에서 짧은 모임에 부적절한 표현.
+forbidden_long_duration_phrases:
+  - "8시간"
+  - "하루 종일"
+  - "하루종일"
+  - "무박"
+  - "밤샘"
+  - "1박 2일"
+  - "1박2일"

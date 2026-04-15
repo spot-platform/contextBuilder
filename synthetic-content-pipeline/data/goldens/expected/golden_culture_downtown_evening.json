@@ -1,0 +1,7 @@
+{
+  "spec": "golden_culture_downtown_evening.json",
+  "layer1_schema_pass": true,
+  "layer2_rule_pass": false,
+  "layer2_expected_rule_mismatch": ["region_mismatch"],
+  "comment": "stub default.json 의 '연무동' vs spec '인계동' — region_consistency reject."
+}

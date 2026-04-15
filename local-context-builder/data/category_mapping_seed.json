@@ -1,0 +1,155 @@
+[
+  {
+    "kakao_category_group_code": "FD6",
+    "kakao_category_pattern": null,
+    "keyword_pattern": null,
+    "internal_tag": "food",
+    "confidence": 1.0,
+    "priority": 10,
+    "notes": "음식점 전체 — Kakao FD6"
+  },
+  {
+    "kakao_category_group_code": "CE7",
+    "kakao_category_pattern": null,
+    "keyword_pattern": null,
+    "internal_tag": "cafe",
+    "confidence": 1.0,
+    "priority": 10,
+    "notes": "카페 전체 — Kakao CE7"
+  },
+  {
+    "kakao_category_group_code": "CT1",
+    "kakao_category_pattern": null,
+    "keyword_pattern": null,
+    "internal_tag": "culture",
+    "confidence": 1.0,
+    "priority": 9,
+    "notes": "문화시설 전체 — Kakao CT1"
+  },
+  {
+    "kakao_category_group_code": "AT4",
+    "kakao_category_pattern": null,
+    "keyword_pattern": null,
+    "internal_tag": "activity",
+    "confidence": 0.8,
+    "priority": 7,
+    "notes": "관광명소 → activity로 매핑 (confidence 하향)"
+  },
+  {
+    "kakao_category_group_code": "AC5",
+    "kakao_category_pattern": null,
+    "keyword_pattern": null,
+    "internal_tag": "lesson",
+    "confidence": 0.9,
+    "priority": 8,
+    "notes": "학원 전체 — Kakao AC5"
+  },
+  {
+    "kakao_category_group_code": null,
+    "kakao_category_pattern": "%주점%",
+    "keyword_pattern": null,
+    "internal_tag": "nightlife",
+    "confidence": 0.95,
+    "priority": 9,
+    "notes": "category_name에 '주점' 포함"
+  },
+  {
+    "kakao_category_group_code": null,
+    "kakao_category_pattern": "%술집%",
+    "keyword_pattern": null,
+    "internal_tag": "nightlife",
+    "confidence": 0.95,
+    "priority": 9,
+    "notes": "category_name에 '술집' 포함"
+  },
+  {
+    "kakao_category_group_code": null,
+    "kakao_category_pattern": "%바%",
+    "keyword_pattern": null,
+    "internal_tag": "nightlife",
+    "confidence": 0.6,
+    "priority": 5,
+    "notes": "category_name에 '바' 포함 — 오탐 가능성 있어 confidence 낮춤"
+  },
+  {
+    "kakao_category_group_code": null,
+    "kakao_category_pattern": "%체육%",
+    "keyword_pattern": null,
+    "internal_tag": "activity",
+    "confidence": 0.9,
+    "priority": 8,
+    "notes": "스포츠시설 — '체육'"
+  },
+  {
+    "kakao_category_group_code": null,
+    "kakao_category_pattern": "%스포츠%",
+    "keyword_pattern": null,
+    "internal_tag": "activity",
+    "confidence": 0.9,
+    "priority": 8,
+    "notes": "스포츠시설 — '스포츠'"
+  },
+  {
+    "kakao_category_group_code": null,
+    "kakao_category_pattern": "%헬스%",
+    "keyword_pattern": null,
+    "internal_tag": "activity",
+    "confidence": 0.85,
+    "priority": 7,
+    "notes": "스포츠시설 — '헬스'"
+  },
+  {
+    "kakao_category_group_code": null,
+    "kakao_category_pattern": "%공원%",
+    "keyword_pattern": null,
+    "internal_tag": "park",
+    "confidence": 0.95,
+    "priority": 9,
+    "notes": "공원 — category_name 매칭"
+  },
+  {
+    "kakao_category_group_code": null,
+    "kakao_category_pattern": "%전시%",
+    "keyword_pattern": null,
+    "internal_tag": "culture",
+    "confidence": 0.9,
+    "priority": 8,
+    "notes": "문화 — '전시'"
+  },
+  {
+    "kakao_category_group_code": null,
+    "kakao_category_pattern": "%갤러리%",
+    "keyword_pattern": null,
+    "internal_tag": "culture",
+    "confidence": 0.9,
+    "priority": 8,
+    "notes": "문화 — '갤러리'"
+  },
+  {
+    "kakao_category_group_code": null,
+    "kakao_category_pattern": "%미술관%",
+    "keyword_pattern": null,
+    "internal_tag": "culture",
+    "confidence": 0.95,
+    "priority": 9,
+    "notes": "문화 — '미술관'"
+  },
+  {
+    "kakao_category_group_code": null,
+    "kakao_category_pattern": null,
+    "keyword_pattern": "%공방%",
+    "internal_tag": "lesson",
+    "confidence": 0.9,
+    "priority": 8,
+    "notes": "keyword 수집분에서 '공방' 매칭"
+  },
+  {
+    "kakao_category_group_code": null,
+    "kakao_category_pattern": null,
+    "keyword_pattern": "%원데이클래스%",
+    "internal_tag": "lesson",
+    "confidence": 0.95,
+    "priority": 9,
+    "notes": "keyword 수집분에서 '원데이클래스' 매칭"
+  }
+]

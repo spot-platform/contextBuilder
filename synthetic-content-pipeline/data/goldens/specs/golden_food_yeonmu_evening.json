@@ -1,0 +1,35 @@
+{
+  "spot_id": "G_FOOD_YEONMU_EVENING",
+  "region": "수원시 연무동",
+  "category": "food",
+  "spot_type": "casual_meetup",
+  "host_persona": {
+    "type": "supporter_teacher",
+    "tone": "친절하고 실용적",
+    "communication_style": "가볍고 직접적"
+  },
+  "participants": {
+    "expected_count": 4,
+    "persona_mix": ["night_social", "casual_foodie"]
+  },
+  "schedule": {
+    "date": "2026-04-17",
+    "start_time": "19:00",
+    "duration_minutes": 120
+  },
+  "budget": {
+    "price_band": 2,
+    "expected_cost_per_person": 18000
+  },
+  "activity_constraints": {
+    "indoor": true,
+    "beginner_friendly": true,
+    "supporter_required": true
+  },
+  "plan_outline": [
+    "가볍게 인사",
+    "식사와 대화",
+    "다음 모임 취향 공유"
+  ],
+  "activity_result": null
+}

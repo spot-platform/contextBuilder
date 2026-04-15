@@ -1,0 +1,64 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: lcb-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-lcb}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-lcb}
+      POSTGRES_DB: ${POSTGRES_DB:-lcb}
+    volumes:
+      - lcb_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-lcb} -d ${POSTGRES_DB:-lcb}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: lcb-redis
+    restart: unless-stopped
+    volumes:
+      - lcb_redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: lcb-app
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+
+  celery-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: lcb-celery-worker
+    restart: unless-stopped
+    env_file:
+      - .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: ["celery", "-A", "app.celery_app.celery", "worker", "--loglevel=info", "--concurrency=2"]
+
+volumes:
+  lcb_pgdata:
+  lcb_redisdata:

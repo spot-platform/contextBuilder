@@ -1,0 +1,63 @@
+{#- detail:v1 — synthetic_content_pipeline_plan.md §3-B 상세 페이지.
+     Layer 1 hard rule: description 80~800자, **3~6문장**. title 12~60자.
+     Cross-reference (Layer 3): feed ↔ detail 스팟 단위 일관성 (지역/인원/금액/카테고리 100% 일치). -#}
+너는 로컬 커뮤니티 앱의 detail 작성 도우미이다.
+아래 활동 정보를 **그대로** 반영한 detail 하나를 JSON 으로 반환하라.
+사실(지역 / 카테고리 / 금액 / 인원 / 시간 / 결과)은 절대 바꾸지 말 것. 지어내지 말 것.
+JSON schema 의 길이 / 필드 제약은 hard rule. 넘기면 reject.
+
+## 활동 정보 (cross-reference 로 feed 와 100% 일치해야 함)
+- 스팟 ID: {{ spot_id }}
+- 지역: {{ region_label }}
+- 카테고리: {{ category }}
+- 호스트 성향: {{ host_persona.type }} ({{ host_persona.tone }}, {{ host_persona.communication_style }})
+- 예상 참가 인원: {{ participants_expected_count }}명
+- 일정: {{ schedule_date }} {{ schedule_time }} ({{ schedule_day_type }}, {{ schedule_time_slot }})
+- 예산: 1인 약 {{ budget_cost_per_person }}원 (price band {{ budget_price_band }})
+- 활동 제약: 실내 {{ activity_constraints.indoor }}, 초면 친화 {{ activity_constraints.beginner_friendly }}, 서포터 필수 {{ activity_constraints.supporter_required }}
+- 진행 개요: {{ plan_outline | join(" → ") }}
+{% if activity_result %}
+- 실제 결과: 참여 {{ activity_result.actual_participants }}명 / 노쇼 {{ activity_result.no_show_count }}명 / 전반 {{ activity_result.overall_sentiment }}
+{% endif %}
+
+## 문체 가이드
+- variant: {{ sample_variant }}
+{% if sample_variant == "primary" %}
+  - 구조 명확, 안전한 선택. 호스트 톤을 그대로 따른다.
+{% else %}
+  - 같은 사실을 다른 어순/표현으로. 가벼운 문체 변화 시도. 단, 사실은 절대 바꾸지 말 것.
+{% endif %}
+- description 길이 버킷: {{ description_length_bucket }} (short=3문장 정도, medium=4~5문장, long=5~6문장).
+- 준비물 버킷: {{ materials_bucket }} (none=빈 배열, simple=1~2개, detailed=3~5개). **버킷이 none 이면 materials 는 반드시 빈 배열**.
+- 톤 예시 ({{ host_persona.type }}):
+{% for line in tone_examples %}
+  · {{ line }}
+{% endfor %}
+
+## 출력 규칙 (길이 hard rule — plan §5 Layer 1)
+- title: 12~60자. 지역과 활동 성격이 드러나야 한다.
+- **description: 80~800자, 정확히 3~6문장**. 문장 수가 2개 이하 또는 7개 이상이면 즉시 reject.
+- activity_purpose: 20~200자. 이 모임이 왜 열리는지 한 문장~두 문장.
+- progress_style: 20~300자. 진행 방식 설명.
+- materials: 배열. 버킷 지시대로 길이 조절. 각 항목 1~40자.
+- target_audience: 10~120자. 누구를 위한 모임인지.
+- cost_breakdown: 1~6개 항목. 합계가 {{ budget_cost_per_person }}원 근처여야 한다 (정확히 일치 권장).
+- host_intro: 30~300자. 호스트 소개. supporter_required 가 true 면 절대 비우지 말 것.
+- policy_notes: 0~200자. 필요 시 노쇼/취소 안내 등.
+
+## Cross-reference 맥락 (필수)
+- **spot_id, 지역, 인원, 금액, 카테고리는 feed 와 100% 일치해야 한다**.
+  feed 가 "연무동 4명 18,000원 food" 면 detail 도 동일 사실 기반이다.
+- 카테고리와 준비물이 모순되면 안 된다 (food 인데 "등산화" 금지).
+- beginner_friendly 가 true 면 숙련자 전용 톤 금지.
+
+{% if previous_rejections %}
+## 이전 시도 실패 사유 (반드시 반영)
+{% for r in previous_rejections %}
+- 필드 `{{ r.rejected_field }}`: {{ r.reason }} — {{ r.detail }}
+  → {{ r.instruction }}
+{% endfor %}
+{% endif %}
+
+## 출력 형식
+JSON 만 반환하라. 마크다운 코드펜스도 붙이지 말 것.

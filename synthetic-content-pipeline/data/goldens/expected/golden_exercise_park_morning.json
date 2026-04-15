@@ -1,0 +1,7 @@
+{
+  "spec": "golden_exercise_park_morning.json",
+  "layer1_schema_pass": true,
+  "layer2_rule_pass": false,
+  "layer2_expected_rule_mismatch": ["region_mismatch", "category_mismatch"],
+  "comment": "stub default.json은 food 카테고리 연무동. exercise category 와 불일치 (운동 deny 키워드는 아니지만 연무동 region_mismatch 확실)."
+}

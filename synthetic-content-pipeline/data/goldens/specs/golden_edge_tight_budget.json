@@ -1,0 +1,35 @@
+{
+  "spot_id": "G_EDGE_TIGHT_BUDGET",
+  "region": "수원시 매탄동",
+  "category": "food",
+  "spot_type": "casual_meetup",
+  "host_persona": {
+    "type": "supporter_neutral",
+    "tone": "친근하고 소탈한",
+    "communication_style": "가볍고 편안한"
+  },
+  "participants": {
+    "expected_count": 4,
+    "persona_mix": ["budget_conscious"]
+  },
+  "schedule": {
+    "date": "2026-04-18",
+    "start_time": "18:00",
+    "duration_minutes": 90
+  },
+  "budget": {
+    "price_band": 1,
+    "expected_cost_per_person": 9000
+  },
+  "activity_constraints": {
+    "indoor": true,
+    "beginner_friendly": true,
+    "supporter_required": true
+  },
+  "plan_outline": [
+    "가볍게 인사",
+    "가성비 식사",
+    "다음 모임 제안"
+  ],
+  "activity_result": null
+}

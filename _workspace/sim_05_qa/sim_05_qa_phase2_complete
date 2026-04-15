@@ -1,0 +1,16 @@
+Phase 2 gate cleared on retry 4 (2026-04-14).
+
+Final tuning: OPEN_TIMEOUT_TICKS 36 -> 40 (single 1-LoC contingent fix).
+
+Result: 6 PASS / 0 FAIL / 1 NEUTRAL.
+- C1 lifecycle:     2521/6841 COMPLETED            PASS
+- C2 CANCELED:      29.53% (2020/6841)             PASS (0.47pp below 30% ceiling)
+- C3 FOMO fill:     0.714 (n=2912)                 PASS
+- C4 host_trust:    neutral (Phase 3 feature)      NEUTRAL
+- C5 lead time:     28.5 ticks (p50=25, p90=57)    PASS
+- C6 NO_SHOW:       14.80% (1362/9205)             PASS
+- C7 DISPUTED:      6.55% (165/2521)               PASS
+
+Regression: Phase 1 gate remains PASS. Pytest: 38 passed in 0.03s.
+
+Phase 3 unblocked.

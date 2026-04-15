@@ -1,0 +1,595 @@
+"""Plan Template Library 생성 — cold start writing helper.
+
+앱 사용자가 "어떻게 진행하면 좋아?" 라고 물었을 때 보여줄 샘플 plan 모음을 YAML
+로 출력한다. MVP 에서는 **수작업 큐레이션된 템플릿** 을 사용 (옵션 1, 플랜에서
+선택). simulator event_log 기반 자동 생성 (옵션 2) 은 추후 확장.
+
+입력:  (수작업 상수, 이 파일 안에 정의)
+출력:  config/templates/plan_library.yaml
+
+18 스킬 × 주요 teach_mode 조합으로 ~30 entry. 각 entry 는:
+  - skill / teach_mode / duration_minutes / style
+  - steps (3~6개, "+0분 / +10분 / ..." 형식)
+  - pocket_money_tip (또래 가격 한 줄 조언)
+
+톤 가이드:
+  - 존댓말
+  - 또래 호스트 voice ("같이 해봐요", "같이 확인")
+  - 프로 강사 어휘 금지 ("강의", "강사", "수강생", "강의료", "원데이 클래스"...)
+
+이 스크립트는 read-only — pipeline 로직 수정 금지.
+"""
+
+from __future__ import annotations
+
+from datetime import date
+from pathlib import Path
+from typing import Any
+
+import yaml
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+OUTPUT_PATH = REPO_ROOT / "config" / "templates" / "plan_library.yaml"
+
+# ────────────────────────────────────────────────────────────────────────────
+# 큐레이션 템플릿 (18 skill × teach_mode, 총 31개)
+# ────────────────────────────────────────────────────────────────────────────
+
+ENTRIES: list[dict[str, Any]] = [
+    # ── 음악 / 악기 ─────────────────────────────────────────────────
+    {
+        "skill": "기타",
+        "teach_mode": "1:1",
+        "duration_minutes": 60,
+        "style": "초보 친화",
+        "steps": [
+            {"time": "+0분", "activity": "가볍게 인사하고 오늘 배우고 싶은 곡/목표 물어보기"},
+            {"time": "+10분", "activity": "기본 자세와 코드 잡는 법 손봐드리기"},
+            {"time": "+25분", "activity": "간단한 코드 진행 (Am, C, G) 같이 짚어보기"},
+            {"time": "+45분", "activity": "한 소절 정도 같이 쳐보기"},
+            {"time": "+55분", "activity": "오늘 해본 것 정리하고 다음에 뭐 해볼지 얘기"},
+        ],
+        "pocket_money_tip": "1:1 은 집중도가 높아서 1.7~1.9만원 정도가 적당해요. 기타 빌려드리면 실비 2~3천원 더 붙이면 됩니다.",
+    },
+    {
+        "skill": "기타",
+        "teach_mode": "small_group",
+        "duration_minutes": 90,
+        "style": "입문자 소그룹",
+        "steps": [
+            {"time": "+0분", "activity": "서로 얼굴 익히고 기타 경험 간단히 공유"},
+            {"time": "+10분", "activity": "악기 튜닝 같이 확인하고 파지법 짚어드리기"},
+            {"time": "+30분", "activity": "쉬운 코드 진행 (Am, C, G) 소개"},
+            {"time": "+55분", "activity": "같이 한 소절씩 쳐보면서 막히는 부분 봐드리기"},
+            {"time": "+80분", "activity": "마무리 정리하고 다음 모임 때 뭐 해볼지 정하기"},
+        ],
+        "pocket_money_tip": "3~4명 소그룹은 1.1만원 안팎이 좋아요. 기타 안 가져오는 분 있으면 장비 대여비 따로 표기해주세요.",
+    },
+    {
+        "skill": "우쿨렐레",
+        "teach_mode": "1:1",
+        "duration_minutes": 60,
+        "style": "한 곡 완성형",
+        "steps": [
+            {"time": "+0분", "activity": "어떤 곡을 해보고 싶은지 물어보고 악기 세팅 같이 확인"},
+            {"time": "+10분", "activity": "코드 2~3개 손에 익히기"},
+            {"time": "+25분", "activity": "스트로크 패턴 한 가지 천천히 연습"},
+            {"time": "+40분", "activity": "반주에 맞춰 한 소절 같이 해보기"},
+            {"time": "+55분", "activity": "오늘 해본 것 정리하고 집에서 이어서 연습할 부분 알려드리기"},
+        ],
+        "pocket_money_tip": "우쿨렐레 1:1 은 1.5만원대면 충분해요. 본인 악기 없으면 대여비 2천원 정도 따로 받으시면 됩니다.",
+    },
+    {
+        "skill": "우쿨렐레",
+        "teach_mode": "small_group",
+        "duration_minutes": 80,
+        "style": "같이 한 곡",
+        "steps": [
+            {"time": "+0분", "activity": "가볍게 인사하고 우쿨렐레 처음인 분 손드는 것 확인"},
+            {"time": "+10분", "activity": "튜닝 같이 하고 기본 코드 3개 짚어드리기"},
+            {"time": "+30분", "activity": "스트로크 리듬 하나 연습"},
+            {"time": "+55분", "activity": "짧은 한 곡 같이 합주 (다 같이 맞춰보기)"},
+            {"time": "+75분", "activity": "마무리 인사하고 다음 모임 얘기"},
+        ],
+        "pocket_money_tip": "소그룹은 1만원 초반이 적절해요. 악기 대여 필요한 분 있을 수 있으니 미리 물어봐주세요.",
+    },
+    {
+        "skill": "피아노 기초",
+        "teach_mode": "1:1",
+        "duration_minutes": 60,
+        "style": "연습실 대여 포함",
+        "steps": [
+            {"time": "+0분", "activity": "연습실에서 만나 인사, 오늘 목표 얘기"},
+            {"time": "+5분", "activity": "손 모양 / 자세 가볍게 봐드리기"},
+            {"time": "+15분", "activity": "음계 2개 천천히 같이 연습"},
+            {"time": "+35분", "activity": "짧은 곡 한 소절 같이 맞춰보기"},
+            {"time": "+55분", "activity": "오늘 한 것 정리하고 다음에 해볼 것 메모"},
+        ],
+        "pocket_money_tip": "피아노는 연습실 대관료 때문에 1.8~2.5만원이 흔해요. '노동료 1만원 + 대관 실비 1만원' 처럼 나눠 안내하시면 안전합니다.",
+    },
+
+    # ── 요리 / 베이킹 ─────────────────────────────────────────────
+    {
+        "skill": "홈쿡",
+        "teach_mode": "small_group",
+        "duration_minutes": 120,
+        "style": "재료 실비 + 같이 요리",
+        "steps": [
+            {"time": "+0분", "activity": "집에서 인사 + 오늘 만들 메뉴 소개"},
+            {"time": "+10분", "activity": "재료 같이 씻고 손질 역할 나누기"},
+            {"time": "+40분", "activity": "본격 조리 시작 (순서대로 해보면서 같이 확인)"},
+            {"time": "+90분", "activity": "플레이팅 + 같이 먹기"},
+            {"time": "+115분", "activity": "마무리 정리 + 레시피 메모 공유"},
+        ],
+        "pocket_money_tip": "재료비 3~4천원 + 노동료 7~8천원 = 1인 1.1만원 정도가 좋아요. 재료 실비를 꼭 따로 표기해주세요.",
+    },
+    {
+        "skill": "홈쿡",
+        "teach_mode": "workshop",
+        "duration_minutes": 150,
+        "style": "5~6인 잔치",
+        "steps": [
+            {"time": "+0분", "activity": "둘러앉아 인사 + 오늘 메뉴 소개 + 역할 정하기"},
+            {"time": "+15분", "activity": "재료 손질 나눠서 같이 하기"},
+            {"time": "+50분", "activity": "조리 진행 (단계별로 설명 곁들여서)"},
+            {"time": "+110분", "activity": "한 상 차려놓고 같이 먹으면서 얘기"},
+            {"time": "+140분", "activity": "뒷정리 같이 하고 마무리"},
+        ],
+        "pocket_money_tip": "워크숍은 1인 8~9천원 선이 적당해요. 재료 실비 포함 여부 꼭 적어주세요.",
+    },
+    {
+        "skill": "홈베이킹",
+        "teach_mode": "small_group",
+        "duration_minutes": 120,
+        "style": "재료 실비 + 함께 굽기",
+        "steps": [
+            {"time": "+0분", "activity": "인사 + 오늘 만들 디저트 소개"},
+            {"time": "+10분", "activity": "재료 계량하고 반죽 시작"},
+            {"time": "+40분", "activity": "반죽 마무리하고 틀에 담기"},
+            {"time": "+60분", "activity": "굽는 동안 커피 내리면서 수다"},
+            {"time": "+100분", "activity": "완성된 디저트 같이 먹고 포장"},
+            {"time": "+115분", "activity": "마무리 + 다음 모임 얘기"},
+        ],
+        "pocket_money_tip": "재료비 4~5천원 + 노동료 7~8천원 정도가 적정해요. '완성품 가져가기' 가 포함되면 더 만족도가 높습니다.",
+    },
+    {
+        "skill": "홈베이킹",
+        "teach_mode": "workshop",
+        "duration_minutes": 150,
+        "style": "5인 이상 잔치",
+        "steps": [
+            {"time": "+0분", "activity": "서로 얼굴 익히고 오늘 만들 것 소개"},
+            {"time": "+15분", "activity": "재료 계량 역할 나눠서 같이 하기"},
+            {"time": "+45분", "activity": "각자 반죽 + 서로 손 봐드리기"},
+            {"time": "+80분", "activity": "굽는 동안 음료 마시면서 수다"},
+            {"time": "+120분", "activity": "완성품 포장해서 가져가기"},
+            {"time": "+140분", "activity": "마무리 인사"},
+        ],
+        "pocket_money_tip": "워크숍은 1인 8~9천원이면 좋아요. 재료비 따로 표기 잊지 마세요.",
+    },
+    {
+        "skill": "핸드드립",
+        "teach_mode": "1:1",
+        "duration_minutes": 60,
+        "style": "원두 한 종류 집중",
+        "steps": [
+            {"time": "+0분", "activity": "인사하고 어떤 커피 좋아하는지 물어보기"},
+            {"time": "+10분", "activity": "원두 고르고 분쇄도 같이 확인"},
+            {"time": "+25분", "activity": "드립 한 잔 천천히 같이 내리기 (시연 + 설명)"},
+            {"time": "+40분", "activity": "한 잔 직접 내려보기 — 옆에서 봐드리기"},
+            {"time": "+55분", "activity": "마시면서 오늘 해본 것 정리"},
+        ],
+        "pocket_money_tip": "1:1 은 1.5~1.8만원. 원두/필터 실비 2천원대 따로 안내하면 깔끔해요.",
+    },
+    {
+        "skill": "핸드드립",
+        "teach_mode": "small_group",
+        "duration_minutes": 90,
+        "style": "원두 2종 비교",
+        "steps": [
+            {"time": "+0분", "activity": "둘러앉아 인사 + 오늘 비교할 원두 2종 소개"},
+            {"time": "+15분", "activity": "첫 번째 원두 같이 분쇄하고 드립 시연"},
+            {"time": "+40분", "activity": "각자 한 잔씩 내려보기 — 옆에서 봐드리기"},
+            {"time": "+65분", "activity": "두 번째 원두로 한 번 더 시도"},
+            {"time": "+85분", "activity": "마시면서 느낀 차이 얘기하고 마무리"},
+        ],
+        "pocket_money_tip": "소그룹은 1인 1.1~1.2만원. 원두/필터 실비 2~3천원 꼭 따로 적어주세요.",
+    },
+
+    # ── 운동 / 신체 ─────────────────────────────────────────────
+    {
+        "skill": "러닝",
+        "teach_mode": "small_group",
+        "duration_minutes": 60,
+        "style": "공원 페이스 맞추기",
+        "steps": [
+            {"time": "+0분", "activity": "공원 만나서 인사, 오늘 코스 / 거리 같이 정하기"},
+            {"time": "+5분", "activity": "가볍게 스트레칭 같이 하기"},
+            {"time": "+15분", "activity": "천천히 조깅 시작 — 페이스 맞추면서 달리기"},
+            {"time": "+45분", "activity": "쿨다운 걷기 + 오늘 어땠는지 얘기"},
+            {"time": "+55분", "activity": "마무리 스트레칭 + 다음에 어디 뛸지 정하기"},
+        ],
+        "pocket_money_tip": "실비 거의 없어서 1인 8~9천원이면 충분해요. 공원은 대관료 안 받으니 노동료만 받으면 됩니다.",
+    },
+    {
+        "skill": "러닝",
+        "teach_mode": "workshop",
+        "duration_minutes": 60,
+        "style": "5인 이상 가볍게",
+        "steps": [
+            {"time": "+0분", "activity": "만나는 지점 인사 + 오늘 루트 같이 확인"},
+            {"time": "+10분", "activity": "다 같이 스트레칭"},
+            {"time": "+20분", "activity": "조깅 — 뒤쪽 페이스 맞춰주면서 진행"},
+            {"time": "+50분", "activity": "마무리 걷기 + 인사"},
+        ],
+        "pocket_money_tip": "워크숍은 1인 5~6천원이면 적당해요. 무리하지 말고 즐겁게 뛰는 분위기가 좋아요.",
+    },
+    {
+        "skill": "요가 입문",
+        "teach_mode": "small_group",
+        "duration_minutes": 80,
+        "style": "스튜디오 대관 포함",
+        "steps": [
+            {"time": "+0분", "activity": "스튜디오 모여서 인사 + 몸 컨디션 물어보기"},
+            {"time": "+10분", "activity": "호흡 / 가벼운 스트레칭"},
+            {"time": "+25분", "activity": "기본 자세 천천히 같이 해보기 (고양이·소·다운독)"},
+            {"time": "+55분", "activity": "짧은 플로우 한 번 같이 돌아보기"},
+            {"time": "+75분", "activity": "마무리 명상 + 인사"},
+        ],
+        "pocket_money_tip": "요가는 스튜디오 대관료가 커서 1인 1.3~1.5만원 선이 흔해요. '노동료 4천원 + 대관 실비 8~9천원' 처럼 나눠 적으면 오해가 없습니다.",
+    },
+    {
+        "skill": "볼더링",
+        "teach_mode": "small_group",
+        "duration_minutes": 90,
+        "style": "클라이밍장 3인",
+        "steps": [
+            {"time": "+0분", "activity": "클라이밍장 입장 + 슈즈 확인"},
+            {"time": "+10분", "activity": "가벼운 워밍업 + 초보 루트 설명"},
+            {"time": "+25분", "activity": "낮은 난도 문제 같이 풀어보기 — 옆에서 봐드리기"},
+            {"time": "+55분", "activity": "한 단계 위 루트 도전, 서로 응원"},
+            {"time": "+80분", "activity": "마무리 스트레칭 + 오늘 느낀 것 얘기"},
+        ],
+        "pocket_money_tip": "클라이밍장 대관 + 슈즈 대여비가 들어가서 1인 1.1~1.4만원이 많아요. '대관 실비 5천원 내외 + 슈즈 2.5천원 + 노동료' 로 나눠 적어주세요.",
+    },
+    {
+        "skill": "가벼운 등산",
+        "teach_mode": "small_group",
+        "duration_minutes": 180,
+        "style": "초보 코스",
+        "steps": [
+            {"time": "+0분", "activity": "들머리에서 만나 인사 + 오늘 코스 확인"},
+            {"time": "+10분", "activity": "스트레칭 + 준비물 체크"},
+            {"time": "+25분", "activity": "천천히 올라가면서 페이스 맞추기"},
+            {"time": "+90분", "activity": "정상/전망대에서 쉬면서 간식"},
+            {"time": "+130분", "activity": "내려오면서 발목 조심 안내"},
+            {"time": "+170분", "activity": "마무리 스트레칭 + 다음 코스 얘기"},
+        ],
+        "pocket_money_tip": "산은 시간이 길어서 1인 9~11k 정도가 무난해요. 대중교통비는 각자 부담으로 미리 안내해주세요.",
+    },
+    {
+        "skill": "가벼운 등산",
+        "teach_mode": "workshop",
+        "duration_minutes": 180,
+        "style": "5인 이상 느긋 걷기",
+        "steps": [
+            {"time": "+0분", "activity": "모여서 인사 + 오늘 코스 다 같이 확인"},
+            {"time": "+15분", "activity": "준비운동 / 물 챙기기"},
+            {"time": "+30분", "activity": "천천히 올라가기 — 뒤쪽 페이스 확인"},
+            {"time": "+100분", "activity": "중간 쉼터에서 간식 같이 먹기"},
+            {"time": "+150분", "activity": "하산 — 미끄러운 곳 서로 안내"},
+            {"time": "+175분", "activity": "마무리 + 단체 사진"},
+        ],
+        "pocket_money_tip": "워크숍은 1인 5~6천원 선이 좋아요. 간식/교통비는 각자 부담으로 안내해주세요.",
+    },
+
+    # ── 창작 / 예술 ─────────────────────────────────────────────
+    {
+        "skill": "드로잉",
+        "teach_mode": "small_group",
+        "duration_minutes": 120,
+        "style": "재료 실비 + 한 컷 완성",
+        "steps": [
+            {"time": "+0분", "activity": "둘러앉아 인사 + 오늘 그려볼 주제 소개"},
+            {"time": "+10분", "activity": "종이 / 연필 / 파스텔 나눠드리고 선 연습"},
+            {"time": "+30분", "activity": "간단한 밑그림 같이 그려보기"},
+            {"time": "+70분", "activity": "채색 / 디테일 — 각자 속도로, 옆에서 봐드리기"},
+            {"time": "+105분", "activity": "서로 그림 보여주면서 얘기"},
+            {"time": "+115분", "activity": "마무리 정리"},
+        ],
+        "pocket_money_tip": "재료비 3천원 + 노동료 8~9천원 해서 1인 1.1~1.2만원이 흔해요. 재료 실비 꼭 표기해주세요.",
+    },
+    {
+        "skill": "드로잉",
+        "teach_mode": "workshop",
+        "duration_minutes": 120,
+        "style": "5인 이상 편하게",
+        "steps": [
+            {"time": "+0분", "activity": "인사 + 오늘 주제 소개 (가벼운 정물이 무난)"},
+            {"time": "+15분", "activity": "재료 나눠드리고 기본 선 연습"},
+            {"time": "+35분", "activity": "각자 밑그림 — 순회하면서 짧게 봐드리기"},
+            {"time": "+75분", "activity": "채색 단계"},
+            {"time": "+105분", "activity": "서로 작품 얘기하고 마무리"},
+        ],
+        "pocket_money_tip": "워크숍은 1인 6~8천원 선이면 좋아요. 재료 실비 따로 표기 필수예요.",
+    },
+    {
+        "skill": "스마트폰 사진",
+        "teach_mode": "small_group",
+        "duration_minutes": 90,
+        "style": "공원 산책 찍기",
+        "steps": [
+            {"time": "+0분", "activity": "공원 입구에서 인사 + 오늘 찍을 주제 얘기"},
+            {"time": "+10분", "activity": "기본 앵글 / 프레이밍 간단히 설명"},
+            {"time": "+25분", "activity": "같이 걸으면서 각자 10컷 찍기 — 옆에서 봐드리기"},
+            {"time": "+60분", "activity": "벤치 앉아 서로 사진 보여주면서 피드백 나누기"},
+            {"time": "+85분", "activity": "마무리 인사"},
+        ],
+        "pocket_money_tip": "실비 거의 없어서 1인 9천원~1만원이면 충분해요. 공원은 무료라 노동료만 받으면 됩니다.",
+    },
+    {
+        "skill": "스마트폰 사진",
+        "teach_mode": "workshop",
+        "duration_minutes": 90,
+        "style": "5인 이상 거리 산책",
+        "steps": [
+            {"time": "+0분", "activity": "만나서 인사 + 오늘 동선 같이 확인"},
+            {"time": "+15분", "activity": "기본 팁 짧게 공유 (3분할 / 역광 등)"},
+            {"time": "+30분", "activity": "같이 걸으면서 각자 찍기 — 가끔 모여서 얘기"},
+            {"time": "+70분", "activity": "카페 앉아 같이 사진 보면서 피드백"},
+            {"time": "+85분", "activity": "마무리 인사"},
+        ],
+        "pocket_money_tip": "워크숍은 1인 6~7천원이면 적당해요. 카페 음료는 각자 부담으로 안내해주세요.",
+    },
+    {
+        "skill": "캘리그라피",
+        "teach_mode": "small_group",
+        "duration_minutes": 90,
+        "style": "붓펜 + 한 문장",
+        "steps": [
+            {"time": "+0분", "activity": "인사 + 오늘 써볼 문장 얘기"},
+            {"time": "+10분", "activity": "붓펜 / 한지 나눠드리고 기본 선 연습"},
+            {"time": "+30분", "activity": "짧은 단어 몇 개 같이 써보기"},
+            {"time": "+60분", "activity": "각자 문장 완성 — 옆에서 봐드리기"},
+            {"time": "+85분", "activity": "완성본 보여주면서 마무리"},
+        ],
+        "pocket_money_tip": "재료비 2~3천원 + 노동료 8~9천원 해서 1인 1만원 안팎이 흔해요. 재료 실비 표기 잊지 마세요.",
+    },
+    {
+        "skill": "캘리그라피",
+        "teach_mode": "workshop",
+        "duration_minutes": 120,
+        "style": "5인 이상 편지 쓰기",
+        "steps": [
+            {"time": "+0분", "activity": "둘러앉아 인사 + 오늘 써볼 주제 (예: 편지) 소개"},
+            {"time": "+15분", "activity": "재료 나눠드리고 기본 선 연습"},
+            {"time": "+40분", "activity": "단어 연습 — 순회하면서 짧게 봐드리기"},
+            {"time": "+80분", "activity": "각자 편지 한 장 완성"},
+            {"time": "+110분", "activity": "서로 보여주면서 마무리 인사"},
+        ],
+        "pocket_money_tip": "워크숍은 1인 6~7천원이면 좋아요. 재료 실비 꼭 표기하고 '가져갈 수 있어요' 안내 붙이면 만족도 높아요.",
+    },
+
+    # ── 언어 / 학습 ─────────────────────────────────────────────
+    {
+        "skill": "영어 프리토킹",
+        "teach_mode": "1:1",
+        "duration_minutes": 60,
+        "style": "카페 대화",
+        "steps": [
+            {"time": "+0분", "activity": "카페 만나서 인사 + 오늘 주제 같이 정하기"},
+            {"time": "+10분", "activity": "가벼운 스몰토크로 시작"},
+            {"time": "+25분", "activity": "준비한 주제로 본격 대화 — 막히는 표현 메모"},
+            {"time": "+50분", "activity": "메모한 표현 같이 복습"},
+            {"time": "+55분", "activity": "다음에 해볼 주제 정하고 마무리"},
+        ],
+        "pocket_money_tip": "1:1 은 1.5~1.7만원 정도면 적당해요. 카페 음료는 각자 부담으로 안내해주세요.",
+    },
+    {
+        "skill": "영어 프리토킹",
+        "teach_mode": "small_group",
+        "duration_minutes": 80,
+        "style": "소그룹 대화 모임",
+        "steps": [
+            {"time": "+0분", "activity": "자기 소개 (영어로 가볍게)"},
+            {"time": "+15분", "activity": "오늘 주제 소개 + 질문 몇 개 나누기"},
+            {"time": "+30분", "activity": "그룹 대화 — 막히면 중간에 도와드리기"},
+            {"time": "+65분", "activity": "자주 나온 표현 같이 정리"},
+            {"time": "+75분", "activity": "다음 주제 정하고 마무리"},
+        ],
+        "pocket_money_tip": "소그룹은 1만원 초반이면 좋아요. 카페 음료는 각자 부담 원칙으로 안내하세요.",
+    },
+    {
+        "skill": "코딩 입문",
+        "teach_mode": "1:1",
+        "duration_minutes": 90,
+        "style": "환경 세팅 + 첫 프로그램",
+        "steps": [
+            {"time": "+0분", "activity": "카페 만나서 인사 + 오늘 목표 확인"},
+            {"time": "+10분", "activity": "파이썬 설치 / 에디터 세팅 같이 확인"},
+            {"time": "+35분", "activity": "변수 / 출력 같이 해보기"},
+            {"time": "+60분", "activity": "작은 예제 하나 같이 돌려보기"},
+            {"time": "+85분", "activity": "다음에 해볼 것 정하고 마무리"},
+        ],
+        "pocket_money_tip": "1:1 은 1.5~1.8만원 정도면 적당해요. 카페 음료 각자 부담으로 안내해주세요.",
+    },
+    {
+        "skill": "코딩 입문",
+        "teach_mode": "small_group",
+        "duration_minutes": 90,
+        "style": "소그룹 예제 따라하기",
+        "steps": [
+            {"time": "+0분", "activity": "자기 소개 + 오늘 목표 얘기"},
+            {"time": "+15분", "activity": "예제 환경 같이 세팅"},
+            {"time": "+35분", "activity": "짧은 예제 같이 따라 해보기"},
+            {"time": "+65분", "activity": "각자 변형 시도 — 막히면 옆에서 도와드리기"},
+            {"time": "+85분", "activity": "마무리 정리"},
+        ],
+        "pocket_money_tip": "소그룹은 1인 1.1~1.2만원 정도가 좋아요. 노트북은 각자 지참으로 안내하세요.",
+    },
+
+    # ── 생활 ─────────────────────────────────────────────────────
+    {
+        "skill": "원예",
+        "teach_mode": "small_group",
+        "duration_minutes": 90,
+        "style": "작은 화분 만들기",
+        "steps": [
+            {"time": "+0분", "activity": "인사 + 오늘 심을 식물 소개"},
+            {"time": "+10분", "activity": "흙 / 씨앗 / 화분 나눠드리기"},
+            {"time": "+30분", "activity": "같이 심는 법 해보기 (깊이 / 물 주기)"},
+            {"time": "+60분", "activity": "관리 팁 얘기 + 질문 받기"},
+            {"time": "+85분", "activity": "포장 / 정리 + 마무리"},
+        ],
+        "pocket_money_tip": "재료비 4~5천원 + 노동료 8~9천원 해서 1인 1.3만원 안팎이 흔해요. 재료 실비 꼭 따로 표기해주세요.",
+    },
+    {
+        "skill": "원예",
+        "teach_mode": "workshop",
+        "duration_minutes": 120,
+        "style": "5인 이상 테라리움",
+        "steps": [
+            {"time": "+0분", "activity": "둘러앉아 인사 + 오늘 작업 소개"},
+            {"time": "+15분", "activity": "재료 나눠드리고 기본 순서 설명"},
+            {"time": "+40분", "activity": "각자 담기 — 순회하면서 봐드리기"},
+            {"time": "+90분", "activity": "관리 팁 공유 + 포장"},
+            {"time": "+115분", "activity": "사진 찍고 마무리"},
+        ],
+        "pocket_money_tip": "워크숍은 1인 7~9천원. 재료 실비는 꼭 표기해주세요 (가져갈 수 있다는 점도 같이 안내하면 좋아요).",
+    },
+    {
+        "skill": "보드게임",
+        "teach_mode": "small_group",
+        "duration_minutes": 120,
+        "style": "입문작 위주",
+        "steps": [
+            {"time": "+0분", "activity": "카페 모여서 인사 + 오늘 해볼 게임 소개"},
+            {"time": "+10분", "activity": "첫 게임 룰 설명 (10분 안에 끝내기)"},
+            {"time": "+25분", "activity": "첫 판 진행 — 룰 헷갈리면 중간에 도와드리기"},
+            {"time": "+70분", "activity": "두 번째 게임 소개 + 진행"},
+            {"time": "+115분", "activity": "인상 공유하고 마무리"},
+        ],
+        "pocket_money_tip": "소그룹은 1인 9천원~1.1만원이면 적당해요. 카페 음료는 각자 부담으로 안내하세요.",
+    },
+    {
+        "skill": "보드게임",
+        "teach_mode": "workshop",
+        "duration_minutes": 150,
+        "style": "5인 이상 여러 판",
+        "steps": [
+            {"time": "+0분", "activity": "인사 + 오늘 게임 리스트 같이 보기"},
+            {"time": "+15분", "activity": "첫 게임 룰 짧게 설명 + 판 세팅"},
+            {"time": "+30분", "activity": "첫 판 진행"},
+            {"time": "+80분", "activity": "두 번째 게임으로 전환 + 진행"},
+            {"time": "+135분", "activity": "인상 공유 + 마무리"},
+        ],
+        "pocket_money_tip": "워크숍은 1인 6~8천원이면 좋아요. 카페 음료 각자 부담 안내 꼭 해주세요.",
+    },
+    {
+        "skill": "타로",
+        "teach_mode": "1:1",
+        "duration_minutes": 45,
+        "style": "카페 세션",
+        "steps": [
+            {"time": "+0분", "activity": "카페 자리 잡고 인사"},
+            {"time": "+5분", "activity": "오늘 어떤 질문 보고 싶은지 같이 정리"},
+            {"time": "+15분", "activity": "카드 뽑고 의미 같이 읽기"},
+            {"time": "+35분", "activity": "카드 해석에서 나온 얘기 나누기"},
+            {"time": "+42분", "activity": "마무리 + 복기용 메모 드리기"},
+        ],
+        "pocket_money_tip": "1:1 타로는 1.5~1.8만원 정도가 흔해요. 카페 음료는 각자 부담으로 안내해주세요.",
+    },
+    {
+        "skill": "타로",
+        "teach_mode": "small_group",
+        "duration_minutes": 60,
+        "style": "소그룹 순서 돌기",
+        "steps": [
+            {"time": "+0분", "activity": "둘러앉아 인사 + 진행 방식 안내"},
+            {"time": "+10분", "activity": "카드 기본 얘기 짧게 소개"},
+            {"time": "+20분", "activity": "한 명씩 짧게 카드 뽑고 풀이"},
+            {"time": "+50분", "activity": "마지막에 질문 나누고 마무리"},
+        ],
+        "pocket_money_tip": "소그룹은 1인 1만원 안팎이 좋아요. 시간이 짧으니 가볍게 진행하시면 됩니다.",
+    },
+]
+
+
+# ────────────────────────────────────────────────────────────────────────────
+# 검증 헬퍼
+# ────────────────────────────────────────────────────────────────────────────
+
+PRO_WORDS = ("강좌", "강사", "수강생", "수강료", "강의료", "자격증", "원데이 클래스", "강의")
+
+
+def _validate_entries(entries: list[dict[str, Any]]) -> None:
+    errors: list[str] = []
+    for i, e in enumerate(entries):
+        if not e.get("skill"):
+            errors.append(f"entry {i}: missing skill")
+        if not e.get("teach_mode"):
+            errors.append(f"entry {i}: missing teach_mode")
+        if len(e.get("steps", [])) < 3:
+            errors.append(f"entry {i}: steps < 3")
+        if not e.get("pocket_money_tip"):
+            errors.append(f"entry {i}: missing pocket_money_tip")
+        # 프로 강사 어휘 검사
+        text = yaml.dump(e, allow_unicode=True)
+        for w in PRO_WORDS:
+            if w in text:
+                errors.append(f"entry {i} ({e.get('skill')}): contains pro word '{w}'")
+    if errors:
+        raise SystemExit("plan_library validation failed:\n  " + "\n  ".join(errors))
+
+
+# ────────────────────────────────────────────────────────────────────────────
+# 메인
+# ────────────────────────────────────────────────────────────────────────────
+
+
+def _str_representer(dumper: yaml.Dumper, data: str) -> yaml.ScalarNode:
+    if "\n" in data:
+        return dumper.represent_scalar("tag:yaml.org,2002:str", data, style="|")
+    return dumper.represent_scalar("tag:yaml.org,2002:str", data)
+
+
+def main() -> None:
+    _validate_entries(ENTRIES)
+
+    payload = {
+        "schema_version": 1,
+        "generated_at": date.today().isoformat(),
+        "source": "hand_curated_mvp",
+        "tone_guide": (
+            "존댓말 + 또래 호스트 voice. 프로 느낌 어휘는 피하고 "
+            "'같이 해봐요', '같이 확인' 같은 표현을 씁니다. "
+            "금지 어휘 목록은 scripts/build_plan_library.py 의 PRO_WORDS 참고."
+        ),
+        "notes": (
+            "앱 cold start writing helper — 사용자가 '어떻게 진행하면 좋아?' 라고 물었을 때 "
+            "보여줄 샘플 plan. 18 스킬 × 주요 teach_mode 로 큐레이션. 각 entry 의 steps 를 "
+            "그대로 복붙 가능한 수준으로 작성. pocket_money_tip 은 fee_reference.yaml 과 "
+            "교차 참조해 사용자에게 한 줄 조언으로 노출하면 좋음."
+        ),
+        "entries": ENTRIES,
+    }
+
+    OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
+    yaml.add_representer(str, _str_representer)
+    text = yaml.dump(
+        payload,
+        allow_unicode=True,
+        sort_keys=False,
+        default_flow_style=False,
+        width=100,
+    )
+    OUTPUT_PATH.write_text(text, encoding="utf-8")
+
+    skills = sorted({e["skill"] for e in ENTRIES})
+    print(f"[build_plan_library] wrote {OUTPUT_PATH}")
+    print(f"  entries        : {len(ENTRIES)}")
+    print(f"  skill coverage : {len(skills)} — {skills}")
+
+
+if __name__ == "__main__":
+    main()

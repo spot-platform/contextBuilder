@@ -1,0 +1,6 @@
+{
+  "spec": "golden_edge_tiny_group.json",
+  "layer1_schema_pass": true,
+  "layer2_rule_pass": true,
+  "comment": "region=연무동 이므로 stub default.json 과 일치. expected_count=2 경계 — rules 는 small_group_threshold 이하에서 동작."
+}

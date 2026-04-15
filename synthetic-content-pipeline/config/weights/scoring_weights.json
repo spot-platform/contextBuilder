@@ -1,0 +1,14 @@
+{
+  "_note": "플랜 §5 Layer 6 + peer pivot plan §5 Phase E — 변경 시 plan 문서와 scoring.py 상수를 동시에 업데이트 필수. 합계 = 1.00",
+  "naturalness": 0.25,
+  "consistency": 0.20,
+  "persona_fit": 0.15,
+  "region_fit": 0.10,
+  "business_rule_fit": 0.05,
+  "diversity": 0.10,
+  "peer_tone_fit": 0.15,
+  "thresholds": {
+    "approved": 0.80,
+    "conditional": 0.65
+  }
+}

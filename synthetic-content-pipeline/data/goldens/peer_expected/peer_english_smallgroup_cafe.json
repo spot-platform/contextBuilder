@@ -1,0 +1,22 @@
+{
+  "spot_id": "S_0002",
+  "origination_mode": "request_matched",
+  "skill_topic": "영어 프리토킹",
+  "teach_mode": "small_group",
+  "venue_type": "cafe",
+  "fee_breakdown_total": 9189,
+  "peer_labor_fee": 7189,
+  "peer_labor_share_min": 0.4,
+  "passthrough_total": 2000,
+  "price_band": 3,
+  "notes": {
+    "title_max_len": 40,
+    "summary_max_len": 120,
+    "forbidden_tokens": [
+      "할인",
+      "특가",
+      "!!",
+      "100%"
+    ]
+  }
+}

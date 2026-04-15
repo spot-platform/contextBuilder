@@ -1,0 +1,37 @@
+# 모든 content type 공통 rule 파라미터.
+#
+# 출처: synthetic_content_pipeline_plan.md §5 Layer 2 표 (현실성 행 2개).
+# 소유자: validator-engineer.
+# 사용처:
+#   - pipeline.validators.rules.rule_realism_budget()
+#   - pipeline.validators.rules.rule_price_consistency()
+
+# 소규모 모임 기준 (이하면 small group).
+small_group_threshold: 6
+
+# 소규모 모임 1인 단가 상한 (원).
+# Plan §5 Layer 2 "현실성: 1인 23만원" 사례 → 50,000 으로 정책 결정.
+max_per_person_small_group: 50000
+
+# rule_price_consistency: expected_cost_per_person 의 허용 배수.
+# Plan §5 Layer 2 "금액 일관성" → ±2.5x 를 deterministic floor 로.
+price_tolerance_low: 0.5
+price_tolerance_high: 2.5
+
+# Phase Peer-E: 프로 강사 어휘 금기어.
+# peer pivot plan §5 Phase E — 또래 강사 marketplace 컨셉 위반.
+# feed / detail / messages / plan / review 등 모든 공개 콘텐츠에 적용.
+# validator-engineer 의 rule_no_pro_keywords 에서 사용.
+forbidden_pro_keywords:
+  - "강좌"
+  - "강사"
+  - "수강생"
+  - "수강료"
+  - "강의료"
+  - "강사료"
+  - "자격증"
+  - "원데이 클래스"
+  - "원데이클래스"
+  - "정규 수업"
+  - "정규수업"
+  - "개설하여"

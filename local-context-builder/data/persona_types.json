@@ -1,0 +1,97 @@
+[
+  {
+    "persona_type": "casual_foodie",
+    "description": "가볍게 밥/카페 모임. 주말 낮 소그룹.",
+    "category_preferences": {
+      "food": 0.50,
+      "cafe": 0.40,
+      "park": 0.10,
+      "activity": 0.0,
+      "culture": 0.0,
+      "nightlife": 0.0,
+      "lesson": 0.0
+    },
+    "preferred_time_slots": {
+      "SAT_12": 0.30,
+      "SAT_14": 0.30,
+      "SUN_12": 0.20,
+      "FRI_19": 0.20
+    }
+  },
+  {
+    "persona_type": "night_social",
+    "description": "저녁/야간 사교 모임. 금/토 저녁 중그룹.",
+    "category_preferences": {
+      "nightlife": 0.50,
+      "food": 0.40,
+      "cafe": 0.10,
+      "park": 0.0,
+      "activity": 0.0,
+      "culture": 0.0,
+      "lesson": 0.0
+    },
+    "preferred_time_slots": {
+      "FRI_19": 0.25,
+      "FRI_21": 0.25,
+      "SAT_19": 0.25,
+      "SAT_21": 0.25
+    }
+  },
+  {
+    "persona_type": "lesson_seeker",
+    "description": "원데이클래스/배움. 주말 오후 소그룹.",
+    "category_preferences": {
+      "lesson": 0.55,
+      "culture": 0.30,
+      "activity": 0.15,
+      "food": 0.0,
+      "cafe": 0.0,
+      "park": 0.0,
+      "nightlife": 0.0
+    },
+    "preferred_time_slots": {
+      "SAT_14": 0.35,
+      "SAT_16": 0.25,
+      "SUN_14": 0.25,
+      "SUN_16": 0.15
+    }
+  },
+  {
+    "persona_type": "solo_healing",
+    "description": "혼자 또는 소수 힐링. 평일도 가능.",
+    "category_preferences": {
+      "park": 0.40,
+      "cafe": 0.35,
+      "culture": 0.25,
+      "food": 0.0,
+      "activity": 0.0,
+      "nightlife": 0.0,
+      "lesson": 0.0
+    },
+    "preferred_time_slots": {
+      "WED_14": 0.20,
+      "THU_14": 0.20,
+      "SAT_10": 0.30,
+      "SUN_10": 0.30
+    }
+  },
+  {
+    "persona_type": "supporter_teacher",
+    "description": "호스트/강사형. 주중+주말 다양한 규모.",
+    "category_preferences": {
+      "lesson": 0.45,
+      "activity": 0.35,
+      "culture": 0.20,
+      "food": 0.0,
+      "cafe": 0.0,
+      "park": 0.0,
+      "nightlife": 0.0
+    },
+    "preferred_time_slots": {
+      "WED_19": 0.20,
+      "FRI_19": 0.25,
+      "SAT_14": 0.30,
+      "SUN_14": 0.25
+    }
+  }
+]

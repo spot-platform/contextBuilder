@@ -1,0 +1,35 @@
+{
+  "spot_id": "G_EDGE_TINY_GROUP",
+  "region": "수원시 연무동",
+  "category": "cafe",
+  "spot_type": "casual_meetup",
+  "host_persona": {
+    "type": "supporter_neutral",
+    "tone": "차분하고 부드러운",
+    "communication_style": "여유 있는 톤"
+  },
+  "participants": {
+    "expected_count": 2,
+    "persona_mix": ["quiet_reader"]
+  },
+  "schedule": {
+    "date": "2026-04-16",
+    "start_time": "15:00",
+    "duration_minutes": 60
+  },
+  "budget": {
+    "price_band": 2,
+    "expected_cost_per_person": 12000
+  },
+  "activity_constraints": {
+    "indoor": true,
+    "beginner_friendly": true,
+    "supporter_required": true
+  },
+  "plan_outline": [
+    "가볍게 인사",
+    "커피 한 잔과 대화",
+    "다음 만남 약속"
+  ],
+  "activity_result": null
+}

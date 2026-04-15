@@ -1,0 +1,745 @@
+schema_version: 1
+generated_at: '2026-04-15'
+source_event_log: ../spot-simulator/output/event_log.jsonl
+source_event_count: 863
+source_spot_count: 863
+notes: 앱 cold start writing helper — 사용자가 '이 스킬 가르치면 얼마 받아야 돼?' 질문에 대답할 때 참고하는 시세표. peer_labor_fee 는 순수
+  노동 대가, passthrough 는 재료/대관/장비 실비. 앱은 두 값을 합쳐 total_fee_per_partner 로 노출하고, '실비 별도' 안내를 붙이면 좋음.
+entries:
+- skill: 가벼운 등산
+  teach_mode: small_group
+  venue_type: park
+  sample_count: 26
+  total_fee_per_partner:
+    min: 8932
+    p25: 8932
+    median: 8932
+    p75: 8932
+    max: 8932
+  peer_labor_fee:
+    p25: 8932
+    median: 8932
+    p75: 8932
+  passthrough_average:
+    total: 0
+    material_cost: 0
+    venue_rental: 0
+    equipment_rental: 0
+  passthrough_note: 실비 없음 (장소/재료 비용 별도 안 드는 조합이에요)
+  recommended_range_label: 1인 약 9,000원
+  by_level:
+    L4:
+      median: 8932
+      sample_count: 26
+- skill: 가벼운 등산
+  teach_mode: workshop
+  venue_type: park
+  sample_count: 13
+  total_fee_per_partner:
+    min: 5742
+    p25: 5742
+    median: 5742
+    p75: 5742
+    max: 5742
+  peer_labor_fee:
+    p25: 5742
+    median: 5742
+    p75: 5742
+  passthrough_average:
+    total: 0
+    material_cost: 0
+    venue_rental: 0
+    equipment_rental: 0
+  passthrough_note: 실비 없음 (장소/재료 비용 별도 안 드는 조합이에요)
+  recommended_range_label: 1인 약 6,000원
+  by_level:
+    L4:
+      median: 5742
+      sample_count: 13
+- skill: 드로잉
+  teach_mode: small_group
+  venue_type: home
+  sample_count: 27
+  total_fee_per_partner:
+    min: 11610
+    p25: 11610
+    median: 11610
+    p75: 11610
+    max: 11610
+  peer_labor_fee:
+    p25: 8610
+    median: 8610
+    p75: 8610
+  passthrough_average:
+    total: 3000
+    material_cost: 3000
+    venue_rental: 0
+    equipment_rental: 0
+  passthrough_note: 실비(재료 약 3,000원)
+  recommended_range_label: 1인 약 1.2만원
+  by_level:
+    L4:
+      median: 11610
+      sample_count: 27
+- skill: 드로잉
+  teach_mode: workshop
+  venue_type: home
+  sample_count: 21
+  total_fee_per_partner:
+    min: 8535
+    p25: 8535
+    median: 8535
+    p75: 8535
+    max: 8535
+  peer_labor_fee:
+    p25: 5535
+    median: 5535
+    p75: 5535
+  passthrough_average:
+    total: 3000
+    material_cost: 3000
+    venue_rental: 0
+    equipment_rental: 0
+  passthrough_note: 실비(재료 약 3,000원)
+  recommended_range_label: 1인 약 9,000원
+  by_level:
+    L4:
+      median: 8535
+      sample_count: 21
+- skill: 러닝
+  teach_mode: small_group
+  venue_type: park
+  sample_count: 29
+  total_fee_per_partner:
+    min: 8932
+    p25: 8932
+    median: 8932
+    p75: 8932
+    max: 8932
+  peer_labor_fee:
+    p25: 8932
+    median: 8932
+    p75: 8932
+  passthrough_average:
+    total: 0
+    material_cost: 0
+    venue_rental: 0
+    equipment_rental: 0
+  passthrough_note: 실비 없음 (장소/재료 비용 별도 안 드는 조합이에요)
+  recommended_range_label: 1인 약 9,000원
+  by_level:
+    L4:
+      median: 8932
+      sample_count: 29
+- skill: 러닝
+  teach_mode: workshop
+  venue_type: park
+  sample_count: 12
+  total_fee_per_partner:
+    min: 5742
+    p25: 5742
+    median: 5742
+    p75: 5742
+    max: 5742
+  peer_labor_fee:
+    p25: 5742
+    median: 5742
+    p75: 5742
+  passthrough_average:
+    total: 0
+    material_cost: 0
+    venue_rental: 0
+    equipment_rental: 0
+  passthrough_note: 실비 없음 (장소/재료 비용 별도 안 드는 조합이에요)
+  recommended_range_label: 1인 약 6,000원
+  by_level:
+    L4:
+      median: 5742
+      sample_count: 12
+- skill: 보드게임
+  teach_mode: small_group
+  venue_type: cafe
+  sample_count: 115
+  total_fee_per_partner:
+    min: 10449
+    p25: 11578
+    median: 11578
+    p75: 11578
+    max: 11578
+  peer_labor_fee:
+    p25: 9578
+    median: 9578
+    p75: 9578
+  passthrough_average:
+    total: 2000
+    material_cost: 0
+    venue_rental: 2000
+    equipment_rental: 0
+  passthrough_note: 실비(대관 약 2,000원)
+  recommended_range_label: 1인 약 1.2만원
+  by_level:
+    L3:
+      median: 10449
+      sample_count: 22
+    L4:
+      median: 11578
+      sample_count: 93
+- skill: 보드게임
+  teach_mode: workshop
+  venue_type: cafe
+  sample_count: 35
+  total_fee_per_partner:
+    min: 7432
+    p25: 8157
+    median: 8157
+    p75: 8157
+    max: 8157
+  peer_labor_fee:
+    p25: 6157
+    median: 6157
+    p75: 6157
+  passthrough_average:
+    total: 2000
+    material_cost: 0
+    venue_rental: 2000
+    equipment_rental: 0
+  passthrough_note: 실비(대관 약 2,000원)
+  recommended_range_label: 1인 약 8,000원
+  by_level:
+    L3:
+      median: 7432
+      sample_count: 7
+    L4:
+      median: 8157
+      sample_count: 28
+- skill: 스마트폰 사진
+  teach_mode: small_group
+  venue_type: park
+  sample_count: 13
+  total_fee_per_partner:
+    min: 8061
+    p25: 8061
+    median: 8061
+    p75: 8061
+    max: 8061
+  peer_labor_fee:
+    p25: 8061
+    median: 8061
+    p75: 8061
+  passthrough_average:
+    total: 0
+    material_cost: 0
+    venue_rental: 0
+    equipment_rental: 0
+  passthrough_note: 실비 없음 (장소/재료 비용 별도 안 드는 조합이에요)
+  recommended_range_label: 1인 약 8,000원
+  by_level:
+    L3:
+      median: 8061
+      sample_count: 13
+- skill: 스마트폰 사진
+  teach_mode: workshop
+  venue_type: park
+  sample_count: 6
+  total_fee_per_partner:
+    min: 5182
+    p25: 5182
+    median: 5182
+    p75: 5182
+    max: 5182
+  peer_labor_fee:
+    p25: 5182
+    median: 5182
+    p75: 5182
+  passthrough_average:
+    total: 0
+    material_cost: 0
+    venue_rental: 0
+    equipment_rental: 0
+  passthrough_note: 실비 없음 (장소/재료 비용 별도 안 드는 조합이에요)
+  recommended_range_label: 1인 약 5,000원
+  by_level:
+    L3:
+      median: 5182
+      sample_count: 6
+- skill: 영어 프리토킹
+  teach_mode: small_group
+  venue_type: cafe
+  sample_count: 163
+  total_fee_per_partner:
+    min: 9189
+    p25: 9189
+    median: 9189
+    p75: 9189
+    max: 9189
+  peer_labor_fee:
+    p25: 7189
+    median: 7189
+    p75: 7189
+  passthrough_average:
+    total: 2000
+    material_cost: 0
+    venue_rental: 2000
+    equipment_rental: 0
+  passthrough_note: 실비(대관 약 2,000원)
+  recommended_range_label: 1인 약 9,000원
+  by_level:
+    L2:
+      median: 9189
+      sample_count: 3
+- skill: 우쿨렐레
+  teach_mode: '1:1'
+  venue_type: cafe
+  sample_count: 22
+  total_fee_per_partner:
+    min: 16818
+    p25: 16818
+    median: 16818
+    p75: 16818
+    max: 16818
+  peer_labor_fee:
+    p25: 14818
+    median: 14818
+    p75: 14818
+  passthrough_average:
+    total: 2000
+    material_cost: 0
+    venue_rental: 2000
+    equipment_rental: 0
+  passthrough_note: 실비(대관 약 2,000원)
+  recommended_range_label: 1인 약 1.7만원
+  by_level:
+    L3:
+      median: 16818
+      sample_count: 22
+- skill: 우쿨렐레
+  teach_mode: small_group
+  venue_type: cafe
+  sample_count: 17
+  total_fee_per_partner:
+    min: 10644
+    p25: 10644
+    median: 10644
+    p75: 10644
+    max: 10644
+  peer_labor_fee:
+    p25: 8644
+    median: 8644
+    p75: 8644
+  passthrough_average:
+    total: 2000
+    material_cost: 0
+    venue_rental: 2000
+    equipment_rental: 0
+  passthrough_note: 실비(대관 약 2,000원)
+  recommended_range_label: 1인 약 1.1만원
+  by_level:
+    L3:
+      median: 10644
+      sample_count: 17
+- skill: 우쿨렐레
+  teach_mode: workshop
+  venue_type: cafe
+  sample_count: 13
+  total_fee_per_partner:
+    min: 7556
+    p25: 7556
+    median: 7556
+    p75: 7556
+    max: 7556
+  peer_labor_fee:
+    p25: 5556
+    median: 5556
+    p75: 5556
+  passthrough_average:
+    total: 2000
+    material_cost: 0
+    venue_rental: 2000
+    equipment_rental: 0
+  passthrough_note: 실비(대관 약 2,000원)
+  recommended_range_label: 1인 약 8,000원
+  by_level:
+    L3:
+      median: 7556
+      sample_count: 13
+- skill: 원예
+  teach_mode: small_group
+  venue_type: home
+  sample_count: 57
+  total_fee_per_partner:
+    min: 13825
+    p25: 13825
+    median: 13825
+    p75: 13825
+    max: 13825
+  peer_labor_fee:
+    p25: 8825
+    median: 8825
+    p75: 8825
+  passthrough_average:
+    total: 5000
+    material_cost: 5000
+    venue_rental: 0
+    equipment_rental: 0
+  passthrough_note: 실비(재료 약 5,000원)
+  recommended_range_label: 1인 약 1.4만원
+  by_level:
+    L4:
+      median: 13825
+      sample_count: 57
+- skill: 원예
+  teach_mode: workshop
+  venue_type: home
+  sample_count: 20
+  total_fee_per_partner:
+    min: 10673
+    p25: 10673
+    median: 10673
+    p75: 10673
+    max: 10673
+  peer_labor_fee:
+    p25: 5673
+    median: 5673
+    p75: 5673
+  passthrough_average:
+    total: 5000
+    material_cost: 5000
+    venue_rental: 0
+    equipment_rental: 0
+  passthrough_note: 실비(재료 약 5,000원)
+  recommended_range_label: 1인 약 1.1만원
+  by_level:
+    L4:
+      median: 10673
+      sample_count: 20
+- skill: 캘리그라피
+  teach_mode: small_group
+  venue_type: home
+  sample_count: 31
+  total_fee_per_partner:
+    min: 11110
+    p25: 11110
+    median: 11110
+    p75: 11110
+    max: 11110
+  peer_labor_fee:
+    p25: 8610
+    median: 8610
+    p75: 8610
+  passthrough_average:
+    total: 2500
+    material_cost: 2500
+    venue_rental: 0
+    equipment_rental: 0
+  passthrough_note: 실비(재료 약 2,500원)
+  recommended_range_label: 1인 약 1.1만원
+  by_level:
+    L4:
+      median: 11110
+      sample_count: 31
+- skill: 캘리그라피
+  teach_mode: workshop
+  venue_type: home
+  sample_count: 28
+  total_fee_per_partner:
+    min: 8035
+    p25: 8035
+    median: 8035
+    p75: 8035
+    max: 8035
+  peer_labor_fee:
+    p25: 5535
+    median: 5535
+    p75: 5535
+  passthrough_average:
+    total: 2500
+    material_cost: 2500
+    venue_rental: 0
+    equipment_rental: 0
+  passthrough_note: 실비(재료 약 2,500원)
+  recommended_range_label: 1인 약 8,000원
+  by_level:
+    L4:
+      median: 8035
+      sample_count: 28
+- skill: 코딩 입문
+  teach_mode: '1:1'
+  venue_type: cafe
+  sample_count: 5
+  total_fee_per_partner:
+    min: 15319
+    p25: 15319
+    median: 15319
+    p75: 15319
+    max: 15319
+  peer_labor_fee:
+    p25: 13319
+    median: 13319
+    p75: 13319
+  passthrough_average:
+    total: 2000
+    material_cost: 0
+    venue_rental: 2000
+    equipment_rental: 0
+  passthrough_note: 실비(대관 약 2,000원)
+  recommended_range_label: 1인 약 1.5만원
+  by_level:
+    L3:
+      median: 15319
+      sample_count: 5
+- skill: 코딩 입문
+  teach_mode: small_group
+  venue_type: cafe
+  sample_count: 6
+  total_fee_per_partner:
+    min: 9769
+    p25: 9769
+    median: 9769
+    p75: 9769
+    max: 9769
+  peer_labor_fee:
+    p25: 7769
+    median: 7769
+    p75: 7769
+  passthrough_average:
+    total: 2000
+    material_cost: 0
+    venue_rental: 2000
+    equipment_rental: 0
+  passthrough_note: 실비(대관 약 2,000원)
+  recommended_range_label: 1인 약 1만원
+  by_level:
+    L3:
+      median: 9769
+      sample_count: 6
+- skill: 타로
+  teach_mode: '1:1'
+  venue_type: cafe
+  sample_count: 18
+  total_fee_per_partner:
+    min: 15652
+    p25: 15652
+    median: 15652
+    p75: 15652
+    max: 15652
+  peer_labor_fee:
+    p25: 13652
+    median: 13652
+    p75: 13652
+  passthrough_average:
+    total: 2000
+    material_cost: 0
+    venue_rental: 2000
+    equipment_rental: 0
+  passthrough_note: 실비(대관 약 2,000원)
+  recommended_range_label: 1인 약 1.6만원
+  by_level:
+    L3:
+      median: 15652
+      sample_count: 18
+- skill: 타로
+  teach_mode: small_group
+  venue_type: cafe
+  sample_count: 4
+  total_fee_per_partner:
+    min: 9964
+    p25: 9964
+    median: 9964
+    p75: 9964
+    max: 9964
+  peer_labor_fee:
+    p25: 7964
+    median: 7964
+    p75: 7964
+  passthrough_average:
+    total: 2000
+    material_cost: 0
+    venue_rental: 2000
+    equipment_rental: 0
+  passthrough_note: 실비(대관 약 2,000원)
+  recommended_range_label: 1인 약 1만원
+  by_level:
+    L3:
+      median: 9964
+      sample_count: 4
+- skill: 핸드드립
+  teach_mode: '1:1'
+  venue_type: home
+  sample_count: 46
+  total_fee_per_partner:
+    min: 18551
+    p25: 18551
+    median: 18551
+    p75: 18551
+    max: 18551
+  peer_labor_fee:
+    p25: 16051
+    median: 16051
+    p75: 16051
+  passthrough_average:
+    total: 2500
+    material_cost: 2500
+    venue_rental: 0
+    equipment_rental: 0
+  passthrough_note: 실비(재료 약 2,500원)
+  recommended_range_label: 1인 약 1.9만원
+  by_level:
+    L4:
+      median: 18551
+      sample_count: 46
+- skill: 핸드드립
+  teach_mode: small_group
+  venue_type: home
+  sample_count: 70
+  total_fee_per_partner:
+    min: 11863
+    p25: 11863
+    median: 11863
+    p75: 11863
+    max: 11863
+  peer_labor_fee:
+    p25: 9363
+    median: 9363
+    p75: 9363
+  passthrough_average:
+    total: 2500
+    material_cost: 2500
+    venue_rental: 0
+    equipment_rental: 0
+  passthrough_note: 실비(재료 약 2,500원)
+  recommended_range_label: 1인 약 1.2만원
+  by_level:
+    L4:
+      median: 11863
+      sample_count: 70
+- skill: 홈베이킹
+  teach_mode: '1:1'
+  venue_type: home
+  sample_count: 4
+  total_fee_per_partner:
+    min: 18152
+    p25: 18152
+    median: 18152
+    p75: 18152
+    max: 18152
+  peer_labor_fee:
+    p25: 13652
+    median: 13652
+    p75: 13652
+  passthrough_average:
+    total: 4500
+    material_cost: 4500
+    venue_rental: 0
+    equipment_rental: 0
+  passthrough_note: 실비(재료 약 4,500원)
+  recommended_range_label: 1인 약 1.8만원
+  by_level:
+    L3:
+      median: 18152
+      sample_count: 4
+- skill: 홈베이킹
+  teach_mode: small_group
+  venue_type: home
+  sample_count: 12
+  total_fee_per_partner:
+    min: 12464
+    p25: 12464
+    median: 12464
+    p75: 12464
+    max: 12464
+  peer_labor_fee:
+    p25: 7964
+    median: 7964
+    p75: 7964
+  passthrough_average:
+    total: 4500
+    material_cost: 4500
+    venue_rental: 0
+    equipment_rental: 0
+  passthrough_note: 실비(재료 약 4,500원)
+  recommended_range_label: 1인 약 1.2만원
+  by_level:
+    L3:
+      median: 12464
+      sample_count: 12
+- skill: 홈베이킹
+  teach_mode: workshop
+  venue_type: home
+  sample_count: 7
+  total_fee_per_partner:
+    min: 9619
+    p25: 9619
+    median: 9619
+    p75: 9619
+    max: 9619
+  peer_labor_fee:
+    p25: 5119
+    median: 5119
+    p75: 5119
+  passthrough_average:
+    total: 4500
+    material_cost: 4500
+    venue_rental: 0
+    equipment_rental: 0
+  passthrough_note: 실비(재료 약 4,500원)
+  recommended_range_label: 1인 약 1만원
+  by_level:
+    L3:
+      median: 9619
+      sample_count: 7
+- skill: 홈쿡
+  teach_mode: small_group
+  venue_type: home
+  sample_count: 32
+  total_fee_per_partner:
+    min: 11209
+    p25: 11949
+    median: 11949
+    p75: 11949
+    max: 11949
+  peer_labor_fee:
+    p25: 8449
+    median: 8449
+    p75: 8449
+  passthrough_average:
+    total: 3500
+    material_cost: 3500
+    venue_rental: 0
+    equipment_rental: 0
+  passthrough_note: 실비(재료 약 3,500원)
+  recommended_range_label: 1인 약 1.2만원
+  by_level:
+    L2:
+      median: 11209
+      sample_count: 4
+    L3:
+      median: 11949
+      sample_count: 28
+- skill: 홈쿡
+  teach_mode: workshop
+  venue_type: home
+  sample_count: 11
+  total_fee_per_partner:
+    min: 8456
+    p25: 8932
+    median: 8932
+    p75: 8932
+    max: 8932
+  peer_labor_fee:
+    p25: 5432
+    median: 5432
+    p75: 5432
+  passthrough_average:
+    total: 3500
+    material_cost: 3500
+    venue_rental: 0
+    equipment_rental: 0
+  passthrough_note: 실비(재료 약 3,500원)
+  recommended_range_label: 1인 약 9,000원
+  by_level:
+    L2:
+      median: 8456
+      sample_count: 1
+    L3:
+      median: 8932
+      sample_count: 10

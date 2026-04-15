@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "synthetic-content-pipeline"
+version = "0.1.0"
+description = "Spot synthetic content pipeline (simulation log → structured content → validated → published)."
+requires-python = ">=3.11"
+authors = [{ name = "spotContextBuilder team" }]
+dependencies = [
+    "sqlalchemy>=2.0",
+    "alembic>=1.13",
+    "pydantic>=2.0",
+    "jinja2>=3.1",
+    "jsonschema>=4.0",
+    "scikit-learn>=1.4",
+    "rapidfuzz>=3.6",
+    "click>=8.1",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+]
+
+[project.scripts]
+pipeline = "pipeline.cli:cli"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["pipeline*"]
+
+[tool.setuptools.package-dir]
+"" = "src"

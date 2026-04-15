@@ -1,0 +1,6 @@
+{
+  "spec": "golden_food_yeonmu_evening.json",
+  "layer1_schema_pass": true,
+  "layer2_rule_pass": true,
+  "comment": "region=연무동, category=food — stub default.json 이 정확히 일치."
+}

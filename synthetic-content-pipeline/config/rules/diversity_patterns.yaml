@@ -1,0 +1,20 @@
+# Layer 5 diversity 반복 패턴 시드. 플랜 §5 Layer 5 / §7-2 참고.
+# regex 는 한국어 자연문에서 자주 반복될 수 있는 "템플릿형" 구조를 겨냥한다.
+# compute_diversity 가 각 후보 텍스트에 대해 pattern 매치 비율을 계산한다.
+patterns:
+  - id: gabyeopge_A_B
+    description: '"가볍게 OO하면서 OO 나누는" 구조'
+    regex: '가볍게\s*\S+\s*(?:하면서|하며)\s*\S+\s*나누'
+  - id: eoseo_osyeoseo
+    description: '"어서 오세요 / 편하게 오세요" 인삿말 반복'
+    regex: '(?:어서\s*오세요|편하게\s*오세요|부담\s*없이\s*오세요)'
+  - id: hamkkehae_recurring
+    description: '"함께해요 / 함께하는 OO" 반복 구조'
+    regex: '함께(?:해요|하는|하실)'
+  - id: join_ikeot_eoddae
+    description: '"OO 어때요 / OO 하실래요" 권유 반복'
+    regex: '\S+(?:어때요|하실래요|해볼까요)'
+ngram_size: 3
+ngram_threshold: 0.15
+tfidf_threshold: 0.85
+template_repeat_threshold: 3

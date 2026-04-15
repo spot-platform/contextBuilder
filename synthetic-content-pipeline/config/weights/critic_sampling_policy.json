@@ -1,0 +1,10 @@
+{
+  "_note": "플랜 §10 Critic 비용 관리. validator-engineer 가 10~20% 샘플링 유지.",
+  "random_rate": 0.10,
+  "target_overall_rate": 0.15,
+  "reasons": {
+    "new_category_region": "학습 데이터가 부족한 카테고리/지역 조합 — 탐색적 평가",
+    "boundary_score": "Layer 1~3 에서 warning 이 있거나 재시도가 발생한 경계값 콘텐츠",
+    "random_10pct": "분포 모니터링용 무작위 샘플 (기본 10%)"
+  }
+}

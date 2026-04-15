@@ -1,0 +1,22 @@
+{
+  "spot_id": "S_0112",
+  "origination_mode": "offer",
+  "skill_topic": "드로잉",
+  "teach_mode": "workshop",
+  "venue_type": "home",
+  "fee_breakdown_total": 8535,
+  "peer_labor_fee": 5535,
+  "peer_labor_share_min": 0.4,
+  "passthrough_total": 3000,
+  "price_band": 2,
+  "notes": {
+    "title_max_len": 40,
+    "summary_max_len": 120,
+    "forbidden_tokens": [
+      "할인",
+      "특가",
+      "!!",
+      "100%"
+    ]
+  }
+}

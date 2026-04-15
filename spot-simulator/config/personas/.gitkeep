@@ -1,0 +1,27 @@
+# Drop-in persona directory (plan §4-2 방법 B).
+#
+# Add one yaml file per new persona. data/loader.py 의 load_personas() 가
+# glob 스캔하여 persona_templates.yaml 에 merge 합니다.
+#
+# 예시 (config/personas/side_hustler.yaml):
+#
+#   side_hustler:
+#     host_score: 0.85
+#     join_score: 0.30
+#     home_region: "emd_yeonmu"
+#     preferred_categories: ["food", "cafe"]
+#     budget_level: 1
+#     time_preferences:
+#       weekday_dawn: 0.02
+#       ... (14 keys)
+#     wallet_monthly: 18000
+#     pocket_money_motivation: 0.95
+#     space_level: 1
+#     space_type: "cafe"
+#     equipment: ["기타", "우쿨렐레"]
+#     skills:
+#       기타:         { level: 4, teach: 0.85, learn: 0.10 }
+#       우쿨렐레:     { level: 3, teach: 0.70, learn: 0.15 }
+#       영어 프리토킹:{ level: 3, teach: 0.60, learn: 0.20 }
+#
+# 불변식은 data/loader.py _validate_persona() 참조.
