@@ -114,6 +114,10 @@ class SpotProcessResult:
     elapsed_seconds: float = 0.0
     retry_count_total: int = 0
     approved: bool = False
+    # MVP 피드 맵용 — publisher 가 spec 에서 lat/lng 를 꺼내 쓸 수 있도록
+    # 원본 ContentSpec 참조를 싣는다. content_spec.latitude/longitude 는
+    # spec builder 가 region_features 에서 채운다.
+    content_spec: Optional[ContentSpec] = None
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -383,7 +387,7 @@ def process_spot_full(
     _rng = rng or random.Random()
     approved_cache = approved_cache or {}
 
-    result = SpotProcessResult(spot_id=spot_id)
+    result = SpotProcessResult(spot_id=spot_id, content_spec=spec)
 
     batch_stats: Dict[str, Any] = {
         "seen_category_region": set(),

@@ -1,0 +1,96 @@
+{
+  "spots_total": 3,
+  "spots_processed": 3,
+  "spots_errors": 0,
+  "publish_rows": {
+    "feed": 3,
+    "detail": 3,
+    "plan": 0,
+    "messages": 12,
+    "review": 3
+  },
+  "published_feed_status": {
+    "approved": 3,
+    "conditional": 0
+  },
+  "per_content_classification": {
+    "feed": {
+      "approved": 3,
+      "conditional": 0,
+      "rejected": 0
+    },
+    "detail": {
+      "approved": 3,
+      "conditional": 0,
+      "rejected": 0
+    },
+    "plan": {
+      "approved": 0,
+      "conditional": 3,
+      "rejected": 0
+    },
+    "messages": {
+      "approved": 2,
+      "conditional": 1,
+      "rejected": 0
+    },
+    "review": {
+      "approved": 2,
+      "conditional": 1,
+      "rejected": 0
+    }
+  },
+  "approved_first_pass": 3,
+  "final_approved": 3,
+  "llm_calls_per_spot": [
+    7,
+    7,
+    8
+  ],
+  "retries_per_spot": [
+    0,
+    0,
+    0
+  ],
+  "elapsed_per_spot": [
+    127.257,
+    142.543,
+    150.794
+  ],
+  "quality_scores": [
+    0.8510902216136894,
+    0.8308529657753763,
+    0.7947233875281634,
+    0.8330636442189958,
+    0.8471301845029433,
+    0.8288618981639576,
+    0.8127155129221515,
+    0.6883997739064465,
+    0.799332317946974,
+    0.8427046497999957,
+    0.8545,
+    0.8244424348096624,
+    0.7994476506619654,
+    0.8345229314728558,
+    0.7789381070413263
+  ],
+  "critic_used_calls": 7,
+  "combo_counts": {
+    "가벼운 등산|small_group|park": 2,
+    "코딩 입문|1:1|cafe": 1
+  },
+  "origination_counts": {
+    "offer": 3,
+    "request_matched": 0
+  },
+  "region_counts": {
+    "장안동": 1,
+    "신촌동": 2
+  },
+  "errors_sample": [],
+  "total_elapsed_seconds": 425.53,
+  "avg_quality_score": 0.8147,
+  "avg_llm_calls_per_spot": 7.33,
+  "max_llm_calls_per_spot": 8,
+  "avg_elapsed_per_spot": 140.198
+}

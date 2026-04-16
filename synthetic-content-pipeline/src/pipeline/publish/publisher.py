@@ -154,9 +154,19 @@ class Publisher:
 
         contents = getattr(spot_result, "contents", {}) or {}
 
+        # MVP 피드 맵용 좌표 — spot_result.content_spec 에서 추출 (있으면).
+        spec = getattr(spot_result, "content_spec", None)
+        latitude = getattr(spec, "latitude", None) if spec is not None else None
+        longitude = getattr(spec, "longitude", None) if spec is not None else None
+
         # feed
         result.published_rows["feed"], result.skipped_rows["feed"] = self._safe_publish(
-            "feed", contents.get("feed"), spot_result.spot_id, result
+            "feed",
+            contents.get("feed"),
+            spot_result.spot_id,
+            result,
+            latitude=latitude,
+            longitude=longitude,
         )
         # detail (+ plan embed)
         result.published_rows["detail"], result.skipped_rows["detail"] = self._safe_publish(
@@ -165,6 +175,8 @@ class Publisher:
             spot_result.spot_id,
             result,
             plan_cpr=contents.get("plan"),
+            latitude=latitude,
+            longitude=longitude,
         )
         # plan 은 별도 테이블 row 가 없음. detail 에 묻혔지만 reject 추적용으로 카운트만.
         plan_cpr = contents.get("plan")
@@ -204,6 +216,8 @@ class Publisher:
         publish_result: PublishResult,
         *,
         plan_cpr: Optional["ContentProcessResult"] = None,
+        latitude: Optional[float] = None,
+        longitude: Optional[float] = None,
     ) -> tuple[int, int]:
         """단일 content type publish 래퍼.
 
@@ -217,9 +231,17 @@ class Publisher:
 
         try:
             if content_type == "feed":
-                published = self._publish_feed(spot_id, cpr)
+                published = self._publish_feed(
+                    spot_id, cpr, latitude=latitude, longitude=longitude
+                )
             elif content_type == "detail":
-                published = self._publish_detail(spot_id, cpr, plan_cpr=plan_cpr)
+                published = self._publish_detail(
+                    spot_id,
+                    cpr,
+                    plan_cpr=plan_cpr,
+                    latitude=latitude,
+                    longitude=longitude,
+                )
             elif content_type == "messages":
                 published = self._publish_messages(spot_id, cpr)
             elif content_type == "review":
@@ -255,7 +277,14 @@ class Publisher:
     # type별 insert
     # ------------------------------------------------------------------
 
-    def _publish_feed(self, spot_id: str, cpr: "ContentProcessResult") -> int:
+    def _publish_feed(
+        self,
+        spot_id: str,
+        cpr: "ContentProcessResult",
+        *,
+        latitude: Optional[float] = None,
+        longitude: Optional[float] = None,
+    ) -> int:
         payload = self._payload(cpr)
         row = SyntheticFeedContent(
             dataset_version=self.dataset_version,
@@ -268,6 +297,8 @@ class Publisher:
             region_label=payload.get("region_label"),
             time_label=payload.get("time_label"),
             status=payload.get("status"),
+            latitude=_to_decimal(latitude) if latitude is not None else None,
+            longitude=_to_decimal(longitude) if longitude is not None else None,
             quality_score=_to_decimal(cpr.quality_score),
             validation_status=cpr.classification,
         )
@@ -280,6 +311,8 @@ class Publisher:
         cpr: "ContentProcessResult",
         *,
         plan_cpr: Optional["ContentProcessResult"] = None,
+        latitude: Optional[float] = None,
+        longitude: Optional[float] = None,
     ) -> int:
         payload = self._payload(cpr)
 
@@ -299,6 +332,8 @@ class Publisher:
             cost_breakdown_json=payload.get("cost_breakdown"),
             host_intro=payload.get("host_intro"),
             policy_notes=payload.get("policy_notes"),
+            latitude=_to_decimal(latitude) if latitude is not None else None,
+            longitude=_to_decimal(longitude) if longitude is not None else None,
             quality_score=_to_decimal(cpr.quality_score),
             validation_status=cpr.classification,
         )

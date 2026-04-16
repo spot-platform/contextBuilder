@@ -448,10 +448,28 @@ def build_peer_content_spec(
     host_agent_id = create_evt.get("agent_id")
     region_id = create_evt.get("region_id")
     region_name = "알 수 없음"
+    region_center_lat: Optional[float] = None
+    region_center_lng: Optional[float] = None
     if region_id and region_id in region_features:
-        region_name = region_features[region_id].get("region_name", region_id)
+        rfeat = region_features[region_id]
+        region_name = rfeat.get("region_name", region_id)
+        if rfeat.get("center_lat") is not None:
+            region_center_lat = float(rfeat["center_lat"])
+        if rfeat.get("center_lng") is not None:
+            region_center_lng = float(rfeat["center_lng"])
     elif region_id:
         region_name = region_id
+
+    # ── spot 핀 좌표: region center + deterministic jitter (±0.003° ≈ ±330m) ─
+    spot_latitude: Optional[float] = None
+    spot_longitude: Optional[float] = None
+    if region_center_lat is not None and region_center_lng is not None:
+        # spot_id 기반 독립 RNG 로 deterministic jitter. 같은 spot_id → 같은 핀.
+        geo_rng = _deterministic_random(f"geo:{spot_id}")
+        lat_jitter = geo_rng.uniform(-0.003, 0.003)
+        lng_jitter = geo_rng.uniform(-0.003, 0.003)
+        spot_latitude = round(region_center_lat + lat_jitter, 6)
+        spot_longitude = round(region_center_lng + lng_jitter, 6)
 
     # ── peer 핵심 payload ─────────────────────────────────────────────
     skill_topic: Optional[str] = create_payload.get("skill")
@@ -744,6 +762,8 @@ def build_peer_content_spec(
         host_reputation_before=host_reputation_before,
         host_reputation_after=host_reputation_after,
         host_earn_from_this_spot=host_earn_from_this_spot,
+        latitude=spot_latitude,
+        longitude=spot_longitude,
         peer_tone_required=True,
     )
 

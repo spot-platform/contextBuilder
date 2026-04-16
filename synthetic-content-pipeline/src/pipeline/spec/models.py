@@ -178,6 +178,16 @@ class ContentSpec(BaseModel):
         default=None, description="POCKET_MONEY_EARNED.amount"
     )
 
+    # ── Geo (MVP 피드 맵용) ───────────────────────────────────────────
+    latitude: Optional[float] = Field(
+        default=None,
+        description="spot 핀 latitude. region center + 시드 jitter (±0.003°).",
+    )
+    longitude: Optional[float] = Field(
+        default=None,
+        description="spot 핀 longitude. region center + 시드 jitter (±0.003°).",
+    )
+
     # ── LLM 생성 가이드 ───────────────────────────────────────────────
     peer_tone_required: bool = Field(
         default=True,
