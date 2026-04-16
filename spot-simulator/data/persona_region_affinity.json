@@ -58,5 +58,41 @@
     "emd_paldal":    {"create_mult": 0.80, "join_mult": 0.85},
     "emd_ingye":     {"create_mult": 0.70, "join_mult": 0.75},
     "emd_yeonmu":    {"create_mult": 0.65, "join_mult": 0.70}
+  },
+  "freelancer_daytime": {
+    "emd_sinchon":   {"create_mult": 1.30, "join_mult": 1.25},
+    "emd_gwanggyo":  {"create_mult": 1.25, "join_mult": 1.20},
+    "emd_yeongtong": {"create_mult": 1.05, "join_mult": 1.10},
+    "emd_yeonmu":    {"create_mult": 1.00, "join_mult": 1.05},
+    "emd_jangan":    {"create_mult": 0.90, "join_mult": 0.90},
+    "emd_maetan":    {"create_mult": 0.85, "join_mult": 0.85},
+    "emd_paldal":    {"create_mult": 0.80, "join_mult": 0.80},
+    "emd_ingye":     {"create_mult": 0.85, "join_mult": 0.85},
+    "emd_hwaseo":    {"create_mult": 0.70, "join_mult": 0.70},
+    "emd_uman":      {"create_mult": 0.60, "join_mult": 0.60}
+  },
+  "parenting_parent": {
+    "emd_yeonmu":    {"create_mult": 1.30, "join_mult": 1.25},
+    "emd_gwanggyo":  {"create_mult": 1.20, "join_mult": 1.20},
+    "emd_hwaseo":    {"create_mult": 1.05, "join_mult": 1.00},
+    "emd_sinchon":   {"create_mult": 1.05, "join_mult": 1.05},
+    "emd_jangan":    {"create_mult": 0.90, "join_mult": 0.90},
+    "emd_yeongtong": {"create_mult": 0.90, "join_mult": 0.95},
+    "emd_maetan":    {"create_mult": 0.80, "join_mult": 0.80},
+    "emd_uman":      {"create_mult": 0.75, "join_mult": 0.75},
+    "emd_paldal":    {"create_mult": 0.75, "join_mult": 0.75},
+    "emd_ingye":     {"create_mult": 0.70, "join_mult": 0.70}
+  },
+  "senior_active": {
+    "emd_jangan":    {"create_mult": 1.30, "join_mult": 1.25},
+    "emd_gwanggyo":  {"create_mult": 1.25, "join_mult": 1.25},
+    "emd_hwaseo":    {"create_mult": 1.10, "join_mult": 1.05},
+    "emd_yeongtong": {"create_mult": 1.05, "join_mult": 1.10},
+    "emd_sinchon":   {"create_mult": 0.95, "join_mult": 0.95},
+    "emd_maetan":    {"create_mult": 0.85, "join_mult": 0.85},
+    "emd_yeonmu":    {"create_mult": 0.80, "join_mult": 0.85},
+    "emd_paldal":    {"create_mult": 0.75, "join_mult": 0.75},
+    "emd_ingye":     {"create_mult": 0.70, "join_mult": 0.75},
+    "emd_uman":      {"create_mult": 0.65, "join_mult": 0.65}
   }
 }

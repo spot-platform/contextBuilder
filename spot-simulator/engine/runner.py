@@ -76,6 +76,7 @@ from data.loader import (
     load_persona_templates,
     load_region_features,
     load_simulation_config,
+    load_skills_catalog,
 )
 from engine.decay import (
     after_create_spot,
@@ -114,6 +115,7 @@ from engine.peer_decision import (
     p_teach,
     pick_skill_to_teach,
     pick_teach_mode,
+    pick_venue,
 )
 from engine.request_lifecycle import (
     p_post_request,
@@ -810,11 +812,11 @@ def _run_peer(
                         region_id=agent.home_region_id,
                         created_at_tick=tick,
                         max_fee_per_partner=max_fee,
-                        preferred_teach_mode="small_group",
-                        preferred_venue=(
-                            (skills_catalog.get(top_skill) or {}).get(
-                                "default_venue", "cafe"
-                            )
+                        preferred_teach_mode=pick_teach_mode(
+                            top_skill, skills_catalog, rng
+                        ),
+                        preferred_venue=pick_venue(
+                            top_skill, skills_catalog, rng
                         ),
                         wait_deadline_tick=tick + request_deadline_lead,
                     )
@@ -1069,10 +1071,16 @@ def run_phase(phase: int, config_path: Path) -> None:
     persona_templates_path = project_root / "config" / "persona_templates.yaml"
     region_features_path = project_root / "data" / "region_features.json"
     persona_affinity_path = project_root / "data" / "persona_region_affinity.json"
+    skills_catalog_path = project_root / "config" / "skills_catalog.yaml"
 
     persona_templates = load_persona_templates(persona_templates_path)
     region_features = load_region_features(region_features_path)
     persona_affinity = load_persona_region_affinity(persona_affinity_path)
+
+    simulation_mode = str(sim_cfg.get("simulation_mode", "legacy"))
+    skills_catalog: dict = {}
+    if simulation_mode == "peer":
+        skills_catalog = load_skills_catalog(skills_catalog_path)
 
     seed = int(phase_cfg.get("seed", 42))
     rng = random.Random(seed)
@@ -1094,6 +1102,8 @@ def run_phase(phase: int, config_path: Path) -> None:
         persona_affinity=persona_affinity,
         seed=seed,
         phase=phase,
+        simulation_mode=simulation_mode,
+        skills_catalog=skills_catalog,
     )
     elapsed = time.perf_counter() - started
 

@@ -234,3 +234,129 @@ homebody:
     원예:      { level: 4, years_exp: 4.0, teach: 0.55, learn: 0.20 }
     타로:      { level: 3, years_exp: 2.0, teach: 0.45, learn: 0.25 }
     요가 입문: { level: 2, years_exp: 1.0, teach: 0.15, learn: 0.50 }
+
+# ─────────────────────────────────────────────────────────────────────
+# MVP diversity expansion (+3 persona → 8 total)
+# Append-only. 위 5개 persona 는 수정 금지 (Phase 1~3 legacy invariant).
+# ─────────────────────────────────────────────────────────────────────
+
+freelancer_daytime:
+  # --- Phase 1~3 legacy fields ---
+  host_score: 0.55
+  join_score: 0.65
+  home_region: "emd_sinchon"
+  preferred_categories: ["cafe", "learning", "creative"]
+  budget_level: 2
+  time_preferences:
+    weekday_dawn: 0.02
+    weekday_morning: 0.35
+    weekday_late_morning: 0.75
+    weekday_lunch: 0.80
+    weekday_afternoon: 0.85
+    weekday_evening: 0.30
+    weekday_night: 0.25
+    weekend_dawn: 0.03
+    weekend_morning: 0.30
+    weekend_late_morning: 0.45
+    weekend_lunch: 0.50
+    weekend_afternoon: 0.50
+    weekend_evening: 0.40
+    weekend_night: 0.25
+  # --- Phase Peer-A extensions ---
+  <<: *base_persona
+  role_preference: "both"
+  wallet_monthly: 35000
+  pocket_money_motivation: 0.70
+  time_budget_weekday: 6
+  time_budget_weekend: 6
+  space_level: 2
+  space_type: "cafe"
+  equipment: []
+  social_capital: 0.55
+  reputation_score: 0.55
+  skills:
+    영어 프리토킹: { level: 4, years_exp: 4.0, teach: 0.60, learn: 0.30 }
+    코딩 입문:     { level: 4, years_exp: 5.0, teach: 0.80, learn: 0.20 }
+    핸드드립:      { level: 3, years_exp: 2.0, teach: 0.30, learn: 0.40 }
+    일본어 회화:   { level: 2, years_exp: 1.0, teach: 0.00, learn: 0.70 }
+
+parenting_parent:
+  # --- Phase 1~3 legacy fields ---
+  host_score: 0.50
+  join_score: 0.60
+  home_region: "emd_yeonmu"
+  preferred_categories: ["home", "cafe", "park"]
+  budget_level: 2
+  time_preferences:
+    weekday_dawn: 0.02
+    weekday_morning: 0.15
+    weekday_late_morning: 0.15
+    weekday_lunch: 0.15
+    weekday_afternoon: 0.15
+    weekday_evening: 0.50
+    weekday_night: 0.20
+    weekend_dawn: 0.03
+    weekend_morning: 0.75
+    weekend_late_morning: 0.80
+    weekend_lunch: 0.75
+    weekend_afternoon: 0.70
+    weekend_evening: 0.35
+    weekend_night: 0.15
+  # --- Phase Peer-A extensions ---
+  <<: *base_persona
+  role_preference: "both"
+  wallet_monthly: 20000
+  pocket_money_motivation: 0.60
+  time_budget_weekday: 2
+  time_budget_weekend: 5
+  space_level: 2
+  space_type: "home"
+  equipment: []
+  social_capital: 0.50
+  reputation_score: 0.50
+  skills:
+    홈쿡:     { level: 3, years_exp: 3.0, teach: 0.60, learn: 0.30 }
+    홈베이킹: { level: 4, years_exp: 4.0, teach: 0.70, learn: 0.20 }
+    원예:     { level: 3, years_exp: 2.0, teach: 0.40, learn: 0.30 }
+    드로잉:   { level: 2, years_exp: 1.0, teach: 0.00, learn: 0.50 }
+
+senior_active:
+  # --- Phase 1~3 legacy fields ---
+  host_score: 0.60
+  join_score: 0.70
+  home_region: "emd_jangan"
+  preferred_categories: ["exercise", "nature", "learning"]
+  budget_level: 2
+  time_preferences:
+    weekday_dawn: 0.05
+    weekday_morning: 0.80
+    weekday_late_morning: 0.85
+    weekday_lunch: 0.55
+    weekday_afternoon: 0.60
+    weekday_evening: 0.20
+    weekday_night: 0.15
+    weekend_dawn: 0.05
+    weekend_morning: 0.65
+    weekend_late_morning: 0.70
+    weekend_lunch: 0.55
+    weekend_afternoon: 0.60
+    weekend_evening: 0.30
+    weekend_night: 0.15
+  # --- Phase Peer-A extensions ---
+  <<: *base_persona
+  role_preference: "both"
+  wallet_monthly: 30000
+  pocket_money_motivation: 0.40
+  time_budget_weekday: 7
+  time_budget_weekend: 7
+  space_level: 2
+  space_type: "home"
+  equipment: []
+  social_capital: 0.65
+  reputation_score: 0.65
+  skills:
+    가벼운 등산:   { level: 4, years_exp: 8.0, teach: 0.70, learn: 0.20 }
+    원예:          { level: 5, years_exp: 10.0, teach: 0.80, learn: 0.20 }
+    캘리그라피:    { level: 3, years_exp: 3.0, teach: 0.50, learn: 0.30 }
+    스마트폰 사진: { level: 1, years_exp: 0.5, teach: 0.00, learn: 0.70 }
+    다도:          { level: 3, years_exp: 4.0, teach: 0.60, learn: 0.20 }

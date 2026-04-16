@@ -228,6 +228,21 @@ def load_skills_catalog(path: PathLike | None = None) -> dict[str, dict[str, Any
                 f"skills_catalog['{skill}'].teach_mode_distribution sum = {total:.4f}"
                 " (expected 1.0 ±0.01)"
             )
+
+        # Optional venue_distribution (MVP diversity expansion). If absent,
+        # engine falls back to default_venue — existing 30 skills work as-is.
+        venue_dist = spec.get("venue_distribution")
+        if venue_dist is not None:
+            if not isinstance(venue_dist, dict) or not venue_dist:
+                raise ValueError(
+                    f"skills_catalog['{skill}'].venue_distribution must be a non-empty dict"
+                )
+            vtotal = sum(float(v) for v in venue_dist.values())
+            if abs(vtotal - 1.0) > 0.01:
+                raise ValueError(
+                    f"skills_catalog['{skill}'].venue_distribution sum = {vtotal:.4f}"
+                    " (expected 1.0 ±0.01)"
+                )
     return data
 
 

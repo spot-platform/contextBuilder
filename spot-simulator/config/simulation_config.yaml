@@ -4,7 +4,7 @@
 #   - "peer"   : runs the peer-pivot Phase B tick loop (p_teach, p_learn,
 #                counter-offer, request_lifecycle). Requires
 #                config/skills_catalog.yaml loaded at startup.
-simulation_mode: "legacy"
+simulation_mode: "peer"
 
 # Peer-mode knobs — only read when simulation_mode == "peer".
 peer:

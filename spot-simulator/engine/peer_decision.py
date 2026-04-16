@@ -273,3 +273,39 @@ def pick_teach_mode(
         if r <= acc:
             return mode
     return items[-1][0]
+
+
+def pick_venue(
+    skill: str,
+    catalog: Mapping[str, Mapping],
+    rng: random.Random,
+) -> str:
+    """스킬의 venue 를 샘플링.
+
+    우선순위:
+      1. catalog[skill]["venue_distribution"] (optional dict {venue: prob})
+         → 정규화 후 샘플.
+      2. 없으면 catalog[skill]["default_venue"].
+      3. 그것도 없으면 ``"cafe"``.
+
+    `CREATE_SKILL_REQUEST` 생성에서 venue 편향을 풀기 위한 훅. catalog 에
+    ``venue_distribution`` 키를 넣지 않은 skill 은 기존과 동일하게 동작한다.
+    """
+
+    spec = catalog.get(skill) if catalog else None
+    if not spec:
+        return "cafe"
+
+    dist = spec.get("venue_distribution")  # type: ignore[assignment]
+    if isinstance(dist, dict) and dist:
+        items = sorted(dist.items(), key=lambda kv: (-float(kv[1]), kv[0]))
+        total = sum(float(v) for _, v in items) or 1.0
+        r = rng.random() * total
+        acc = 0.0
+        for venue, p in items:
+            acc += float(p)
+            if r <= acc:
+                return venue
+        return items[-1][0]
+
+    return spec.get("default_venue", "cafe")
