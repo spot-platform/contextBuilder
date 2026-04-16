@@ -1,0 +1,2 @@
+# Event logs (large files)
+spot-simulator/output/*.jsonl
