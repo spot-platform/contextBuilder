@@ -49,6 +49,11 @@ JSON schema 의 길이 / 필드 제약은 hard rule. 넘기면 reject.
   · long = 4 문장 이상 (180~400자 권장)
 - noshow_happened: {{ noshow_happened }} (True 면 "전원 참여" 같은 문구 금지)
 
+## 호스트 취향 색깔 (선택적 — 자연스러울 때만 한 번 언급)
+- 호스트가 어떤 색깔의 사람인지가 리뷰에 살짝 묻어나면 진짜 후기 같다. 강제 X.
+{% if taste_facets %}- 호스트 세부 취향: {{ taste_facets | join(", ") }} — "{{ taste_facets[0] }}" 같은 디테일을 본인 입장에서 한 줄 언급 가능.{% endif %}
+{% if recent_obsession %}- 호스트가 요즘 꽂힌 것: "{{ recent_obsession }}" — "그 얘기 들으면서 배웠어요" 톤 허용.{% endif %}
+
 ## 이 스팟의 출생 배경
 {% if is_request_matched %}
 이 스팟은 파트너가 먼저 "배우고 싶어요" 요청을 올린 것.

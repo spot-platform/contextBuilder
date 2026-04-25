@@ -58,6 +58,13 @@ JSON schema 의 길이 / 필드 제약은 hard rule. 넘기면 reject.
 - 실제 결과: 참여 {{ activity_result.actual_participants }}명 / 노쇼 {{ activity_result.no_show_count }}명 / 전반 {{ activity_result.overall_sentiment }}
 {% endif %}
 
+## 호스트 취향 색깔 (host_intro / description 에 자연스럽게 녹일 것)
+- 같은 스킬이라도 호스트마다 색이 다르다. feed 와 동일한 취향이 detail 에서도 흘러야 cross-reference 가 어색하지 않다.
+- 사실로 단정하지 말고 취향으로 표현. "요즘 ~에 빠져 있어서" / "~를 같이 해보고 싶었어요".
+{% if taste_facets %}- 세부 취향: {{ taste_facets | join(", ") }}{% endif %}
+{% if recent_obsession %}- 요즘 꽂힌 것: "{{ recent_obsession }}"{% endif %}
+{% if curiosity_hooks %}- 호스트가 거꾸로 배우고 싶은 것: {{ curiosity_hooks | join(", ") }} (host_intro 에 한 줄 포함하면 또래 톤이 자연스러워짐){% endif %}
+
 ## 이 스팟의 출생 배경
 {% if is_request_matched %}
 파트너가 먼저 "배우고 싶어요" 요청을 올렸고 호스트가 응답한 경우.

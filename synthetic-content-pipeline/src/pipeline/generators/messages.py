@@ -3,7 +3,7 @@
 ContentSpec → 커뮤니케이션 snippet 4종 (모집소개/참여승인/당일안내/감사) × 2 후보.
 
 schema: ``src/pipeline/llm/schemas/messages.json``
-프롬프트: ``config/prompts/messages/v1.j2``
+프롬프트: ``config/prompts/messages/v2.j2``
 
 4개의 snippet 을 **한 번의 LLM 호출**로 생성한다. 같은 스팟·같은 호스트의 발화이므로
 톤/지역/시간에 대한 일관성을 프롬프트에서 강조한다.

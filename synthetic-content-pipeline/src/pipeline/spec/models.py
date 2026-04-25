@@ -205,6 +205,22 @@ class ContentSpec(BaseModel):
         description="Phase E 프롬프트가 이 플래그로 또래 강사 톤을 강제",
     )
 
+    # ── Taste profile (LLM 발현, append-only) ────────────────────────
+    # spot 단위로 한 번 LLM 호출(또는 deterministic fallback)로 생성. 5개
+    # generator 가 동일한 취향을 참조하도록 spec 에 박아둔다.
+    taste_facets: List[str] = Field(
+        default_factory=list,
+        description="호스트의 세부 취향 키워드 (예: '핑거스타일 카피', '야외 러닝 루트').",
+    )
+    recent_obsession: Optional[str] = Field(
+        default=None,
+        description="요즘 빠진 한 가지 — 한 문장.",
+    )
+    curiosity_hooks: List[str] = Field(
+        default_factory=list,
+        description="배우고 싶거나 누가 가르쳐줬으면 하는 것 — 짧은 라벨.",
+    )
+
 
 # ---------------------------------------------------------------------------
 # FE-facing public enums (2026-04-24 회의 반영)

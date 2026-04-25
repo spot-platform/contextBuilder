@@ -36,6 +36,10 @@ JSON schema 의 길이 / 필드 제약은 hard rule. 넘기면 reject.
 - {{ row.time }} — {{ row.activity_hint }}
 {% endfor %}
 
+## 호스트 취향 색깔 (한 step 정도 자연스럽게 녹이면 좋음)
+{% if taste_facets %}- 세부 취향: {{ taste_facets | join(", ") }} — step.activity 한 줄에 슬쩍 반영 가능 (예: "{{ taste_facets[0] }} 함께 해보기"). 단 시간/순서 사실은 절대 변경 금지.{% endif %}
+{% if recent_obsession %}- 호스트가 요즘 꽂힌 것: "{{ recent_obsession }}" — 본 활동 step 톤에 살짝.{% endif %}
+
 ## 문체 가이드 (plan — 존댓말 필수)
 - variant: {{ sample_variant }}
 {% if sample_variant == "primary" %}

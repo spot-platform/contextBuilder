@@ -3,7 +3,7 @@
 ContentSpec → 리뷰(별점 + 자유 텍스트 + 태그) × 2 후보.
 
 schema: ``src/pipeline/llm/schemas/review.json``
-프롬프트: ``config/prompts/review/v1.j2``
+프롬프트: ``config/prompts/review/v2.j2``
 
 별점 분포 (§7-3) 를 activity_result.overall_sentiment 에 따라 편향 샘플링하고
 리뷰 길이 분포 (§7-2) 를 결정한 뒤, 프롬프트에서 rating ↔ sentiment 정합성을

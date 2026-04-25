@@ -3,7 +3,7 @@
 ContentSpec → 활동 타임라인 × 2 후보.
 
 schema: ``src/pipeline/llm/schemas/plan.json``
-프롬프트: ``config/prompts/plan/v1.j2``
+프롬프트: ``config/prompts/plan/v2.j2``
 
 스팟 단위 cross-reference (Layer 3) 에서 총 소요 시간이 spec.schedule.duration_minutes
 와 일치해야 하므로, generator 가 결정성 타임라인 초안을 만들어 프롬프트에 주입한다.

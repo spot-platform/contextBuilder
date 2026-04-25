@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import json
 import random
+from datetime import date
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Tuple
 
@@ -728,6 +729,44 @@ def build_peer_content_spec(
             ),
         )
 
+    from pipeline.spec.taste_profile import generate_taste_profile
+
+    _hour = int(schedule.start_time.split(":", 1)[0])
+    if 0 <= _hour < 5:
+        _slot = "dawn"
+    elif _hour < 9:
+        _slot = "morning"
+    elif _hour < 11:
+        _slot = "late_morning"
+    elif _hour < 14:
+        _slot = "lunch"
+    elif _hour < 17:
+        _slot = "afternoon"
+    elif _hour < 21:
+        _slot = "evening"
+    else:
+        _slot = "night"
+    _day_type = (
+        "weekend"
+        if date.fromisoformat(schedule.date).weekday() >= 5
+        else "weekday"
+    )
+
+    taste_facets, recent_obsession, curiosity_hooks = generate_taste_profile(
+        spot_id=spot_id,
+        skill_topic=skill_topic,
+        category=category,
+        region_label=region_name,
+        host_skill_level=host_skill_level,
+        teach_mode=teach_mode,
+        venue_type=venue_type,
+        schedule_time_slot=_slot,
+        schedule_day_type=_day_type,
+        host_persona_tone=host_persona.tone,
+        host_persona_style=host_persona.communication_style,
+        originating_request_summary=originating_request_summary,
+    )
+
     return ContentSpec(
         spot_id=spot_id,
         region=region_name,
@@ -765,6 +804,9 @@ def build_peer_content_spec(
         latitude=spot_latitude,
         longitude=spot_longitude,
         peer_tone_required=True,
+        taste_facets=taste_facets,
+        recent_obsession=recent_obsession,
+        curiosity_hooks=curiosity_hooks,
     )
 
 

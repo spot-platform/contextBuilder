@@ -63,7 +63,7 @@ def get_latest_version(template_id_dir: str) -> int:
 
 
 def template_path(template_id: str) -> Path:
-    """`feed:v1` → `config/prompts/feed/v1.j2` 절대경로."""
+    """`feed:v2` → `config/prompts/feed/v2.j2` 절대경로."""
     dir_name, version = parse_template_id(template_id)
     return _PROMPTS_ROOT / dir_name / f"v{version}.j2"
 

@@ -52,6 +52,13 @@
 - 실제 결과: 참여 {{ activity_result.actual_participants }}명 / 노쇼 {{ activity_result.no_show_count }}명 / 전반 {{ activity_result.overall_sentiment }}
 {% endif %}
 
+## 호스트 취향 색깔 (이 카드에서 반드시 살릴 것)
+- 같은 스킬이라도 호스트마다 색이 다르다. 아래 키워드를 1~2 개 자연스럽게 녹여 넣어라.
+- 사실로 단정하지 말고, 취향/관심사로 부드럽게 표현 (예: "요즘 ~에 빠져 있어서").
+{% if taste_facets %}- 세부 취향: {{ taste_facets | join(", ") }}{% endif %}
+{% if recent_obsession %}- 요즘 꽂힌 것: "{{ recent_obsession }}"{% endif %}
+{% if curiosity_hooks %}- 거꾸로 배우고 싶은 것 (필요 시 한 줄): {{ curiosity_hooks | join(", ") }}{% endif %}
+
 ## 이 스팟의 출생 배경
 {% if is_request_matched %}
 이 스팟은 **파트너(배우고 싶은 사람)가 먼저 요청을 올렸고**, 호스트가 그 요청에 응답한 경우이다.

@@ -3,7 +3,7 @@
 ContentSpec → 상세 페이지 콘텐츠 × 2 후보.
 
 schema 파일: ``src/pipeline/llm/schemas/detail.json``
-프롬프트: ``config/prompts/detail/v1.j2``
+프롬프트: ``config/prompts/detail/v2.j2``
 
 Phase 2 cross-reference validator 가 스팟 단위로 feed ↔ detail 일치(지역/인원/금액/카테고리)
 를 체크하므로, 프롬프트에서 사실 일관성을 hard rule 로 강제한다.

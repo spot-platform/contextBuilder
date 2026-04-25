@@ -41,6 +41,12 @@ JSON schema 길이 / 필드 제약은 hard rule.
 - 모집 상태: {{ recruit_status }}
 - 진행 개요: {{ plan_outline | join(" → ") }}
 
+## 호스트 취향 색깔 (recruiting_intro / post_thanks 에 한 줄씩 자연스럽게)
+- 같은 호스트가 보낸 메시지처럼 들리려면, feed/detail 과 동일한 취향이 흘러야 한다.
+{% if taste_facets %}- 세부 취향: {{ taste_facets | join(", ") }} — recruiting_intro 에 1 개 이내로 슬쩍.{% endif %}
+{% if recent_obsession %}- 요즘 꽂힌 것: "{{ recent_obsession }}" — recruiting_intro 한 문장에 녹이면 자연스러움.{% endif %}
+{% if curiosity_hooks %}- 호스트가 거꾸로 배우고 싶은 것: {{ curiosity_hooks | join(", ") }} — post_thanks 의 "다음엔 이런 것도" 톤에 활용 가능.{% endif %}
+
 ## 이 스팟의 출생 배경
 {% if is_request_matched %}
 파트너가 먼저 요청을 올렸고 호스트가 응답한 경우.

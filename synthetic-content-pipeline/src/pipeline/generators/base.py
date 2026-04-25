@@ -93,6 +93,10 @@ COMMON_VARIABLE_KEYS: frozenset = frozenset({
     "host_earn_from_this_spot",
     # LLM 톤 플래그
     "peer_tone_required",
+    # ── Taste profile (Job 1 발현, 5 generator 공유) ──────────────────
+    "taste_facets",
+    "recent_obsession",
+    "curiosity_hooks",
 })
 
 
@@ -205,7 +209,7 @@ class BaseGenerator:
     content_type: str = "base"
     template_id: str = "base:v1"
     schema_path: Optional[Path] = None
-    template_path: Optional[str] = None  # config/prompts/<type>/v1.j2 형식
+    template_path: Optional[str] = None  # config/prompts/<type>/v2.j2 형식
 
     # ------------------------------------------------------------------
     # 공용 변수 빌드
@@ -298,6 +302,10 @@ class BaseGenerator:
             "host_reputation_after": spec.host_reputation_after,
             "host_earn_from_this_spot": spec.host_earn_from_this_spot,
             "peer_tone_required": spec.peer_tone_required,
+            # ── Taste profile (Job 1 발현) ────────────────────────────
+            "taste_facets": list(spec.taste_facets),
+            "recent_obsession": spec.recent_obsession,
+            "curiosity_hooks": list(spec.curiosity_hooks),
         }
 
         # 변수 표준 일관성 검사 (개발용 sanity assert).
