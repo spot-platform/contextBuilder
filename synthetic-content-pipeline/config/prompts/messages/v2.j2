@@ -42,10 +42,22 @@ JSON schema 길이 / 필드 제약은 hard rule.
 - 진행 개요: {{ plan_outline | join(" → ") }}
 
 ## 호스트 취향 색깔 (recruiting_intro / post_thanks 에 한 줄씩 자연스럽게)
-- 같은 호스트가 보낸 메시지처럼 들리려면, feed/detail 과 동일한 취향이 흘러야 한다.
-{% if taste_facets %}- 세부 취향: {{ taste_facets | join(", ") }} — recruiting_intro 에 1 개 이내로 슬쩍.{% endif %}
-{% if recent_obsession %}- 요즘 꽂힌 것: "{{ recent_obsession }}" — recruiting_intro 한 문장에 녹이면 자연스러움.{% endif %}
-{% if curiosity_hooks %}- 호스트가 거꾸로 배우고 싶은 것: {{ curiosity_hooks | join(", ") }} — post_thanks 의 "다음엔 이런 것도" 톤에 활용 가능.{% endif %}
+- 같은 호스트가 보낸 메시지처럼 들리려면, feed/detail 과 동일한 취향 결이 흘러야 한다.
+- `recent_obsession` 문장 통째 인용 금지. `taste_facets` 명사구도 그대로 옮기지 말고 풀어쓴다.
+{% if taste_facets %}- 세부 취향: {{ taste_facets | join(", ") }}{% endif %}
+{% if recent_obsession %}- 요즘 꽂힌 결: "{{ recent_obsession }}"{% endif %}
+{% if curiosity_hooks %}- 호스트가 거꾸로 배우고 싶은 것: {{ curiosity_hooks | join(", ") }}{% endif %}
+
+## 또래 입말 종결 (4 snippet 각각 자연스럽게)
+호스트가 친구한테 말하는 톤. 각 snippet 의 종결을 다음 풀에서 골라 쓰되, **4 snippet 끼리 같은 종결을 두 번 이상 반복 금지**:
+- ~ 해요 / ~ 했어요 / ~ 하더라고요 / ~ 하는 중이에요
+- ~ 자주 해요 / ~ 좋아해요 / ~ 같이 해봐요 / ~ 어때요
+- ~ 들러주세요 / ~ 환영해요 / ~ 기다리고 있어요 / ~ 만나봐요
+
+## AI틱 어휘 블랙리스트 (messages — 절대 금지)
+- 추상 명사 단독: "조율 / 밸런스 / 큐레이션 / 다이어트"
+- 카탈로그 어휘: "결 / 한 단면" (단독)
+- 마케팅: "리듬감 / 본격 / 완벽한 / 마스터"
 
 ## 이 스팟의 출생 배경
 {% if is_request_matched %}

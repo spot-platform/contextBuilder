@@ -37,8 +37,15 @@ JSON schema 의 길이 / 필드 제약은 hard rule. 넘기면 reject.
 {% endfor %}
 
 ## 호스트 취향 색깔 (한 step 정도 자연스럽게 녹이면 좋음)
-{% if taste_facets %}- 세부 취향: {{ taste_facets | join(", ") }} — step.activity 한 줄에 슬쩍 반영 가능 (예: "{{ taste_facets[0] }} 함께 해보기"). 단 시간/순서 사실은 절대 변경 금지.{% endif %}
-{% if recent_obsession %}- 호스트가 요즘 꽂힌 것: "{{ recent_obsession }}" — 본 활동 step 톤에 살짝.{% endif %}
+- `taste_facets` 명사구를 그대로 step.activity 에 옮기지 말고, 친구한테 말하듯 풀어쓴다.
+- 시간/순서 사실은 절대 변경 금지.
+{% if taste_facets %}- 세부 취향: {{ taste_facets | join(", ") }}{% endif %}
+{% if recent_obsession %}- 호스트가 요즘 꽂힌 결: "{{ recent_obsession }}"{% endif %}
+
+## AI틱 어휘 블랙리스트 (plan — 절대 금지)
+- 추상 명사 단독: "조율 / 밸런스 / 큐레이션 / 다이어트"
+- 카탈로그 어휘: "결 / 한 단면" (단독)
+- 마케팅: "리듬감 / 본격 / 완벽한 / 마스터"
 
 ## 문체 가이드 (plan — 존댓말 필수)
 - variant: {{ sample_variant }}

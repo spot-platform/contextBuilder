@@ -59,11 +59,25 @@ JSON schema 의 길이 / 필드 제약은 hard rule. 넘기면 reject.
 {% endif %}
 
 ## 호스트 취향 색깔 (host_intro / description 에 자연스럽게 녹일 것)
-- 같은 스킬이라도 호스트마다 색이 다르다. feed 와 동일한 취향이 detail 에서도 흘러야 cross-reference 가 어색하지 않다.
-- 사실로 단정하지 말고 취향으로 표현. "요즘 ~에 빠져 있어서" / "~를 같이 해보고 싶었어요".
+- 같은 스킬이라도 호스트마다 색이 다르다. feed 와 동일한 취향 결이 detail 에서도 흘러야 cross-reference 가 어색하지 않다.
+- 사실로 단정하지 말고 취향으로 표현. **`recent_obsession` 문장을 통째로 옮기지 말고 본인 어휘로 풀어쓴다.**
+- `taste_facets` 명사구를 그대로 인용하지 말고, 친구한테 말하듯 풀어쓴다.
 {% if taste_facets %}- 세부 취향: {{ taste_facets | join(", ") }}{% endif %}
-{% if recent_obsession %}- 요즘 꽂힌 것: "{{ recent_obsession }}"{% endif %}
-{% if curiosity_hooks %}- 호스트가 거꾸로 배우고 싶은 것: {{ curiosity_hooks | join(", ") }} (host_intro 에 한 줄 포함하면 또래 톤이 자연스러워짐){% endif %}
+{% if recent_obsession %}- 요즘 꽂힌 결: "{{ recent_obsession }}"{% endif %}
+{% if curiosity_hooks %}- 호스트가 거꾸로 배우고 싶은 것: {{ curiosity_hooks | join(", ") }}{% endif %}
+
+## 또래 입말 종결 (description / host_intro 의 자연스러운 종결 후보)
+호스트가 친구한테 말하는 톤. 다음 풀에서 카드마다 다른 결을 골라:
+- ~ 해요 / ~ 했어요 / ~ 하더라고요 / ~ 하는 중이에요
+- ~ 좋아해요 / ~ 자주 해요 / ~ 푹 빠져 있어요 / ~ 꽂혀 있어요
+- ~ 같이 해봐요 / ~ 한 번 어때요 / ~ 들러주세요 / ~ 환영해요
+같은 종결을 한 카드 안에서 두 번 이상 반복 금지.
+
+## AI틱 어휘 블랙리스트 (detail — 절대 금지)
+사람이 안 쓰는 단어. 한 번이라도 등장하면 reject.
+- 추상 명사 단독: "조율 / 밸런스 / 큐레이션 / 다이어트 / 정수 / 묘미"
+- 카탈로그 어휘: "결 / 결의 / 한 단면" (단독 명사로)
+- 마케팅: "리듬감 / 자연스러움 / 본격 / 진정한 / 완벽한 / 마스터"
 
 ## 이 스팟의 출생 배경
 {% if is_request_matched %}

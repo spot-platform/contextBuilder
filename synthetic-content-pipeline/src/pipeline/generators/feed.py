@@ -5,12 +5,31 @@
 """
 from __future__ import annotations
 
+import random
 from pathlib import Path
 from typing import Any, Dict, List
 
 from pipeline.generators.base import BaseGenerator, normalize_region_label
 from pipeline.generators.persona_tones import tone_examples_for
 from pipeline.spec.models import ContentSpec
+
+
+# §A — 오프닝 angle 풀. spot_id × variant deterministic seed 로 선택.
+# 각 angle 은 feed/v2.j2 가 분기 처리한다.
+_OPENING_ANGLES: List[str] = [
+    "ask",
+    "confession",
+    "scene",
+    "invitation",
+    "detail_lead",
+    "contrast",
+]
+
+
+def _pick_opening_angle(spot_id: str, variant: str) -> str:
+    """deterministic 한 angle 선택. variant 가 다르면 다른 angle 이 우선 시도된다."""
+    rng = random.Random(hash((spot_id, variant, "open_angle")) & 0xFFFFFFFF)
+    return rng.choice(_OPENING_ANGLES)
 
 
 # 가격 라벨용 단위 변환 (참고용 — 프롬프트 본문이 직접 표현).
@@ -63,6 +82,8 @@ class FeedGenerator(BaseGenerator):
             spec.schedule.date, spec.schedule.start_time
         )
         variables["supporter_label_hint"] = spec.host_persona.type
+        # §A — 오프닝 angle 주입. spot_id × variant deterministic.
+        variables["opening_angle"] = _pick_opening_angle(spec.spot_id, variant)
         return variables
 
     def _placeholder_payload(self, variables: Dict[str, Any]) -> Dict[str, Any]:
