@@ -25,7 +25,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--phase",
         type=int,
         choices=[1, 2, 3],
-        default=1,
+        default=3,
         help="Simulation phase to run (1=MVP loop, 2=lifecycle, 3=settlement).",
     )
     parser.add_argument(

@@ -296,6 +296,12 @@ def finalize_counter_offer(
                     "renegotiation_count": len(spot.renegotiation_history),
                     "final_total": spot.fee_breakdown.total,
                     "final_partner_count": len(accepted),
+                    # FE handoff 2026-04-24: this emit maps to the
+                    # `spot.extended` event. Counter-offer acceptance keeps
+                    # the same scheduled_tick -> expected_closed_at_tick is
+                    # unchanged; we still ship the current value so the BE
+                    # publisher can drop a no-op `spot.extended` or skip.
+                    "new_expected_closed_at_tick": spot.expected_closed_at_tick,
                 },
             )
         )
@@ -315,7 +321,14 @@ def finalize_counter_offer(
                 tick=tick,
                 event_type="SPOT_TIMEOUT",
                 spot=spot,
-                payload={"reason": "counter_offer_rejected"},
+                payload={
+                    "reason": "counter_offer_rejected",
+                    # FE handoff 2026-04-24: maps to `spot.closed` with
+                    # outcome=CANCELED (not TIMEOUT — the BE publisher
+                    # branches on `reason`).
+                    "closed_at_tick": tick,
+                    "outcome": "CANCELED",
+                },
             )
         )
 

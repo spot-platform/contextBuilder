@@ -191,6 +191,19 @@ class Spot:
     original_fee_breakdown: FeeBreakdown | None = None
     renegotiation_history: list[dict] = field(default_factory=list)
 
+    # --- FE handoff 2026-04-24: deterministic expected-close prediction ---
+    # BACKEND_HANDOFF_ENTITIES.md §SpotLifecycle requires `expected_closed_at_ms`
+    # to be emitted alongside `spot.created`. The FE uses it to schedule the
+    # "dying" animation (isDying) without running its own random lifespan
+    # model — the simulator owns the prediction.
+    #
+    # Written once at `Spot` construction (see engine/runner.py
+    # CREATE_TEACH_SPOT emit) as `scheduled_tick + duration`. Counter-offer
+    # acceptance extends this via engine/negotiation.py (SPOT_RENEGOTIATED
+    # payload carries `new_expected_closed_at_tick` — the ONLY legal path
+    # that mutates this field after creation).
+    expected_closed_at_tick: int = -1
+
     # --- Phase Peer-A+: origination (offer vs request_matched) -----------
     # peer-pivot §3-request — 스팟이 어디서 시작됐는가. 호스트가 먼저 모집글
     # 올림(offer) vs 학생이 먼저 "배우고 싶어요" 요청을 올리고 호스트가 그에

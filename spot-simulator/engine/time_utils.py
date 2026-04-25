@@ -57,3 +57,71 @@ def schedule_key(tick: int) -> str:
     """
 
     return f"{get_day_type(tick)}_{get_time_slot(tick)}"
+
+
+# ---------------------------------------------------------------------------
+# Tick <-> virtual wall-clock (ms) conversion — FE handoff 2026-04-24
+# ---------------------------------------------------------------------------
+#
+# FE handoff (`BACKEND_HANDOFF_ENTITIES.md §SpotLifecycle`) requires all
+# timestamps on the SpotLifecycle stream (`created_at_ms`, `matched_at_ms`,
+# `joined_at_ms`, `closed_at_ms`, `expected_closed_at_ms`, `arrived_at_ms`)
+# to be **simulation virtual-time milliseconds** — not wall clock. The BE
+# server reads `event_log.jsonl` and converts `tick` → `ms` via these helpers
+# before publishing SSE frames.
+#
+# `TICK_DURATION_MS` is derived from `simulation_config.yaml::*.time_resolution_hours`.
+# Current configs hold it at 1h (phase_1/2/3), so one tick == one hour ==
+# 3_600_000ms. If the resolution ever changes, `make_run_clock()` reads the
+# config value and returns a closure bound to that run.
+
+TICK_DURATION_MS_PER_HOUR: int = 3_600_000
+
+
+def tick_to_virtual_ms(
+    tick: int,
+    *,
+    run_start_ms: int = 0,
+    time_resolution_hours: int = 1,
+) -> int:
+    """Convert a `tick` into virtual-time milliseconds for FE consumption.
+
+    `run_start_ms` anchors tick=0. A run is deterministic by `seed`, so
+    `run_start_ms` is typically taken from `SimulationRun.started_at` at the
+    moment the BE server serializes the run. Simulator code that cannot see
+    `run_start_ms` (it is not in `simulation_config.yaml`) should pass 0 —
+    the BE publisher adds the offset when turning ticks into wall clock.
+
+    Guarantees:
+      - monotonically non-decreasing with `tick`
+      - byte-identical output for equal `(tick, run_start_ms, time_resolution_hours)`
+      - safe for `tick < 0` (negative offsets are valid; used for
+        `wait_deadline_tick = -1` sentinels)
+    """
+
+    return run_start_ms + tick * time_resolution_hours * TICK_DURATION_MS_PER_HOUR
+
+
+def make_run_clock(
+    *,
+    run_start_ms: int = 0,
+    time_resolution_hours: int = 1,
+):
+    """Return a closure that converts `tick` → virtual ms.
+
+    Useful when the engine emits many events and does not want to pass
+    `run_start_ms` / `time_resolution_hours` to every `payload` call site.
+    Usage:
+
+        clock = make_run_clock(run_start_ms=0, time_resolution_hours=1)
+        payload = {"joined_at_ms": clock(tick), ...}
+    """
+
+    def _clock(tick: int) -> int:
+        return tick_to_virtual_ms(
+            tick,
+            run_start_ms=run_start_ms,
+            time_resolution_hours=time_resolution_hours,
+        )
+
+    return _clock

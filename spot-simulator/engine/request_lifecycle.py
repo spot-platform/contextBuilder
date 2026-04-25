@@ -173,6 +173,7 @@ def create_teach_spot_from_request(
 
     # legacy category 필드 — request 경로는 "teach" 로 고정. legacy path 의
     # category_match 어댑터는 peer 경로를 타지 않으므로 충돌 없음.
+    scheduled = tick + _DEFAULT_SCHEDULED_LEAD
     spot = Spot(
         spot_id=spot_id,
         host_agent_id=host.agent_id,
@@ -180,7 +181,7 @@ def create_teach_spot_from_request(
         category="teach",
         capacity=_DEFAULT_REQUEST_SPOT_PARTNER_COUNT,
         min_participants=2,
-        scheduled_tick=tick + _DEFAULT_SCHEDULED_LEAD,
+        scheduled_tick=scheduled,
         created_at_tick=tick,
         skill_topic=request.skill_topic,
         host_skill_level=host_level,
@@ -194,6 +195,9 @@ def create_teach_spot_from_request(
         origination_agent_id=request.learner_agent_id,
         originating_request_id=request.request_id,
         responded_at_tick=tick,
+        # FE handoff 2026-04-24: deterministic expected-close for FE
+        # `spot.created` event, mirroring the offer path in runner.py.
+        expected_closed_at_tick=scheduled + 2,
     )
     # learner 자동 참여 (본인이 올린 요청이니 당연히 join).
     spot.participants.append(request.learner_agent_id)
@@ -323,6 +327,27 @@ def process_open_requests(
                         "teach_mode": spot.teach_mode,
                         "venue_type": spot.venue_type,
                         "origination_mode": "request_matched",
+                        # FE handoff 2026-04-24: align with offer-path payload
+                        # so the BE publisher can emit `spot.created` from
+                        # either origination path without branching.
+                        "host_persona_id": host.agent_id,
+                        "region_id": spot.region_id,
+                        "scheduled_tick": spot.scheduled_tick,
+                        "expected_closed_at_tick": spot.expected_closed_at_tick,
+                        "capacity": spot.capacity,
+                        "host_skill_level": spot.host_skill_level,
+                        "fee_breakdown": {
+                            "peer_labor_fee": spot.fee_breakdown.peer_labor_fee,
+                            "material_cost": spot.fee_breakdown.material_cost,
+                            "venue_rental": spot.fee_breakdown.venue_rental,
+                            "equipment_rental": spot.fee_breakdown.equipment_rental,
+                            "total": spot.fee_breakdown.total,
+                            "passthrough_total": spot.fee_breakdown.passthrough_total,
+                        },
+                        # request-matched 는 FE 맥락에서 여전히 offer 이벤트로
+                        # 보이지만, FE 가 voice 구분이 필요할 때 참고할 수 있도록
+                        # intent 필드를 포함한다.
+                        "intent": "request",
                     },
                 )
             )

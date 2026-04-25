@@ -67,7 +67,20 @@ def process_lifecycle(
                 spot.status = SpotStatus.CANCELED
                 spot.canceled_at_tick = tick
                 event_log.append(
-                    make_event(tick, "SPOT_TIMEOUT", agent=None, spot=spot)
+                    make_event(
+                        tick,
+                        "SPOT_TIMEOUT",
+                        agent=None,
+                        spot=spot,
+                        # FE handoff 2026-04-24: maps to `spot.closed` with
+                        # outcome=TIMEOUT. `closed_at_tick` lets the BE
+                        # publisher compute `closed_at_ms` without reading
+                        # lifecycle timestamps off the Spot dataclass.
+                        payload={
+                            "closed_at_tick": tick,
+                            "outcome": "TIMEOUT",
+                        },
+                    )
                 )
             continue
 
@@ -77,7 +90,24 @@ def process_lifecycle(
                 spot.status = SpotStatus.CONFIRMED
                 spot.confirmed_at_tick = tick
                 event_log.append(
-                    make_event(tick, "SPOT_CONFIRMED", agent=None, spot=spot)
+                    make_event(
+                        tick,
+                        "SPOT_CONFIRMED",
+                        agent=None,
+                        spot=spot,
+                        # FE handoff 2026-04-24: mirrored fields let the BE
+                        # publisher emit a `spot.matched` event even when the
+                        # earlier SPOT_MATCHED emit was agent-scoped and not
+                        # lifecycle-scoped.
+                        payload={
+                            "matched_at_tick": tick,
+                            "arrived_count": 0,
+                            "participants": [
+                                {"persona_id": pid}
+                                for pid in spot.participants
+                            ],
+                        },
+                    )
                 )
                 # Pin host + participants: they now "owe" this spot a check-in.
                 host = agents_by_id.get(spot.host_agent_id)
@@ -114,13 +144,35 @@ def process_lifecycle(
                     spot.status = SpotStatus.DISPUTED
                     spot.disputed_at_tick = tick
                     event_log.append(
-                        make_event(tick, "SPOT_DISPUTED", agent=None, spot=spot)
+                        make_event(
+                            tick,
+                            "SPOT_DISPUTED",
+                            agent=None,
+                            spot=spot,
+                            # FE handoff 2026-04-24: DISPUTED resolves into
+                            # SETTLED or FORCE_SETTLED later (settlement.py),
+                            # so `spot.closed` is emitted by settlement, not
+                            # here. We still tag the closing tick so the BE
+                            # publisher can map DISPUTED -> pending state.
+                            payload={"disputed_at_tick": tick},
+                        )
                     )
                 else:
                     spot.status = SpotStatus.COMPLETED
                     spot.completed_at_tick = tick
                     event_log.append(
-                        make_event(tick, "SPOT_COMPLETED", agent=None, spot=spot)
+                        make_event(
+                            tick,
+                            "SPOT_COMPLETED",
+                            agent=None,
+                            spot=spot,
+                            # FE handoff 2026-04-24: COMPLETED is the happy
+                            # path -> `spot.closed` with outcome=MATCHED.
+                            payload={
+                                "closed_at_tick": tick,
+                                "outcome": "MATCHED",
+                            },
+                        )
                     )
                     for pid in spot.checked_in:
                         agent = agents_by_id.get(pid)

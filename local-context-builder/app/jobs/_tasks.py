@@ -22,6 +22,7 @@ from app.jobs import (
     incremental_refresh,
     merge_real_data,
     publish_dataset,
+    recompute_attractiveness,
 )
 
 
@@ -61,6 +62,17 @@ def task_merge_real_data(target_city: str) -> dict[str, Any]:
     return merge_real_data.run(target_city)
 
 
+@celery.task(
+    name="jobs.recompute_attractiveness",
+    # FE handoff 2026-04-24: FE 는 rate limit 을 분당 3회로 제한한다.
+    # Celery 단에서도 동일 feed_id 가 동시에 2 개 이상 큐에 쌓이지 않도록
+    # ``rate_limit`` 으로 안전망을 둔다 (라우터 실패 대비).
+    rate_limit="3/m",
+)
+def task_recompute_attractiveness(feed_id: str) -> dict[str, Any]:
+    return recompute_attractiveness.run_recompute_attractiveness(feed_id)
+
+
 #: All task names this service exposes. Used by ``admin`` unit tests
 #: as a single source of truth when checking send_task wiring.
 REGISTERED_TASK_NAMES: tuple[str, ...] = (
@@ -70,4 +82,5 @@ REGISTERED_TASK_NAMES: tuple[str, ...] = (
     "jobs.build_all_features",
     "jobs.publish_dataset",
     "jobs.merge_real_data",
+    "jobs.recompute_attractiveness",
 )

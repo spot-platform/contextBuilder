@@ -406,12 +406,30 @@ def _run_legacy(
                     if roll < _p_checkin(agent):
                         execute_check_in(agent, spot, tick)
                         event_log.append(
-                            make_event(tick, "CHECK_IN", agent=agent, spot=spot)
+                            make_event(
+                                tick,
+                                "CHECK_IN",
+                                agent=agent,
+                                spot=spot,
+                                payload={
+                                    "arrived_at_tick": tick,
+                                    "persona_id": agent.agent_id,
+                                },
+                            )
                         )
                     else:
                         execute_no_show(agent, spot, tick)
                         event_log.append(
-                            make_event(tick, "NO_SHOW", agent=agent, spot=spot)
+                            make_event(
+                                tick,
+                                "NO_SHOW",
+                                agent=agent,
+                                spot=spot,
+                                payload={
+                                    "persona_id": agent.agent_id,
+                                    "reason": "no_show",
+                                },
+                            )
                         )
 
             # 7. Cancel pass — independent rolls for every participant of
@@ -431,7 +449,17 @@ def _run_legacy(
                     if execute_cancel_join(agent, spot, tick):
                         event_log.append(
                             make_event(
-                                tick, "CANCEL_JOIN", agent=agent, spot=spot
+                                tick,
+                                "CANCEL_JOIN",
+                                agent=agent,
+                                spot=spot,
+                                payload={
+                                    # FE handoff 2026-04-24: maps to
+                                    # `spot.participant_left` event.
+                                    "persona_id": agent.agent_id,
+                                    "left_at_tick": tick,
+                                    "reason": "cancel_join",
+                                },
                             )
                         )
 
@@ -870,6 +898,7 @@ def _run_peer(
                         expected_partners=expected_partners,
                         catalog=skills_catalog,
                     )
+                    scheduled = tick + rng.randint(6, 24)
                     new_spot = Spot(
                         spot_id=_alloc_spot_id(),
                         host_agent_id=agent.agent_id,
@@ -877,7 +906,7 @@ def _run_peer(
                         category="teach",
                         capacity=capacity,
                         min_participants=2,
-                        scheduled_tick=tick + rng.randint(6, 24),
+                        scheduled_tick=scheduled,
                         created_at_tick=tick,
                         skill_topic=teach_skill,
                         host_skill_level=skills[teach_skill].level,
@@ -889,6 +918,10 @@ def _run_peer(
                         wait_deadline_tick=tick + request_deadline_lead,
                         origination_mode="offer",
                         origination_agent_id=agent.agent_id,
+                        # FE handoff 2026-04-24: deterministic expected-close.
+                        # Default to scheduled_tick + duration; SPOT_RENEGOTIATED
+                        # is the only path that rewrites this.
+                        expected_closed_at_tick=scheduled + 2,
                     )
                     spots.append(new_spot)
                     open_teach_spots.append(new_spot)
@@ -919,6 +952,14 @@ def _run_peer(
                                     "total": fb.total,
                                     "passthrough_total": fb.passthrough_total,
                                 },
+                                # FE handoff 2026-04-24: spot.created payload
+                                # fields the BE publisher needs to build a
+                                # `SpotLifecycleEvent.spot.created`.
+                                "host_persona_id": agent.agent_id,
+                                "region_id": agent.home_region_id,
+                                "scheduled_tick": scheduled,
+                                "expected_closed_at_tick": new_spot.expected_closed_at_tick,
+                                "intent": "offer",
                             },
                         )
                     )
@@ -950,6 +991,11 @@ def _run_peer(
                                 "is_follower": False,
                                 "fee_charged": target.fee_per_partner,
                                 "wallet_after": agent.assets.wallet_monthly,
+                                # FE handoff 2026-04-24:
+                                # `spot.participant_joined` requires tick so
+                                # the BE publisher can convert to ms.
+                                "joined_at_tick": tick,
+                                "persona_id": agent.agent_id,
                             },
                         )
                     )
@@ -960,6 +1006,19 @@ def _run_peer(
                                 "SPOT_MATCHED",
                                 agent=None,
                                 spot=target,
+                                payload={
+                                    # FE handoff 2026-04-24: `spot.matched`
+                                    # carries BE-adjudicated arrival state.
+                                    # `arrived_count` == len(participants) at
+                                    # match time; FE must not infer from
+                                    # coordinate thresholds.
+                                    "matched_at_tick": tick,
+                                    "arrived_count": len(target.participants),
+                                    "participants": [
+                                        {"persona_id": pid}
+                                        for pid in target.participants
+                                    ],
+                                },
                             )
                         )
                         if target in open_teach_spots:
@@ -1017,12 +1076,36 @@ def _run_peer(
                     if roll < _p_checkin(agent):
                         execute_check_in(agent, spot, tick)
                         event_log.append(
-                            make_event(tick, "CHECK_IN", agent=agent, spot=spot)
+                            make_event(
+                                tick,
+                                "CHECK_IN",
+                                agent=agent,
+                                spot=spot,
+                                # FE handoff 2026-04-24: CHECK_IN carries the
+                                # arrival timestamp the BE publisher uses to
+                                # populate `participants[].arrived_at_ms` on
+                                # spot.matched events. Previously FE inferred
+                                # arrival from a 55m coordinate threshold —
+                                # now BE owns the judgement.
+                                payload={
+                                    "arrived_at_tick": tick,
+                                    "persona_id": agent.agent_id,
+                                },
+                            )
                         )
                     else:
                         execute_no_show(agent, spot, tick)
                         event_log.append(
-                            make_event(tick, "NO_SHOW", agent=agent, spot=spot)
+                            make_event(
+                                tick,
+                                "NO_SHOW",
+                                agent=agent,
+                                spot=spot,
+                                payload={
+                                    "persona_id": agent.agent_id,
+                                    "reason": "no_show",
+                                },
+                            )
                         )
 
             for spot in spots:
@@ -1037,7 +1120,15 @@ def _run_peer(
                     if execute_cancel_join(agent, spot, tick):
                         event_log.append(
                             make_event(
-                                tick, "CANCEL_JOIN", agent=agent, spot=spot
+                                tick,
+                                "CANCEL_JOIN",
+                                agent=agent,
+                                spot=spot,
+                                payload={
+                                    "persona_id": agent.agent_id,
+                                    "left_at_tick": tick,
+                                    "reason": "cancel_join",
+                                },
                             )
                         )
 
