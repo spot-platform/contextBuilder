@@ -1,0 +1,10 @@
+# role_distance_rules.yaml — POI-anchored pipeline §Phase 0.
+#
+# routing 알고리즘이 venue_anchors 를 묶을 때 적용하는 거리 / 신뢰도 휴리스틱.
+
+max_total_walking_meters: 1500
+meetup_to_main_max_meters: 800
+main_to_secondary_max_meters: 600
+secondary_to_wrapup_max_meters: 600
+prefer_same_road_address: true
+min_mapping_confidence: 0.7

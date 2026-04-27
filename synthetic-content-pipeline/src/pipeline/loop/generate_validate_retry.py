@@ -168,12 +168,26 @@ def _lazy_review() -> Type:
     return ReviewGenerator
 
 
+def _lazy_price() -> Type:
+    from pipeline.generators.price import SpotPriceGenerator  # noqa: WPS433
+
+    return SpotPriceGenerator
+
+
+def _lazy_preparation() -> Type:
+    from pipeline.generators.preparation import SpotPreparationGenerator  # noqa: WPS433
+
+    return SpotPreparationGenerator
+
+
 GENERATOR_FACTORIES: Dict[str, Callable[[], Type]] = {
     "feed": _lazy_feed,
     "detail": _lazy_detail,
     "plan": _lazy_plan,
     "messages": _lazy_messages,
     "review": _lazy_review,
+    "price": _lazy_price,
+    "preparation": _lazy_preparation,
 }
 
 
@@ -395,7 +409,25 @@ def process_spot_full(
         "region": getattr(spec, "region", None),
     }
 
-    processing_order = ("feed", "detail", "plan", "messages", "review")
+    # POI-anchored Phase 4: price / preparation 추가. detail 다음에 price,
+    # plan 다음에 preparation. review/messages 위치 / 처리 순서 보존.
+    # USE_POI_ANCHORS=false 면 신규 2종 미실행 → v2 회귀 안전.
+    import os
+    _poi_on = (
+        os.getenv("USE_POI_ANCHORS", "true") or ""
+    ).strip().lower() not in ("false", "0", "no", "off")
+    if _poi_on:
+        processing_order = (
+            "feed",
+            "detail",
+            "price",
+            "plan",
+            "preparation",
+            "messages",
+            "review",
+        )
+    else:
+        processing_order = ("feed", "detail", "plan", "messages", "review")
 
     for content_type in processing_order:
         factory_getter = GENERATOR_FACTORIES.get(content_type)

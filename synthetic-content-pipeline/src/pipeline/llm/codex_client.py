@@ -8,6 +8,7 @@ from __future__ import annotations
 import json
 import logging
 import os
+import shutil
 import subprocess  # ALLOW_CODEX_SUBPROCESS — codex_client 만 호출 허용
 import tempfile
 import threading
@@ -113,11 +114,17 @@ def _invoke_codex(prompt: str, schema_path: Path, model: str) -> dict:
     if not schema_path.exists():
         raise CodexCallError(-1, f"schema file not found: {schema_path}")
 
+    # Windows 호환: PATH 에 등록된 codex.CMD / codex.cmd / codex.exe 등
+    # 모든 확장자를 shutil.which 로 해결. POSIX 에서도 codex 절대경로가 됨.
+    codex_bin = shutil.which("codex") or "codex"
+
     msg_fd, msg_path = tempfile.mkstemp(suffix=".json", prefix="codex_msg_")
     os.close(msg_fd)
     try:
+        # Windows cmd 명령줄 길이 제한 (~32K) 회피: prompt 를 stdin 으로 보낸다.
+        # codex exec --help: "If stdin is piped ... instructions are read from stdin".
         cmd = [
-            "codex",
+            codex_bin,
             "exec",
             "--json",
             "--skip-git-repo-check",
@@ -130,10 +137,11 @@ def _invoke_codex(prompt: str, schema_path: Path, model: str) -> dict:
             msg_path,
         ]
         # model 이 비어있으면 -m 을 생략하고 codex CLI default 에 맡긴다.
-        # ChatGPT 구독에서는 gpt-5-codex 같은 특정 모델명이 거부될 수 있다.
         if model:
             cmd.extend(["-m", model])
-        cmd.append(prompt)
+        # PROMPT positional 자리에 "-" 를 두어 stdin 사용을 명시.
+        cmd.append("-")
+
         timeout = _resolve_timeout()
         sem = _get_semaphore()
         with sem:
@@ -142,8 +150,9 @@ def _invoke_codex(prompt: str, schema_path: Path, model: str) -> dict:
                     cmd,
                     capture_output=True,
                     text=True,
+                    encoding="utf-8",
                     timeout=timeout,
-                    stdin=subprocess.DEVNULL,
+                    input=prompt,
                 )
             except FileNotFoundError as e:
                 raise CodexCallError(-1, f"codex CLI not found: {e}") from e

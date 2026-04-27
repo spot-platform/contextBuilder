@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SpotPreparation",
+  "type": "object",
+  "required": [
+    "host_provides",
+    "partner_brings",
+    "weather_contingency",
+    "safety_notes",
+    "host_tip"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "host_provides": {
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 8,
+      "items": {"type": "string", "minLength": 1, "maxLength": 60}
+    },
+    "partner_brings": {
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 8,
+      "items": {"type": "string", "minLength": 1, "maxLength": 60}
+    },
+    "weather_contingency": {
+      "type": ["string", "null"],
+      "maxLength": 200
+    },
+    "safety_notes": {
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 5,
+      "items": {"type": "string", "minLength": 1, "maxLength": 120}
+    },
+    "host_tip": {
+      "type": ["string", "null"],
+      "maxLength": 200
+    }
+  }
+}

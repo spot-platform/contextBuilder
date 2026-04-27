@@ -1,0 +1,197 @@
+{
+  "spec_summary": {
+    "spot_id": "DEMO_S0001",
+    "region": "연무동",
+    "skill_topic": "스마트폰 사진",
+    "venue_type": "park",
+    "primary_pin": {
+      "place_id": 100033,
+      "name": "성곽 산책길",
+      "primary_category": "park",
+      "role": "main",
+      "lat": 37.292,
+      "lng": 127.022,
+      "address": "수원시 팔달구 연무동 산5",
+      "road_address": null,
+      "confidence": 0.95
+    },
+    "venue_anchors": [
+      {
+        "place_id": 100018,
+        "name": "성곽길 다방",
+        "primary_category": "cafe",
+        "role": "meetup",
+        "lat": 37.2906,
+        "lng": 127.0203,
+        "address": "수원시 팔달구 창룡대로 56",
+        "road_address": "수원시 팔달구 창룡대로 56",
+        "confidence": 0.94
+      },
+      {
+        "place_id": 100033,
+        "name": "성곽 산책길",
+        "primary_category": "park",
+        "role": "main",
+        "lat": 37.292,
+        "lng": 127.022,
+        "address": "수원시 팔달구 연무동 산5",
+        "road_address": null,
+        "confidence": 0.95
+      },
+      {
+        "place_id": 100004,
+        "name": "오후 세시 카페",
+        "primary_category": "cafe",
+        "role": "wrapup",
+        "lat": 37.2891,
+        "lng": 127.0231,
+        "address": "수원시 팔달구 창룡대로 41",
+        "road_address": "수원시 팔달구 창룡대로 41",
+        "confidence": 0.91
+      }
+    ],
+    "latitude": 37.292,
+    "longitude": 127.022,
+    "poi_fallback_reason": null
+  },
+  "results": {
+    "feed": {
+      "template_id": "feed:v2",
+      "stub": false,
+      "retry_count": 0,
+      "payload": {
+        "title": "연무동 골목을 스마트폰으로 담아봐요",
+        "summary": "혹시 스마트폰으로 동네 골목이랑 화성 성곽길 사진 같이 찍어보실 분 계실까요? 저는 요즘 필름 느낌으로 동네를 다시 보는 재미가 있어서, 역광은 살짝 피하면서 찍고 마무리로 카페에서 사진 나눠보려고 해요.",
+        "tags": [
+          "연무동",
+          "골목사진",
+          "성곽길",
+          "스마트폰",
+          "초면환영"
+        ],
+        "price_label": "1인 약 1.5만원",
+        "region_label": "수원시 연무동",
+        "time_label": "5/23(토) 14:00",
+        "status": "recruiting",
+        "supporter_label": "supporter_neutral"
+      }
+    },
+    "detail": {
+      "template_id": "detail:v3",
+      "stub": false,
+      "retry_count": 0,
+      "payload": {
+        "title": "연무동 성곽 산책길 스마트폰 사진 모임",
+        "description": "성곽길 다방 (수원시 팔달구 창룡대로 56)에서 가볍게 인사하고, 성곽 산책길 (수원시 팔달구 연무동 산5)을 걸으며 스마트폰으로 골목 사진을 찍어봐요. 역광이 너무 센 자리 피하는 법, 화면 안에 길과 벽을 담는 법처럼 제가 평소 자주 쓰는 방식으로 같이 해볼게요. 참가비 15000원에는 호스트의 가이드와 진행 시간이 포함돼요. 마지막에는 오후 세시 카페 (수원시 팔달구 창룡대로 41) 근처에서 사진을 같이 보며 마음에 드는 컷을 골라봐요.",
+        "activity_purpose": "사진을 잘 몰라도 동네를 새롭게 보고, 또래끼리 가볍게 걷고 이야기 나누려고 여는 모임이에요.",
+        "progress_style": "4명이 함께 성곽길 다방에서 만나 성곽 산책길로 이동해요. 짧게 촬영 팁을 나누고 각자 찍어본 뒤, 중간중간 같이 보며 이어가요.",
+        "materials": [
+          "충전 충분한 스마트폰",
+          "편한 신발",
+          "보조배터리",
+          "가볍게 걸칠 겉옷",
+          "비 예보 확인 후 작은 우산"
+        ],
+        "target_audience": "수원시 연무동에서 스마트폰 사진을 가볍게 시작해보고 싶은 또래 참가자",
+        "cost_breakdown": [
+          {
+            "item": "가이드/진행",
+            "amount": 15000
+          }
+        ],
+        "host_intro": "저는 스마트폰으로 동네 골목을 2년째 찍고 있는 또래 호스트예요. 요즘은 필름 느낌으로 익숙한 길을 다시 찍어보는 데 푹 빠져 있어요.",
+        "policy_notes": "강수 확률이 30% 이상이면 다음 회차로 미루거나 인근 카페로 변경해요."
+      }
+    },
+    "plan": {
+      "template_id": "plan:v3",
+      "stub": false,
+      "retry_count": 0,
+      "payload": {
+        "steps": [
+          {
+            "time": "14:00",
+            "activity": "처음이라 커피 한 잔하며 인사해요",
+            "place_id": null,
+            "intent": "14시에는 성곽길 다방에서 편하게 모여 오늘 찍어볼 사진 흐름을 짧게 나눠요."
+          },
+          {
+            "time": "14:20",
+            "activity": "성곽길 걸으며 구도부터 같이 찍어봐요",
+            "place_id": null,
+            "intent": "햇빛이 남아 있는 오후 시간에 성곽 산책길을 걸으며 스마트폰 사진을 바로 해보기 좋아요."
+          },
+          {
+            "time": "16:30",
+            "activity": "카페에서 사진 보며 후기 한 줄 나눠요",
+            "place_id": null,
+            "intent": "마지막에는 오후 세시 카페에서 쉬면서 서로 찍은 사진과 느낀 점을 가볍게 나눠요."
+          }
+        ],
+        "total_duration_minutes": 180
+      }
+    },
+    "price": {
+      "template_id": "price:v1",
+      "stub": false,
+      "retry_count": 0,
+      "payload": {
+        "base_fee": 15000,
+        "included_items": [
+          {
+            "name": "가이드/진행",
+            "value": "호스트의 시간과 진행을 포함"
+          },
+          {
+            "name": "촬영 미션",
+            "value": "공원에서 바로 해볼 수 있는 스마트폰 사진 미션 포함"
+          },
+          {
+            "name": "사진 피드백",
+            "value": "각자 찍은 사진을 같이 보고 가볍게 의견 나누기 포함"
+          }
+        ],
+        "optional_addons": [
+          {
+            "name": "간단 소품",
+            "price": 2000,
+            "mechanism": "realcost",
+            "explanation": "실비라 구매 영수증 공유해드려요. 꽃이나 작은 천 같은 촬영 소품을 나눠 써요."
+          },
+          {
+            "name": "인화 체험",
+            "price": 5000,
+            "mechanism": "funding",
+            "explanation": "4명 모이면 다 같이 1인 5,000원씩 나눠 내요. 근처 인화소 기준이에요."
+          }
+        ],
+        "refund_policy": {
+          "cutoff_hours": 72,
+          "full_refund_until": "활동 3일 전까지",
+          "note": "그 이후에는 준비한 소품이나 예약 상황에 따라 환불이 어려울 수 있어요."
+        },
+        "summary_line": "참가비 15,000원에 공원 스마트폰 사진 진행과 피드백이 포함이고, 소품이나 인화는 원하면 실비로 나눠 내요."
+      }
+    },
+    "preparation": {
+      "template_id": "preparation:v1",
+      "stub": false,
+      "retry_count": 0,
+      "payload": {
+        "host_provides": [
+          "촬영 가이드"
+        ],
+        "partner_brings": [
+          "충전 넉넉한 스마트폰",
+          "걷기 편한 신발"
+        ],
+        "weather_contingency": "강수 확률이 30% 이상이면 다음 회차로 미루거나 인근 카페로 변경해요.",
+        "safety_notes": [
+          "공원 안을 조금 걸을 수 있어 발이 편한 신발이면 좋아요.",
+          "촬영 중에는 주변 사람과 자전거 동선만 가볍게 살펴주세요."
+        ],
+        "host_tip": "사진 많이 찍다 보면 배터리가 빨리 닳아서 오기 전에 충전만 넉넉히 해오시면 좋아요."
+      }
+    }
+  }
+}

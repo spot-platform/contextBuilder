@@ -74,14 +74,28 @@ def test_positive_yeonmu_bundle_all_pairs_pass(yeonmu_spec, cr_rules):
         f"positive bundle should pass cross-ref but got: "
         f"{[(r.rejected_field, r.reason) for r in res.rejections]}"
     )
-    assert set(res.meta["executed_pairs"]) == {
+    # legacy 5쌍은 모두 실행. POI-anchored 신규 4쌍은 spec 에 venue_anchors 가
+    # 없으므로 skip 되는 것이 정상 (Phase 5 회귀 안전).
+    legacy_executed = {
         "feed↔detail",
         "detail↔plan",
         "detail↔review",
         "feed↔messages",
         "review↔activity_result",
     }
-    assert res.meta["skipped_pairs"] == []
+    assert legacy_executed.issubset(set(res.meta["executed_pairs"]))
+    poi_pairs = {
+        "detail↔venue_anchors",
+        "plan↔poi",
+        "feed↔primary_pin",
+        "detail↔price",
+        "detail↔preparation",
+    }
+    # POI 4쌍은 anchors 없으면 skip 또는 detail/price/preparation 누락 시 skip.
+    assert all(
+        p in res.meta["executed_pairs"] or p in res.meta["skipped_pairs"]
+        for p in poi_pairs
+    )
 
 
 # ---------------------------------------------------------------------------

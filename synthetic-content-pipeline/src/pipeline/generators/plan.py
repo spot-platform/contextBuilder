@@ -78,10 +78,10 @@ class SpotPlanGenerator(BaseGenerator):
     """스팟 타임라인 생성기."""
 
     content_type: str = "plan"
-    template_id: str = "plan:v2"
-    template_path: str = "plan/v2.j2"
+    template_id: str = "plan:v3"
+    template_path: str = "plan/v3.j2"
     schema_path: Path = (
-        Path(__file__).resolve().parent.parent / "llm" / "schemas" / "plan.json"
+        Path(__file__).resolve().parent.parent / "llm" / "schemas" / "plan_v3.json"
     )
 
     def __init__(self) -> None:
@@ -104,19 +104,52 @@ class SpotPlanGenerator(BaseGenerator):
         )
         variables["tone_examples"] = tone_examples_for(spec.host_persona.type)
         variables["schedule_duration_minutes"] = spec.schedule.duration_minutes
+        # v3 는 spec.plan_steps (deterministic draft) 를 사용. base.spec_to_variables
+        # 가 이미 ``plan_steps`` 키를 평탄화했지만, 호환을 위해 v2 ``plan_draft`` 도
+        # 함께 계산 (template 안 쓰면 무시됨).
         variables["plan_draft"] = _build_plan_draft(
             spec.schedule.start_time, spec.schedule.duration_minutes
         )
         return variables
 
     def _placeholder_payload(self, variables: Dict[str, Any]) -> Dict[str, Any]:
-        """stub 폴백 — draft 를 그대로 plan steps 로 변환."""
+        """stub 폴백.
+
+        spec.plan_steps (variables['plan_steps']) 가 있으면 v3 형태로,
+        없으면 v2 의 plan_draft 기반 fallback.
+        """
+        plan_steps = variables.get("plan_steps") or []
+        if plan_steps:
+            steps = []
+            for ps in plan_steps:
+                step = {
+                    "time": ps["time"],
+                    "activity": ps.get("activity") or "본 활동 진행",
+                }
+                # place_id / intent 는 schema 에 optional. None 이면 생략.
+                place = ps.get("place")
+                if place and place.get("place_id") is not None:
+                    step["place_id"] = int(place["place_id"])
+                if ps.get("intent"):
+                    step["intent"] = ps["intent"]
+                steps.append(step)
+            while len(steps) < 3:
+                steps.append(
+                    {"time": variables["schedule_time"], "activity": "본 활동 진행"}
+                )
+            return {
+                "steps": steps,
+                "total_duration_minutes": int(
+                    variables.get("schedule_duration_minutes", 120)
+                ),
+            }
+
+        # v2 fallback
         draft = variables.get("plan_draft") or []
         steps = [
             {"time": row["time"], "activity": row["activity_hint"]}
             for row in draft
         ]
-        # 최소 3 step 확보.
         while len(steps) < 3:
             steps.append(
                 {"time": variables["schedule_time"], "activity": "본 활동 진행"}
@@ -124,14 +157,7 @@ class SpotPlanGenerator(BaseGenerator):
         return {
             "steps": steps,
             "total_duration_minutes": int(
-                variables.get(
-                    "schedule_duration_minutes",
-                    variables.get("activity_result", {}).get(
-                        "duration_actual_minutes", 120
-                    )
-                    if isinstance(variables.get("activity_result"), dict)
-                    else 120,
-                )
+                variables.get("schedule_duration_minutes", 120)
             ),
         }
 

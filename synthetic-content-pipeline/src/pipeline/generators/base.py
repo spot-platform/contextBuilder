@@ -97,6 +97,12 @@ COMMON_VARIABLE_KEYS: frozenset = frozenset({
     "taste_facets",
     "recent_obsession",
     "curiosity_hooks",
+    # ── POI-anchored (Phase 2 신규 5 키) ─────────────────────────────
+    "venue_anchors",
+    "primary_pin",
+    "plan_steps",
+    "price_breakdown",
+    "preparation",
 })
 
 
@@ -306,6 +312,26 @@ class BaseGenerator:
             "taste_facets": list(spec.taste_facets),
             "recent_obsession": spec.recent_obsession,
             "curiosity_hooks": list(spec.curiosity_hooks),
+            # ── POI-anchored (Phase 2) ───────────────────────────────
+            # 평탄화: pydantic 모델 → dict (LLM 프롬프트 jinja2 에서 직접 dict
+            # 접근 가능하도록). venue_anchors 는 list of dict, primary_pin/
+            # price_breakdown/preparation 은 dict or None, plan_steps 는
+            # list of dict.
+            "venue_anchors": [a.model_dump() for a in spec.venue_anchors],
+            "primary_pin": (
+                spec.primary_pin.model_dump() if spec.primary_pin is not None else None
+            ),
+            "plan_steps": [s.model_dump() for s in spec.plan_steps],
+            "price_breakdown": (
+                spec.price_breakdown.model_dump()
+                if spec.price_breakdown is not None
+                else None
+            ),
+            "preparation": (
+                spec.preparation.model_dump()
+                if spec.preparation is not None
+                else None
+            ),
         }
 
         # 변수 표준 일관성 검사 (개발용 sanity assert).

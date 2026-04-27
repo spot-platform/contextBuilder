@@ -186,6 +186,24 @@ class Publisher:
             result.skipped_rows.setdefault("plan", 0)
         result.published_rows.setdefault("plan", 0)  # plan 은 항상 0 row 자체 insert.
 
+        # POI-anchored Phase 7: price / preparation 카운트 추적 (현재 별도 row
+        # 미발행 — detail row 내 cost_breakdown_json / materials_json 에 이미
+        # 반영됨). reject/conditional 카운트만 PublishResult 에 노출하여 QA
+        # 가 다양성 메트릭을 계산할 수 있게 한다.
+        for ct in ("price", "preparation"):
+            cpr = contents.get(ct)
+            if cpr is None:
+                result.published_rows.setdefault(ct, 0)
+                result.skipped_rows.setdefault(ct, 0)
+                continue
+            cls = getattr(cpr, "classification", None)
+            if cls in _PUBLISHABLE_CLASSIFICATIONS:
+                result.published_rows[ct] = 1
+                result.skipped_rows.setdefault(ct, 0)
+            else:
+                result.published_rows.setdefault(ct, 0)
+                result.skipped_rows[ct] = result.skipped_rows.get(ct, 0) + 1
+
         # messages (4 row)
         result.published_rows["messages"], result.skipped_rows["messages"] = self._safe_publish(
             "messages", contents.get("messages"), spot_result.spot_id, result

@@ -612,6 +612,8 @@ def validate_cross_reference(
     plan: Optional[Dict[str, Any]] = None,
     messages: Optional[Dict[str, Any]] = None,
     review: Optional[Dict[str, Any]] = None,
+    price: Optional[Dict[str, Any]] = None,
+    preparation: Optional[Dict[str, Any]] = None,
     spec: ContentSpec,
     rules: Optional[Dict[str, Any]] = None,
 ) -> ValidationResult:
@@ -669,6 +671,42 @@ def validate_cross_reference(
     else:
         skipped_pairs.append("review↔activity_result")
 
+    # POI-anchored Pair 6~9 (Phase 5).
+    # spec.venue_anchors 가 비어있으면 모든 POI pair skip (legacy jitter fallback).
+    has_anchors = bool(getattr(spec, "venue_anchors", None))
+    if has_anchors:
+        if detail:
+            executed_pairs.append("detail↔venue_anchors")
+            rejections.extend(_pair_detail_venue_anchors(detail, spec))
+        else:
+            skipped_pairs.append("detail↔venue_anchors")
+
+        if plan:
+            executed_pairs.append("plan↔poi")
+            rejections.extend(_pair_plan_poi(plan, spec))
+        else:
+            skipped_pairs.append("plan↔poi")
+
+        if feed:
+            executed_pairs.append("feed↔primary_pin")
+            rejections.extend(_pair_feed_primary_pin(feed, spec))
+        else:
+            skipped_pairs.append("feed↔primary_pin")
+    else:
+        skipped_pairs.extend(["detail↔venue_anchors", "plan↔poi", "feed↔primary_pin"])
+
+    if detail and price:
+        executed_pairs.append("detail↔price")
+        rejections.extend(_pair_detail_price(detail, price, spec))
+    else:
+        skipped_pairs.append("detail↔price")
+
+    if detail and preparation:
+        executed_pairs.append("detail↔preparation")
+        rejections.extend(_pair_detail_preparation(detail, preparation))
+    else:
+        skipped_pairs.append("detail↔preparation")
+
     meta = {
         "spot_id": spot_id,
         "executed_pairs": executed_pairs,
@@ -677,6 +715,274 @@ def validate_cross_reference(
         "rule_count": len(rejections),
     }
     return ValidationResult.from_rejections("cross_ref", rejections, meta=meta)
+
+
+# ---------------------------------------------------------------------------
+# POI-anchored cross-reference pairs (Phase 5)
+# ---------------------------------------------------------------------------
+
+
+def _pair_detail_venue_anchors(
+    detail: Dict[str, Any], spec: ContentSpec
+) -> List[Rejection]:
+    """detail 본문에 venue_anchors[*].name 중 최소 1개가 등장해야 한다.
+
+    LLM 이 POI 무시하고 일반 콘텐츠를 생성하면 hard reject.
+    또 venue_anchors 외 가게명 환각이 의심되면 warn.
+    """
+    rejections: List[Rejection] = []
+    anchors = list(spec.venue_anchors or [])
+    if not anchors:
+        return rejections
+
+    # 본문 = description + activity_purpose + progress_style + host_intro
+    text_blob = " ".join(
+        str(detail.get(k) or "")
+        for k in ("description", "activity_purpose", "progress_style", "host_intro")
+    )
+
+    # 정확 substring 매칭 1차, 못 찾으면 fuzzy partial_ratio ≥ 80 2차.
+    matched: List[str] = []
+    for a in anchors:
+        name = a.name
+        if not name:
+            continue
+        if name in text_blob:
+            matched.append(name)
+            continue
+        # fuzzy fallback (띄어쓰기 변형 흡수)
+        if _similarity(name, text_blob) >= 80.0:
+            matched.append(name)
+
+    if not matched:
+        anchor_names = [a.name for a in anchors[:3]]
+        rejections.append(
+            Rejection(
+                layer="cross_ref",
+                rejected_field="detail:venue_anchor_missing",
+                reason="no_anchor_in_text",
+                detail=(
+                    f"detail 본문에 venue_anchors 이름 0건 매칭. "
+                    f"anchors={anchor_names}"
+                ),
+                instruction=(
+                    f"description 또는 progress_style 에 위 anchors 중 "
+                    f"최소 1개 (예: {anchors[0].name}) 를 정확히 인용하라"
+                ),
+                severity="reject",
+            )
+        )
+
+    return rejections
+
+
+def _pair_plan_poi(plan: Dict[str, Any], spec: ContentSpec) -> List[Rejection]:
+    """plan.steps[].place_id 가 spec.venue_anchors[*].place_id 의 부분집합인지.
+
+    None / 누락은 warn. anchors 외의 정수 ID 는 hard reject (환각).
+    """
+    rejections: List[Rejection] = []
+    anchors = list(spec.venue_anchors or [])
+    if not anchors:
+        return rejections
+
+    valid_ids = {a.place_id for a in anchors}
+    steps = plan.get("steps") or []
+    null_count = 0
+    invalid_ids: List[int] = []
+    for i, s in enumerate(steps):
+        pid = s.get("place_id")
+        if pid is None:
+            null_count += 1
+            continue
+        try:
+            pid_int = int(pid)
+        except (TypeError, ValueError):
+            null_count += 1
+            continue
+        if pid_int not in valid_ids:
+            invalid_ids.append(pid_int)
+
+    if invalid_ids:
+        rejections.append(
+            Rejection(
+                layer="cross_ref",
+                rejected_field="plan:place_id_invalid",
+                reason="place_id_not_in_anchors",
+                detail=(
+                    f"plan.steps 에 anchors 에 없는 place_id 등장: "
+                    f"{invalid_ids}. valid={sorted(valid_ids)}"
+                ),
+                instruction=(
+                    "plan.steps[].place_id 는 venue_anchors 의 place_id 만 사용. "
+                    "다른 ID 를 발명하지 말 것"
+                ),
+                severity="reject",
+            )
+        )
+
+    if null_count > 0 and null_count == len(steps):
+        # 전부 null 이면 warn — LLM 이 ID 활용 안 함.
+        rejections.append(
+            Rejection(
+                layer="cross_ref",
+                rejected_field="plan:place_id_missing",
+                reason="all_place_ids_null",
+                detail=(
+                    f"plan.steps {len(steps)} 개 모두 place_id null. "
+                    f"anchors 가 있는데 사용 안 함."
+                ),
+                instruction=(
+                    "각 step 에 anchors 의 place_id 를 명시 (meetup→main→wrapup 순)"
+                ),
+                severity="warn",
+            )
+        )
+
+    return rejections
+
+
+def _pair_feed_primary_pin(feed: Dict[str, Any], spec: ContentSpec) -> List[Rejection]:
+    """feed.region_label 이 primary_pin.address 와 정합인지.
+
+    primary_pin 이 있으면 그 주소에 region 토큰 (예: "연무동", "수원시") 이 포함되어야.
+    region_label 이 "다른 시" 를 가리키면 hard reject.
+    """
+    rejections: List[Rejection] = []
+    pin = spec.primary_pin
+    if pin is None:
+        return rejections
+    region_label = str(feed.get("region_label") or "")
+    address = (pin.address or "") + " " + (pin.road_address or "")
+    if not region_label or not address.strip():
+        return rejections
+
+    # 행정동 한글 토큰 (스펙의 region) 이 양쪽에 등장해야.
+    region_token = (spec.region or "").strip()
+    if region_token and region_token not in region_label and region_token not in address:
+        # 둘 다에 region 토큰 누락 — primary_pin 자체가 region 과 안 맞을 수 있음.
+        rejections.append(
+            Rejection(
+                layer="cross_ref",
+                rejected_field="feed:region_label",
+                reason="region_pin_mismatch",
+                detail=(
+                    f"feed.region_label={region_label!r} 또는 primary_pin "
+                    f"address={address!r} 둘 다 spec.region={region_token!r} 미포함"
+                ),
+                instruction=(
+                    f"region_label 에 '{region_token}' 명시 또는 routing 결과 재확인"
+                ),
+                severity="warn",
+            )
+        )
+
+    return rejections
+
+
+def _pair_detail_price(
+    detail: Dict[str, Any],
+    price: Dict[str, Any],
+    spec: ContentSpec,
+) -> List[Rejection]:
+    """detail.cost_breakdown 합계 vs price.base_fee + included_items 합계 정합."""
+    rejections: List[Rejection] = []
+    base_fee = int(price.get("base_fee", 0))
+    cost_items = detail.get("cost_breakdown") or []
+    detail_sum = 0
+    for item in cost_items:
+        amt = item.get("amount")
+        try:
+            detail_sum += int(amt or 0)
+        except (TypeError, ValueError):
+            continue
+
+    expected = int(spec.budget.expected_cost_per_person or 0)
+    if expected <= 0:
+        return rejections
+
+    tol = 0.10  # ±10%
+    low = expected * (1 - tol)
+    high = expected * (1 + tol)
+    if not (low <= base_fee <= high):
+        rejections.append(
+            Rejection(
+                layer="cross_ref",
+                rejected_field="price:base_fee_mismatch_detail",
+                reason="base_fee_out_of_range",
+                detail=(
+                    f"price.base_fee={base_fee} vs spec.expected={expected} "
+                    f"(±{int(tol*100)}%)"
+                ),
+                instruction=f"price.base_fee 를 {expected} 근처로 조정",
+                severity="reject",
+            )
+        )
+
+    if detail_sum > 0 and not (low <= detail_sum <= high):
+        rejections.append(
+            Rejection(
+                layer="cross_ref",
+                rejected_field="detail:cost_breakdown_sum",
+                reason="cost_breakdown_out_of_range",
+                detail=(
+                    f"detail.cost_breakdown sum={detail_sum} vs spec.expected={expected}"
+                ),
+                instruction=f"cost_breakdown 합계를 {expected} 근처로 조정",
+                severity="reject",
+            )
+        )
+
+    return rejections
+
+
+def _pair_detail_preparation(
+    detail: Dict[str, Any],
+    preparation: Dict[str, Any],
+) -> List[Rejection]:
+    """detail.materials 와 preparation.partner_brings 의 token 모순 검증.
+
+    완전 일치 강제는 아니고: detail.materials 안에 preparation 이 명시한
+    host_provides (호스트가 가져가는 것) 가 들어가면 모순 — partner 가 그것까지
+    가져오라는 셈. hard reject.
+    """
+    rejections: List[Rejection] = []
+    materials = [str(m) for m in (detail.get("materials") or [])]
+    host_provides = [str(m) for m in (preparation.get("host_provides") or [])]
+    if not materials or not host_provides:
+        return rejections
+
+    # 호스트가 가져가는 항목과 동일한 단어가 partner_brings 측 (= materials) 에
+    # 그대로 들어가 있으면 모순.
+    intersect: List[str] = []
+    for m in materials:
+        for h in host_provides:
+            if m.strip() and h.strip() and (m.strip() == h.strip()):
+                intersect.append(m)
+                break
+            if h.strip() and m.strip() and h.strip() in m.strip():
+                intersect.append(m)
+                break
+
+    if intersect:
+        rejections.append(
+            Rejection(
+                layer="cross_ref",
+                rejected_field="detail:materials_vs_host_provides",
+                reason="host_provides_in_materials",
+                detail=(
+                    f"detail.materials 가 preparation.host_provides 와 겹침: "
+                    f"{intersect}"
+                ),
+                instruction=(
+                    "호스트가 가져가는 항목은 detail.materials 에 넣지 말 것 "
+                    "(participant 측 준비물만)"
+                ),
+                severity="warn",
+            )
+        )
+
+    return rejections
 
 
 __all__ = [

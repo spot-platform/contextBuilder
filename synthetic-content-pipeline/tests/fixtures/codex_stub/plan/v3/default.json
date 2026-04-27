@@ -1,0 +1,10 @@
+{
+  "steps": [
+    {"time": "19:00", "activity": "식당 앞 모여 인사 나누기", "place_id": null, "intent": "처음 만나는 사이라 가볍게 얼굴부터 익혀요"},
+    {"time": "19:10", "activity": "메뉴 주문하며 간단한 소개", "place_id": null, "intent": "주문하면서 자연스럽게 대화 시작하기 좋아요"},
+    {"time": "19:30", "activity": "편안하게 식사하며 대화", "place_id": null, "intent": "식사 시간이 가장 길어야 분위기가 풀려요"},
+    {"time": "20:30", "activity": "오늘 하루 이야기 나누기", "place_id": null, "intent": "마무리 전에 짧게 후일담 나누면 다음 모임 기대감 생겨요"},
+    {"time": "20:50", "activity": "가볍게 마무리 인사", "place_id": null, "intent": "끝은 깔끔하게 끊어야 부담 없이 다음에 또 만나요"}
+  ],
+  "total_duration_minutes": 120
+}

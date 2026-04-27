@@ -26,6 +26,11 @@ from pipeline.validators.messages_rules import (
     validate_messages_rules,
 )
 from pipeline.validators.plan_rules import load_plan_rules, validate_plan_rules
+from pipeline.validators.preparation_rules import (
+    load_preparation_rules,
+    validate_preparation_rules,
+)
+from pipeline.validators.price_rules import load_price_rules, validate_price_rules
 from pipeline.validators.review_rules import load_review_rules, validate_review_rules
 from pipeline.validators.rules import load_feed_rules, validate_feed_rules
 from pipeline.validators.schema import (
@@ -33,6 +38,8 @@ from pipeline.validators.schema import (
     validate_feed_schema,
     validate_messages_schema,
     validate_plan_schema,
+    validate_preparation_schema,
+    validate_price_schema,
     validate_review_schema,
 )
 from pipeline.validators.types import Rejection, ValidationResult
@@ -48,9 +55,11 @@ RULES_ROOT = Path("config/rules")
 CONTENT_TYPE_SCHEMA: Dict[str, str] = {
     "feed": "feed.json",
     "detail": "detail.json",
-    "plan": "plan.json",
+    "plan": "plan_v3.json",  # POI-anchored Phase 4b
     "messages": "messages.json",
     "review": "review.json",
+    "price": "price_v1.json",          # POI-anchored Phase 4c
+    "preparation": "preparation_v1.json",  # POI-anchored Phase 4d
 }
 
 SchemaValidator = Callable[[Dict[str, Any], Path], ValidationResult]
@@ -68,6 +77,12 @@ CONTENT_TYPE_VALIDATOR: Dict[str, Tuple[SchemaValidator, RuleValidator, RuleLoad
         load_messages_rules,
     ),
     "review": (validate_review_schema, validate_review_rules, load_review_rules),
+    "price": (validate_price_schema, validate_price_rules, load_price_rules),
+    "preparation": (
+        validate_preparation_schema,
+        validate_preparation_rules,
+        load_preparation_rules,
+    ),
 }
 
 
@@ -149,6 +164,8 @@ def run_cross_reference(
         plan=spot_bundle.get("plan"),
         messages=spot_bundle.get("messages"),
         review=spot_bundle.get("review"),
+        price=spot_bundle.get("price"),
+        preparation=spot_bundle.get("preparation"),
         spec=spec,
         rules=rules,
     )

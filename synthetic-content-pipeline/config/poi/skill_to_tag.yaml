@@ -1,0 +1,306 @@
+# skill_to_tag.yaml — POI-anchored pipeline §Phase 0.
+#
+# 30 skill_topic × { primary_tags / secondary_tags / avoid_tags / role_hint }.
+# place_normalized 의 9 boolean tags (is_food/is_cafe/is_activity/is_park/is_culture/
+# is_nightlife/is_lesson/is_night_friendly/is_group_friendly) 을 후보 풀 필터로 사용.
+#
+# routing 알고리즘 의사:
+#   1. primary_pool  = region 의 POI 중 primary_tags 하나라도 True
+#   2. secondary_pool= region 의 POI 중 secondary_tags 하나라도 True
+#   3. avoid_tags 하나라도 True 면 둘 다에서 배제
+#   4. role 별로 role_hint 우선 태그가 있는 후보 → top_k → deterministic shuffle
+#
+# 모든 skill 은 __default__ + 30 skill 의 superset. yaml 검증으로 강제.
+
+# ───────── 음악 / 악기 ─────────
+
+기타:
+  primary_tags: [is_cafe]
+  secondary_tags: [is_culture, is_lesson]
+  avoid_tags: [is_nightlife]
+  role_hint:
+    meetup: is_cafe
+    main: is_cafe
+    wrapup: is_cafe
+
+우쿨렐레:
+  primary_tags: [is_cafe]
+  secondary_tags: [is_culture, is_lesson]
+  avoid_tags: [is_nightlife]
+  role_hint:
+    meetup: is_cafe
+    main: is_cafe
+    wrapup: is_cafe
+
+피아노 기초:
+  primary_tags: [is_lesson, is_culture]
+  secondary_tags: [is_cafe]
+  avoid_tags: [is_nightlife]
+  role_hint:
+    meetup: is_cafe
+    main: is_lesson
+    wrapup: is_cafe
+
+오카리나:
+  primary_tags: [is_cafe]
+  secondary_tags: [is_culture, is_lesson]
+  avoid_tags: [is_nightlife]
+  role_hint:
+    meetup: is_cafe
+    main: is_cafe
+    wrapup: is_cafe
+
+# ───────── 요리 / 베이킹 (home venue 위주) ─────────
+
+홈쿡:
+  primary_tags: []
+  secondary_tags: [is_cafe]
+  avoid_tags: [is_nightlife]
+  role_hint:
+    meetup: is_cafe
+    main: is_cafe
+    wrapup: is_cafe
+
+홈베이킹:
+  primary_tags: []
+  secondary_tags: [is_cafe]
+  avoid_tags: [is_nightlife]
+  role_hint:
+    meetup: is_cafe
+    main: is_cafe
+    wrapup: is_cafe
+
+핸드드립:
+  primary_tags: []
+  secondary_tags: [is_cafe]
+  avoid_tags: [is_nightlife]
+  role_hint:
+    meetup: is_cafe
+    main: is_cafe
+    wrapup: is_cafe
+
+다도:
+  primary_tags: []
+  secondary_tags: [is_cafe, is_culture]
+  avoid_tags: [is_nightlife]
+  role_hint:
+    meetup: is_cafe
+    main: is_cafe
+    wrapup: is_cafe
+
+김치 담그기:
+  primary_tags: []
+  secondary_tags: [is_cafe]
+  avoid_tags: [is_nightlife]
+  role_hint:
+    meetup: is_cafe
+    main: is_cafe
+    wrapup: is_cafe
+
+홈카페 라떼아트:
+  primary_tags: []
+  secondary_tags: [is_cafe]
+  avoid_tags: [is_nightlife]
+  role_hint:
+    meetup: is_cafe
+    main: is_cafe
+    wrapup: is_cafe
+
+# ───────── 운동 / 신체 ─────────
+
+러닝:
+  primary_tags: [is_park, is_activity]
+  secondary_tags: [is_cafe]
+  avoid_tags: [is_nightlife]
+  role_hint:
+    meetup: is_cafe
+    main: is_park
+    wrapup: is_cafe
+
+요가 입문:
+  primary_tags: [is_lesson, is_activity]
+  secondary_tags: [is_cafe, is_park]
+  avoid_tags: [is_nightlife]
+  role_hint:
+    meetup: is_cafe
+    main: is_lesson
+    wrapup: is_cafe
+
+볼더링:
+  primary_tags: [is_activity]
+  secondary_tags: [is_cafe]
+  avoid_tags: [is_nightlife]
+  role_hint:
+    meetup: is_cafe
+    main: is_activity
+    wrapup: is_cafe
+
+가벼운 등산:
+  primary_tags: [is_park, is_activity]
+  secondary_tags: [is_cafe]
+  avoid_tags: [is_nightlife]
+  role_hint:
+    meetup: is_cafe
+    main: is_park
+    wrapup: is_cafe
+
+필라테스 스트레칭:
+  primary_tags: [is_lesson, is_activity]
+  secondary_tags: [is_cafe]
+  avoid_tags: [is_nightlife]
+  role_hint:
+    meetup: is_cafe
+    main: is_lesson
+    wrapup: is_cafe
+
+배드민턴:
+  primary_tags: [is_activity]
+  secondary_tags: [is_cafe]
+  avoid_tags: [is_nightlife]
+  role_hint:
+    meetup: is_cafe
+    main: is_activity
+    wrapup: is_cafe
+
+탁구:
+  primary_tags: [is_activity]
+  secondary_tags: [is_cafe]
+  avoid_tags: [is_nightlife]
+  role_hint:
+    meetup: is_cafe
+    main: is_activity
+    wrapup: is_cafe
+
+# ───────── 창작 / 예술 ─────────
+
+드로잉:
+  primary_tags: []
+  secondary_tags: [is_cafe, is_culture]
+  avoid_tags: [is_nightlife]
+  role_hint:
+    meetup: is_cafe
+    main: is_cafe
+    wrapup: is_cafe
+
+스마트폰 사진:
+  primary_tags: [is_park, is_culture]
+  secondary_tags: [is_cafe]
+  avoid_tags: [is_nightlife]
+  role_hint:
+    meetup: is_cafe
+    main: is_park
+    wrapup: is_cafe
+
+캘리그라피:
+  primary_tags: []
+  secondary_tags: [is_cafe, is_culture]
+  avoid_tags: [is_nightlife]
+  role_hint:
+    meetup: is_cafe
+    main: is_cafe
+    wrapup: is_cafe
+
+수채화:
+  primary_tags: []
+  secondary_tags: [is_cafe, is_culture]
+  avoid_tags: [is_nightlife]
+  role_hint:
+    meetup: is_cafe
+    main: is_cafe
+    wrapup: is_cafe
+
+도예 기초:
+  primary_tags: [is_lesson, is_culture]
+  secondary_tags: [is_cafe]
+  avoid_tags: [is_nightlife]
+  role_hint:
+    meetup: is_cafe
+    main: is_lesson
+    wrapup: is_cafe
+
+# ───────── 언어 / 학습 ─────────
+
+영어 프리토킹:
+  primary_tags: [is_cafe]
+  secondary_tags: [is_culture]
+  avoid_tags: [is_nightlife]
+  role_hint:
+    meetup: is_cafe
+    main: is_cafe
+    wrapup: is_cafe
+
+코딩 입문:
+  primary_tags: [is_cafe]
+  secondary_tags: [is_culture, is_lesson]
+  avoid_tags: [is_nightlife]
+  role_hint:
+    meetup: is_cafe
+    main: is_cafe
+    wrapup: is_cafe
+
+일본어 회화:
+  primary_tags: [is_cafe]
+  secondary_tags: [is_culture]
+  avoid_tags: [is_nightlife]
+  role_hint:
+    meetup: is_cafe
+    main: is_cafe
+    wrapup: is_cafe
+
+중국어 회화:
+  primary_tags: [is_cafe]
+  secondary_tags: [is_culture]
+  avoid_tags: [is_nightlife]
+  role_hint:
+    meetup: is_cafe
+    main: is_cafe
+    wrapup: is_cafe
+
+# ───────── 생활 ─────────
+
+원예:
+  primary_tags: []
+  secondary_tags: [is_cafe, is_park]
+  avoid_tags: [is_nightlife]
+  role_hint:
+    meetup: is_cafe
+    main: is_cafe
+    wrapup: is_cafe
+
+보드게임:
+  primary_tags: [is_cafe]
+  secondary_tags: [is_culture]
+  avoid_tags: [is_nightlife]
+  role_hint:
+    meetup: is_cafe
+    main: is_cafe
+    wrapup: is_cafe
+
+타로:
+  primary_tags: [is_cafe]
+  secondary_tags: [is_culture]
+  avoid_tags: [is_nightlife]
+  role_hint:
+    meetup: is_cafe
+    main: is_cafe
+    wrapup: is_cafe
+
+뜨개질:
+  primary_tags: []
+  secondary_tags: [is_cafe, is_culture]
+  avoid_tags: [is_nightlife]
+  role_hint:
+    meetup: is_cafe
+    main: is_cafe
+    wrapup: is_cafe
+
+# ───────── default fallback ─────────
+
+__default__:
+  primary_tags: [is_cafe]
+  secondary_tags: [is_cafe]
+  avoid_tags: [is_nightlife]
+  role_hint:
+    meetup: is_cafe
+    main: is_cafe
+    wrapup: is_cafe

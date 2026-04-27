@@ -41,8 +41,21 @@ from pipeline.spec.models import (
     FeeBreakdownSpec,
     HostPersona,
     Participants,
+    ResolvedPlace,
     Schedule,
 )
+from pipeline.spec.poi_config import load_distance_rules, load_skill_to_tag
+
+
+def _is_poi_anchors_enabled() -> bool:
+    """``USE_POI_ANCHORS`` env 토글. default True. 'false'/'0'/'no' 면 비활성.
+
+    비활성 시 _peer.py 는 routing 호출을 건너뛰고 legacy jitter path 만 사용.
+    publisher / generator 는 spec 의 신규 필드가 빈 채라서 v2 동작.
+    """
+    import os
+    val = (os.getenv("USE_POI_ANCHORS", "true") or "").strip().lower()
+    return val not in ("false", "0", "no", "off", "")
 
 # ---------------------------------------------------------------------------
 # 상수
@@ -461,18 +474,7 @@ def build_peer_content_spec(
     elif region_id:
         region_name = region_id
 
-    # ── spot 핀 좌표: region center + deterministic jitter (±0.003° ≈ ±330m) ─
-    spot_latitude: Optional[float] = None
-    spot_longitude: Optional[float] = None
-    if region_center_lat is not None and region_center_lng is not None:
-        # spot_id 기반 독립 RNG 로 deterministic jitter. 같은 spot_id → 같은 핀.
-        geo_rng = _deterministic_random(f"geo:{spot_id}")
-        lat_jitter = geo_rng.uniform(-0.003, 0.003)
-        lng_jitter = geo_rng.uniform(-0.003, 0.003)
-        spot_latitude = round(region_center_lat + lat_jitter, 6)
-        spot_longitude = round(region_center_lng + lng_jitter, 6)
-
-    # ── peer 핵심 payload ─────────────────────────────────────────────
+    # ── peer 핵심 payload (POI routing 보다 먼저 추출 필요) ───────────
     skill_topic: Optional[str] = create_payload.get("skill")
     teach_mode: Optional[str] = create_payload.get("teach_mode")
     venue_type: Optional[str] = create_payload.get("venue_type")
@@ -767,6 +769,82 @@ def build_peer_content_spec(
         originating_request_summary=originating_request_summary,
     )
 
+    # ── POI-anchored: 실제 lcb POI 로 venue_anchors / primary_pin 결정 ─
+    # 알고리즘 결정적, LLM 미관여. region_pool 비어있거나 매칭 0건이면
+    # poi_fallback_reason 채우고 legacy jitter 좌표로 회귀.
+    # USE_POI_ANCHORS 환경 토글 false 면 routing 자체를 skip 하고 legacy jitter.
+    venue_anchors: List[ResolvedPlace] = []
+    primary_pin: Optional[ResolvedPlace] = None
+    poi_fallback_reason: Optional[str] = None
+    spot_latitude: Optional[float] = None
+    spot_longitude: Optional[float] = None
+    if _is_poi_anchors_enabled():
+        try:
+            from pipeline.poi.repository import get_default_repository
+            from pipeline.poi.routing import assign_poi_roles
+
+            poi_repo = get_default_repository()
+            skill_to_tag = load_skill_to_tag(strict_superset=False)
+            distance_rules = load_distance_rules()
+            routing = assign_poi_roles(
+                spot_id=spot_id,
+                skill_topic=skill_topic,
+                venue_type=venue_type,
+                region_emd=region_name,
+                teach_mode=teach_mode,
+                duration_minutes=schedule.duration_minutes,
+                repo=poi_repo,
+                skill_to_tag=skill_to_tag,
+                distance_rules=distance_rules,
+            )
+            venue_anchors = routing.venue_anchors
+            primary_pin = routing.primary_pin
+            poi_fallback_reason = routing.fallback_reason
+        except Exception:  # noqa: BLE001 — POI 인프라 실패해도 spec 생성은 계속
+            poi_fallback_reason = "routing_error"
+    else:
+        poi_fallback_reason = "disabled_by_env"
+
+    if primary_pin is not None:
+        spot_latitude = round(primary_pin.lat, 6)
+        spot_longitude = round(primary_pin.lng, 6)
+    elif region_center_lat is not None and region_center_lng is not None:
+        # legacy fallback: region center + deterministic jitter (±0.003° ≈ ±330m)
+        geo_rng = _deterministic_random(f"geo:{spot_id}")
+        spot_latitude = round(region_center_lat + geo_rng.uniform(-0.003, 0.003), 6)
+        spot_longitude = round(region_center_lng + geo_rng.uniform(-0.003, 0.003), 6)
+        if poi_fallback_reason is None:
+            poi_fallback_reason = "region_empty"
+
+    # ── plan_steps / price_breakdown / preparation deterministic drafts ─
+    # LLM 호출 0회. 후속 generator (Phase 4b/c/d) 가 narrative 만 다듬음.
+    # USE_POI_ANCHORS=false 면 모두 빈 default 로 둬서 v2 회귀.
+    if _is_poi_anchors_enabled():
+        from pipeline.spec.draft_plan import build_plan_steps_draft
+        from pipeline.spec.draft_preparation import build_preparation_draft
+        from pipeline.spec.draft_price import build_price_breakdown_draft
+
+        plan_steps = build_plan_steps_draft(
+            schedule=schedule,
+            venue_anchors=venue_anchors,
+            skill_topic=skill_topic,
+            teach_mode=teach_mode,
+        )
+        price_breakdown_draft = build_price_breakdown_draft(
+            base_fee=effective_fee_per_partner,
+            fee_breakdown=fee_breakdown,
+            skill_topic=skill_topic,
+            expected_count=expected_count,
+        )
+        preparation_draft = build_preparation_draft(
+            skill_topic=skill_topic,
+            venue_type=venue_type,
+        )
+    else:
+        plan_steps = []
+        price_breakdown_draft = None
+        preparation_draft = None
+
     return ContentSpec(
         spot_id=spot_id,
         region=region_name,
@@ -807,6 +885,13 @@ def build_peer_content_spec(
         taste_facets=taste_facets,
         recent_obsession=recent_obsession,
         curiosity_hooks=curiosity_hooks,
+        # POI-anchored ─────────────────────────────────────────────
+        venue_anchors=venue_anchors,
+        primary_pin=primary_pin,
+        plan_steps=plan_steps,
+        price_breakdown=price_breakdown_draft,
+        preparation=preparation_draft,
+        poi_fallback_reason=poi_fallback_reason,
     )
 
 

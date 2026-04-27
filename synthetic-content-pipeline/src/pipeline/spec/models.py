@@ -98,11 +98,106 @@ class FeeBreakdownSpec(BaseModel):
         return self.material_cost + self.venue_rental + self.equipment_rental
 
 
+class ResolvedPlace(BaseModel):
+    """실제 POI (place_normalized) 의 ContentSpec 표현.
+
+    POI-anchored pipeline §Phase 2.
+
+    routing 알고리즘이 lcb dump 에서 골라 ContentSpec.venue_anchors 에 박는다.
+    LLM 은 ``name`` / ``address`` 를 본문에 그대로 인용해야 하며, 환각 시
+    Phase 5 cross-reference layer 에서 reject.
+    """
+
+    place_id: int = Field(..., description="lcb place_normalized.id")
+    name: str = Field(..., description="가게/공원 이름. LLM 은 정확히 인용.")
+    primary_category: str = Field(..., description="cafe | food | park | culture | ...")
+    role: Literal["meetup", "main", "secondary", "wrapup"] = Field(
+        ..., description="이 spot 동선에서의 역할"
+    )
+    lat: float = Field(..., ge=-90.0, le=90.0)
+    lng: float = Field(..., ge=-180.0, le=180.0)
+    address: str = Field(..., description="address_name 또는 road_address_name 중 노출용 1개")
+    road_address: Optional[str] = Field(default=None)
+    confidence: float = Field(default=1.0, ge=0.0, le=1.0)
+
+
+class PlanStep(BaseModel):
+    """plan 의 한 step. 시간 / 장소 / 활동 / 의도."""
+
+    time: str = Field(..., description="HH:MM 24시간")
+    place: Optional[ResolvedPlace] = Field(
+        default=None,
+        description="이동/장소 없는 step (예: 워밍업) 은 None 허용",
+    )
+    activity: str = Field(..., min_length=2, description="이 시간에 뭘 하는지")
+    intent: str = Field(
+        ...,
+        min_length=5,
+        max_length=120,
+        description="왜 이 시간/이 장소를 골랐는지 1줄 — host onboarding 핵심",
+    )
+
+
+class IncludedItem(BaseModel):
+    """참가비에 포함된 항목."""
+
+    name: str = Field(..., min_length=1)
+    value: str = Field(
+        ...,
+        min_length=1,
+        description='자연어 OK ("재료비 5000원 포함" / "필름 1롤 포함")',
+    )
+
+
+class AddOn(BaseModel):
+    """추가 옵션 (선택 결제)."""
+
+    name: str = Field(..., min_length=1)
+    price: int = Field(..., ge=0)
+    mechanism: Literal["fixed", "funding", "realcost"] = Field(
+        ...,
+        description='"fixed" 정액 / "funding" N분의1 펀딩 / "realcost" 실비 분담',
+    )
+
+
+class RefundPolicy(BaseModel):
+    """환불 정책."""
+
+    cutoff_hours: int = Field(..., ge=0, description="이 시간 전까지 전액 환불")
+    full_refund_until: Optional[str] = Field(
+        default=None,
+        description='자연어 ("당일 오전 9시까지")',
+    )
+    note: Optional[str] = Field(default=None)
+
+
+class PriceBreakdown(BaseModel):
+    """가격 분해 — host onboarding 가이드 핵심."""
+
+    base_fee: int = Field(..., ge=0, description="참가비 (1인)")
+    included_items: List[IncludedItem] = Field(default_factory=list)
+    optional_addons: List[AddOn] = Field(default_factory=list)
+    refund_policy: Optional[RefundPolicy] = Field(default=None)
+
+
+class Preparation(BaseModel):
+    """준비물 가이드. host_provides 와 partner_brings 의 명시적 분리."""
+
+    host_provides: List[str] = Field(default_factory=list)
+    partner_brings: List[str] = Field(default_factory=list)
+    weather_contingency: Optional[str] = Field(
+        default=None,
+        description="우천/혹서 대비 — venue_type=park 또는 야외 활동에서 채움",
+    )
+    safety_notes: List[str] = Field(default_factory=list)
+
+
 class ContentSpec(BaseModel):
     """LLM 입력 스키마 (Plan §4, Phase Peer-D 확장).
 
     - Phase 1 필드 (spot_id ~ activity_result) 는 그대로 유지.
     - Phase Peer-D 확장 필드는 전부 Optional 또는 default 값을 가진다.
+    - POI-anchored 확장 필드 (Phase 2) 도 전부 Optional / default.
     """
 
     # ── 기존 Phase 1 필드 ──────────────────────────────────────────────
@@ -219,6 +314,36 @@ class ContentSpec(BaseModel):
     curiosity_hooks: List[str] = Field(
         default_factory=list,
         description="배우고 싶거나 누가 가르쳐줬으면 하는 것 — 짧은 라벨.",
+    )
+
+    # ── POI-anchored 확장 (append-only) ───────────────────────────────
+    # spec_builder 가 routing 알고리즘으로 결정. LLM 은 narrative 만 다듬는다.
+    # 신규 5 필드는 전부 Optional / default — review/messages v2 회귀 안전.
+    venue_anchors: List[ResolvedPlace] = Field(
+        default_factory=list,
+        description="이 spot 이 사용하는 실제 POI 3~5 개. role 별로 묶임.",
+    )
+    primary_pin: Optional[ResolvedPlace] = Field(
+        default=None,
+        description="프론트 spot 카드의 대표 핀. 보통 main role. None 이면 region jitter fallback.",
+    )
+    plan_steps: List[PlanStep] = Field(
+        default_factory=list,
+        description="시간/장소/활동/의도가 분해된 plan. plan_outline 와 병행.",
+    )
+    price_breakdown: Optional[PriceBreakdown] = Field(
+        default=None,
+        description="가격 분해 — base_fee + included + optional_addons + refund_policy.",
+    )
+    preparation: Optional[Preparation] = Field(
+        default=None,
+        description="준비물 가이드 — host_provides / partner_brings / weather / safety.",
+    )
+
+    # POI fallback 플래그 (region_pool 비어있어 legacy jitter 로 갔을 때 기록).
+    poi_fallback_reason: Optional[str] = Field(
+        default=None,
+        description='None | "region_empty" | "no_match" | "skill_unmapped" 중 하나.',
     )
 
 

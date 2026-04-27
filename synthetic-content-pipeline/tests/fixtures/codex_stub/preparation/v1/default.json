@@ -1,0 +1,7 @@
+{
+  "host_provides": ["식당 자리 예약"],
+  "partner_brings": ["편하게 오시면 됩니다"],
+  "weather_contingency": null,
+  "safety_notes": [],
+  "host_tip": "처음이신 분도 편하게 오시면 됩니다."
+}

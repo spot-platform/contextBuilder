@@ -444,6 +444,20 @@ def validate_review_schema(
     return _validate_json_schema(payload, schema_path, "review")
 
 
+def validate_price_schema(
+    payload: Dict[str, Any], schema_path: Path
+) -> ValidationResult:
+    """SpotPrice Layer 1 JSON Schema 검증 (POI-anchored Phase 4c)."""
+    return _validate_json_schema(payload, schema_path, "price")
+
+
+def validate_preparation_schema(
+    payload: Dict[str, Any], schema_path: Path
+) -> ValidationResult:
+    """SpotPreparation Layer 1 JSON Schema 검증 (POI-anchored Phase 4d)."""
+    return _validate_json_schema(payload, schema_path, "preparation")
+
+
 __all__ = [
     "validate_feed_schema",
     "validate_detail_schema",

@@ -1,0 +1,355 @@
+{
+  "spots": [
+    {
+      "spot_id": "REAL_S0001",
+      "region": "연무동",
+      "skill_topic": "스마트폰 사진",
+      "primary_pin": {
+        "place_id": 26344641,
+        "name": "연무공원",
+        "primary_category": "park",
+        "role": "main",
+        "lat": 37.296227229214,
+        "lng": 127.029991481087,
+        "address": "경기 수원시 장안구 창훈로39번길 4",
+        "road_address": "경기 수원시 장안구 창훈로39번길 4",
+        "confidence": 0.95
+      },
+      "venue_anchors": [
+        {
+          "place_id": 345785816,
+          "name": "아롬",
+          "primary_category": "cafe",
+          "role": "meetup",
+          "lat": 37.296228807751,
+          "lng": 127.030861045184,
+          "address": "경기 수원시 장안구 창훈로40번길 9",
+          "road_address": "경기 수원시 장안구 창훈로40번길 9",
+          "confidence": 1.0
+        },
+        {
+          "place_id": 26344641,
+          "name": "연무공원",
+          "primary_category": "park",
+          "role": "main",
+          "lat": 37.296227229214,
+          "lng": 127.029991481087,
+          "address": "경기 수원시 장안구 창훈로39번길 4",
+          "road_address": "경기 수원시 장안구 창훈로39번길 4",
+          "confidence": 0.95
+        },
+        {
+          "place_id": 935519117,
+          "name": "커피있는하루",
+          "primary_category": "cafe",
+          "role": "wrapup",
+          "lat": 37.2970443223896,
+          "lng": 127.030568137178,
+          "address": "경기 수원시 장안구 창훈로46번길 5-10",
+          "road_address": "경기 수원시 장안구 창훈로46번길 5-10",
+          "confidence": 1.0
+        }
+      ],
+      "lat": 37.296227229214,
+      "lng": 127.029991481087,
+      "results": {
+        "feed": {
+          "ok": true,
+          "payload": {
+            "title": "연무동 골목, 스마트폰으로 다시 보기",
+            "summary": "한 시간만 같이 해봐요. 필름카메라 느낌으로 동네를 다시 보는 데 요즘 마음이 가서, 역광 피하는 법이랑 골목에서 예쁘게 담는 팁을 4명이서 가볍게 나눠보려고 해요.",
+            "tags": [
+              "연무동",
+              "폰사진",
+              "골목산책",
+              "역광팁",
+              "초면OK"
+            ],
+            "price_label": "1인 약 1.5만원",
+            "region_label": "수원시 연무동",
+            "time_label": "5/23(토) 14:00",
+            "status": "recruiting",
+            "supporter_label": "supporter_neutral"
+          }
+        },
+        "detail": {
+          "ok": true,
+          "payload": {
+            "title": "수원시 연무동 연무공원 스마트폰 사진 모임",
+            "description": "수원시 연무동에서 스마트폰으로 골목과 공원 풍경을 가볍게 찍어보는 모임이에요. 아롬에서 먼저 만나 간단히 인사하고, 연무공원까지 걸으며 빛이 너무 세게 들어오는 자리 피하는 법과 골목 사진 구도 보는 법을 같이 살펴봐요. 사진을 많이 찍어본 분이 아니어도 괜찮고, 4명이서 천천히 걸으며 서로 찍은 사진을 보여주면 좋아요.",
+            "activity_purpose": "동네를 함께 걸으며 스마트폰 사진을 나누고, 취미가 비슷한 또래와 편하게 이어지려고 열어요.",
+            "progress_style": "아롬에서 모인 뒤 연무공원 주변을 작은 그룹으로 걸으며 촬영해요. 중간중간 찍은 사진을 같이 보고, 마무리는 커피있는하루 쪽에서 가볍게 정리해요.",
+            "materials": [
+              "스마트폰 (충전 충분히)",
+              "편한 신발",
+              "보조배터리",
+              "가벼운 겉옷"
+            ],
+            "target_audience": "스마트폰 사진을 편하게 시작해보고 싶은 수원시 연무동 또래",
+            "cost_breakdown": [
+              {
+                "item": "가이드/진행",
+                "amount": 15000
+              }
+            ],
+            "host_intro": "저는 동네 골목을 스마트폰으로 자주 찍는 또래 호스트예요. 요즘은 필름카메라 느낌으로 익숙한 길을 다시 보는 데 푹 빠져 있어서, 같이 걸으며 눈에 들어오는 장면을 나눠보고 싶어요.",
+            "policy_notes": "강수 확률이 30% 이상이면 다음 회차로 미루거나 인근 카페로 변경해요."
+          }
+        },
+        "plan": {
+          "ok": true,
+          "payload": {
+            "steps": [
+              {
+                "time": "14:00",
+                "activity": "처음이라 아롬에서 가볍게 인사해요",
+                "place_id": null,
+                "intent": "처음 만나는 자리라 14시에 카페에서 한 잔 하며 오늘 찍어볼 흐름을 편하게 나눠요"
+              },
+              {
+                "time": "14:20",
+                "activity": "연무공원에서 구도와 빛을 같이 찍어봐요",
+                "place_id": null,
+                "intent": "14시 20분엔 공원으로 옮겨 산책하듯 움직이며 스마트폰 사진을 바로 해보기 좋아요"
+              },
+              {
+                "time": "16:30",
+                "activity": "커피있는하루에서 사진과 후기 나눠요",
+                "place_id": null,
+                "intent": "마지막 30분은 가까운 카페에서 서로 찍은 사진을 보고 한 줄씩 편하게 마무리해요"
+              }
+            ],
+            "total_duration_minutes": 180
+          }
+        },
+        "price": {
+          "ok": true,
+          "payload": {
+            "base_fee": 15000,
+            "included_items": [
+              {
+                "name": "가이드/진행",
+                "value": "호스트의 시간과 진행을 포함"
+              }
+            ],
+            "optional_addons": [
+              {
+                "name": "간단 소품 준비",
+                "price": 3000,
+                "mechanism": "fixed",
+                "explanation": "작은 반사판이나 컬러 종이 같은 촬영 소품은 추가비 정액 +3,000원이에요."
+              },
+              {
+                "name": "사진 인화",
+                "price": 5000,
+                "mechanism": "realcost",
+                "explanation": "원하는 분만 근처 인화 비용을 실비로 나눠 내고, 영수증 공유해드려요."
+              },
+              {
+                "name": "돗자리와 간식",
+                "price": 4000,
+                "mechanism": "funding",
+                "explanation": "4명 모이면 다 같이 4분의 1로 나눠 내요. 정원 차야 1인 비용이 내려가요."
+              }
+            ],
+            "refund_policy": {
+              "cutoff_hours": 72,
+              "full_refund_until": "활동 3일 전까지",
+              "note": "활동 3일 전까지는 전액 환불 가능해요."
+            },
+            "summary_line": "참가비 15,000원에 스마트폰 사진 가이드와 진행이 포함이고, 소품·인화·간식은 원하는 경우만 실비나 정액으로 더해요."
+          }
+        },
+        "preparation": {
+          "ok": true,
+          "payload": {
+            "host_provides": [
+              "촬영 가이드"
+            ],
+            "partner_brings": [
+              "충전 충분한 스마트폰",
+              "걷기 편한 신발"
+            ],
+            "weather_contingency": "강수 확률이 30% 이상이면 다음 회차로 미루거나 인근 카페로 변경해요.",
+            "safety_notes": [
+              "공원 산책로를 걸으며 촬영하니 발이 편한 신발이면 좋아요.",
+              "스마트폰 배터리를 넉넉히 충전해 오시면 촬영 중 더 편해요."
+            ],
+            "host_tip": "사진 찍으며 조금 걸을 수 있어서 편한 신발로 오시면 좋아요."
+          }
+        }
+      }
+    },
+    {
+      "spot_id": "REAL_S0002",
+      "region": "인계동",
+      "skill_topic": "보드게임",
+      "primary_pin": {
+        "place_id": 27440700,
+        "name": "커피펍스 수원인계점",
+        "primary_category": "cafe",
+        "role": "main",
+        "lat": 37.2658435125946,
+        "lng": 127.032504770181,
+        "address": "경기 수원시 팔달구 인계로138번길 25",
+        "road_address": "경기 수원시 팔달구 인계로138번길 25",
+        "confidence": 1.0
+      },
+      "venue_anchors": [
+        {
+          "place_id": 27440700,
+          "name": "커피펍스 수원인계점",
+          "primary_category": "cafe",
+          "role": "main",
+          "lat": 37.2658435125946,
+          "lng": 127.032504770181,
+          "address": "경기 수원시 팔달구 인계로138번길 25",
+          "road_address": "경기 수원시 팔달구 인계로138번길 25",
+          "confidence": 1.0
+        },
+        {
+          "place_id": 8552500,
+          "name": "CGV 동수원",
+          "primary_category": "culture",
+          "role": "wrapup",
+          "lat": 37.26390632559984,
+          "lng": 127.03231003231717,
+          "address": "경기 수원시 팔달구 권광로 181",
+          "road_address": "경기 수원시 팔달구 권광로 181",
+          "confidence": 1.0
+        }
+      ],
+      "lat": 37.2658435125946,
+      "lng": 127.032504770181,
+      "results": {
+        "feed": {
+          "ok": true,
+          "payload": {
+            "title": "인계동 카페에서 전략 보드 한 판",
+            "summary": "테이블 위에 보드게임 몇 개 올려두고, 인사하고 바로 한 판씩 굴려보는 작은 모임을 열어보려고 해요. 요즘은 캐스케이디아처럼 차근차근 판을 만드는 게임에 관심이 많고, 한국식 변형 룰도 가볍게 섞어보실 분들 환영해요.",
+            "tags": [
+              "인계동카페",
+              "전략보드",
+              "5명모임",
+              "초면OK",
+              "변형룰"
+            ],
+            "price_label": "1인 약 1.2만원",
+            "region_label": "수원시 인계동",
+            "time_label": "5/25(월) 19:00",
+            "status": "recruiting",
+            "supporter_label": "supporter_neutral"
+          }
+        },
+        "detail": {
+          "ok": true,
+          "payload": {
+            "title": "인계동 커피펍스 보드게임 저녁 모임",
+            "description": "수원시 인계동 커피펍스 수원인계점(경기 수원시 팔달구 인계로138번길 25)에서 5명이 모여 보드게임을 가볍게 해보는 저녁 모임이에요. 규칙을 처음 듣는 분도 따라올 수 있게 천천히 설명하고, 익숙해지면 우리끼리 살짝 바꾼 룰도 한 번 해봐요. 전략을 세우는 재미는 살리되 너무 승부에만 몰리지 않게 이야기하면서 편하게 놀아보려고 해요.",
+            "activity_purpose": "퇴근 뒤 동네에서 보드게임 좋아하는 또래끼리 만나고, 호스트도 취미를 나누며 소소한 참가비를 받을 수 있는 모임이에요.",
+            "progress_style": "카페 공간에 모여 간단히 인사한 뒤 난이도 낮은 게임부터 시작해요. 분위기가 맞으면 조금 더 머리 쓰는 게임으로 넘어가고, 마무리 후 원하시는 분들은 CGV 동수원(경기 수원시 팔달구 권광로 181) 쪽까지 같이 걸어가도 좋아요.",
+            "materials": [
+              "편한 복장",
+              "개인 음료를 원하시면 살 작은 금액",
+              "게임 중 적어둘 작은 메모지나 펜",
+              "처음 보는 분들과 가볍게 이야기할 마음"
+            ],
+            "target_audience": "보드게임을 좋아하거나 퇴근 뒤 인계동에서 또래 친구를 만들고 싶은 분",
+            "cost_breakdown": [
+              {
+                "item": "가이드/진행",
+                "amount": 12000
+              }
+            ],
+            "host_intro": "저는 보드게임을 오래 즐기고 있는 또래 호스트예요. 요즘은 캐스케이디아를 자주 꺼내고 있고, 익숙한 규칙에 작은 변화를 주며 같이 웃는 시간을 좋아해요.",
+            "policy_notes": "참가비는 1인 기준이며, 카페에서 개인 주문이 필요할 수 있어요."
+          }
+        },
+        "plan": {
+          "ok": true,
+          "payload": {
+            "steps": [
+              {
+                "time": "19:00",
+                "activity": "처음이라 카페에서 가볍게 인사해요",
+                "place_id": null,
+                "intent": "커피펍스 수원인계점은 저녁에 앉아 이야기하기 좋아, 처음 만나도 부담이 덜해요"
+              },
+              {
+                "time": "19:00",
+                "activity": "규칙 같이 보고 보드게임 시작해요",
+                "place_id": null,
+                "intent": "자리 넓고 조용한 카페 공간이라 설명 듣고 바로 같이 해보기 좋아요"
+              },
+              {
+                "time": "21:00",
+                "activity": "후기 한 줄씩 나누고 마무리해요",
+                "place_id": null,
+                "intent": "CGV 동수원 앞에서 각자 이동하기 전, 짧게 소감 나누고 편하게 헤어져요"
+              }
+            ],
+            "total_duration_minutes": 150
+          }
+        },
+        "price": {
+          "ok": true,
+          "payload": {
+            "base_fee": 12000,
+            "included_items": [
+              {
+                "name": "가이드/진행",
+                "value": "호스트의 시간과 보드게임 진행을 포함"
+              }
+            ],
+            "optional_addons": [
+              {
+                "name": "카페 음료",
+                "price": 0,
+                "mechanism": "realcost",
+                "explanation": "각자 주문한 만큼 실비로 내요. 영수증 기준으로 확인하면 돼요."
+              },
+              {
+                "name": "보드게임 대여비",
+                "price": 3000,
+                "mechanism": "funding",
+                "explanation": "5명 모이면 다 같이 나눠 내요. 대여가 필요할 때만 추가돼요."
+              },
+              {
+                "name": "간단한 간식",
+                "price": 2000,
+                "mechanism": "fixed",
+                "explanation": "원하면 추가비 정액 +2,000원으로 같이 준비해요."
+              }
+            ],
+            "refund_policy": {
+              "cutoff_hours": 72,
+              "full_refund_until": "활동 3일 전까지",
+              "note": "그 이후에는 카페 예약이나 준비 상황에 따라 환불이 어려울 수 있어요."
+            },
+            "summary_line": "참가비 12,000원에 보드게임 진행이 포함이고, 음료는 각자 실비, 대여비는 필요하면 5명이 나눠 내요."
+          }
+        },
+        "preparation": {
+          "ok": true,
+          "payload": {
+            "host_provides": [
+              "여러 종류의 보드게임"
+            ],
+            "partner_brings": [
+              "편하게 오시면 됩니다"
+            ],
+            "weather_contingency": null,
+            "safety_notes": [],
+            "host_tip": "카페에서 가볍게 하는 모임이라 좋아하는 음료만 편하게 주문하시면 돼요."
+          }
+        }
+      }
+    }
+  ],
+  "meta": {
+    "total_codex_calls": 10,
+    "elapsed_seconds": 99.3,
+    "mode": "live",
+    "poi_path": "C:/project/contextBuilder/synthetic-content-pipeline/data/poi/poi_normalized_real.json"
+  }
+}

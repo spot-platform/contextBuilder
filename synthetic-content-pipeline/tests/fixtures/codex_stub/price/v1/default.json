@@ -1,0 +1,14 @@
+{
+  "base_fee": 18000,
+  "included_items": [
+    {"name": "식사비", "value": "1인 약 16,000원 분담"},
+    {"name": "음료", "value": "1인 약 2,000원"}
+  ],
+  "optional_addons": [],
+  "refund_policy": {
+    "cutoff_hours": 72,
+    "full_refund_until": "활동 3일 전까지",
+    "note": "3~1일 전 50% / 당일 환불 불가"
+  },
+  "summary_line": "참가비 18,000원에 식사 + 음료가 포함되어 있어요."
+}

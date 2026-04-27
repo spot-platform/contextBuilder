@@ -59,8 +59,8 @@ class SpotDetailGenerator(BaseGenerator):
     """상세 페이지 생성기."""
 
     content_type: str = "detail"
-    template_id: str = "detail:v2"
-    template_path: str = "detail/v2.j2"
+    template_id: str = "detail:v3"
+    template_path: str = "detail/v3.j2"
     schema_path: Path = (
         Path(__file__).resolve().parent.parent / "llm" / "schemas" / "detail.json"
     )

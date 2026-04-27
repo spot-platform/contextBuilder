@@ -80,8 +80,10 @@ def test_process_spot_full_runs_all_five_types(golden_spec):
     assert isinstance(result, SpotProcessResult)
     assert result.spot_id == golden_spec.spot_id
 
-    expected_types = {"feed", "detail", "plan", "messages", "review"}
-    assert set(result.contents.keys()) == expected_types
+    # legacy 5종은 모두 처리. POI-anchored Phase 4 가 추가한 price /
+    # preparation 은 USE_POI_ANCHORS=true (default) 이면 함께 등장.
+    legacy_types = {"feed", "detail", "plan", "messages", "review"}
+    assert legacy_types.issubset(set(result.contents.keys()))
 
     # 모든 content type 의 분류가 유효해야 한다.
     for ct, cpr in result.contents.items():
