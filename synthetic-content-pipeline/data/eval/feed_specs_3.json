@@ -1,0 +1,596 @@
+[
+  {
+    "spot_id": "EVAL_S0001",
+    "region": "연무동",
+    "category": "스마트폰 사진",
+    "spot_type": "casual_meetup",
+    "host_persona": {
+      "type": "supporter_neutral",
+      "tone": "편안하고 또래스러운",
+      "communication_style": "구체적인 안내, 부담 없는 어투"
+    },
+    "participants": {
+      "expected_count": 3,
+      "persona_mix": []
+    },
+    "schedule": {
+      "date": "2026-05-23",
+      "start_time": "10:00",
+      "duration_minutes": 180
+    },
+    "budget": {
+      "price_band": 2,
+      "expected_cost_per_person": 8000
+    },
+    "activity_constraints": {
+      "indoor": false,
+      "beginner_friendly": true,
+      "supporter_required": true
+    },
+    "plan_outline": [
+      "가볍게 모여 인사",
+      "스마트폰 사진 기본 흐름 같이 해보기",
+      "마무리하면서 결과물/후기 공유"
+    ],
+    "activity_result": null,
+    "skill_topic": "스마트폰 사진",
+    "host_skill_level": 4,
+    "teach_mode": "small_group",
+    "venue_type": "park",
+    "fee_breakdown": {
+      "peer_labor_fee": 12000,
+      "material_cost": 0,
+      "venue_rental": 0,
+      "equipment_rental": 0,
+      "total": 12000,
+      "passthrough_total": 0
+    },
+    "origination_mode": "offer",
+    "originating_voice": "host",
+    "originating_request_summary": null,
+    "responded_at_tick": null,
+    "is_request_matched": false,
+    "had_renegotiation": false,
+    "renegotiation_history": [],
+    "original_target_partner_count": null,
+    "final_partner_count": null,
+    "bonded_partner_count": 0,
+    "bond_updates_at_settlement": [],
+    "friend_upgrades": [],
+    "referrals_triggered": [],
+    "host_reputation_before": null,
+    "host_reputation_after": null,
+    "host_earn_from_this_spot": null,
+    "latitude": 37.2845,
+    "longitude": 127.025,
+    "peer_tone_required": true,
+    "taste_facets": [
+      "골목 사진",
+      "역광 피하기"
+    ],
+    "recent_obsession": "동네 골목을 사진으로 다시 보는 데 빠져 있어요",
+    "curiosity_hooks": [
+      "처음 시작하기",
+      "동네에서 같이 해보기"
+    ],
+    "venue_anchors": [
+      {
+        "place_id": 100020,
+        "name": "초록잎 커피",
+        "primary_category": "cafe",
+        "role": "meetup",
+        "lat": 37.2861,
+        "lng": 127.024,
+        "address": "수원시 팔달구 창룡대로 47",
+        "road_address": "수원시 팔달구 창룡대로 47",
+        "confidence": 0.89
+      },
+      {
+        "place_id": 100032,
+        "name": "연무체육공원",
+        "primary_category": "park",
+        "role": "main",
+        "lat": 37.2845,
+        "lng": 127.025,
+        "address": "수원시 팔달구 창룡대로 60",
+        "road_address": "수원시 팔달구 창룡대로 60",
+        "confidence": 0.97
+      },
+      {
+        "place_id": 100017,
+        "name": "느티나무 카페",
+        "primary_category": "cafe",
+        "role": "wrapup",
+        "lat": 37.2853,
+        "lng": 127.022,
+        "address": "수원시 팔달구 연무로 22",
+        "road_address": "수원시 팔달구 연무로 22",
+        "confidence": 0.86
+      }
+    ],
+    "primary_pin": {
+      "place_id": 100032,
+      "name": "연무체육공원",
+      "primary_category": "park",
+      "role": "main",
+      "lat": 37.2845,
+      "lng": 127.025,
+      "address": "수원시 팔달구 창룡대로 60",
+      "road_address": "수원시 팔달구 창룡대로 60",
+      "confidence": 0.97
+    },
+    "plan_steps": [
+      {
+        "time": "14:00",
+        "place": {
+          "place_id": 100020,
+          "name": "초록잎 커피",
+          "primary_category": "cafe",
+          "role": "meetup",
+          "lat": 37.2861,
+          "lng": 127.024,
+          "address": "수원시 팔달구 창룡대로 47",
+          "road_address": "수원시 팔달구 창룡대로 47",
+          "confidence": 0.89
+        },
+        "activity": "가볍게 인사하고 오늘 흐름 소개",
+        "intent": "처음 모이는 사이라 카페에서 스마트폰 사진 흐름을 짧게 안내해요"
+      },
+      {
+        "time": "14:20",
+        "place": {
+          "place_id": 100032,
+          "name": "연무체육공원",
+          "primary_category": "park",
+          "role": "main",
+          "lat": 37.2845,
+          "lng": 127.025,
+          "address": "수원시 팔달구 창룡대로 60",
+          "road_address": "수원시 팔달구 창룡대로 60",
+          "confidence": 0.97
+        },
+        "activity": "스마트폰 사진 본 활동",
+        "intent": "연무체육공원에서 본격적으로 스마트폰 사진 해보기 좋아요"
+      },
+      {
+        "time": "16:30",
+        "place": {
+          "place_id": 100017,
+          "name": "느티나무 카페",
+          "primary_category": "cafe",
+          "role": "wrapup",
+          "lat": 37.2853,
+          "lng": 127.022,
+          "address": "수원시 팔달구 연무로 22",
+          "road_address": "수원시 팔달구 연무로 22",
+          "confidence": 0.86
+        },
+        "activity": "마무리 정리 + 후기 한 줄씩 나누기",
+        "intent": "끝에 가볍게 후기 나누면 다음 모임 기대감이 생겨요"
+      }
+    ],
+    "price_breakdown": {
+      "base_fee": 8000,
+      "included_items": [
+        {
+          "name": "가이드/진행",
+          "value": "호스트의 시간과 진행을 포함"
+        }
+      ],
+      "optional_addons": [],
+      "refund_policy": {
+        "cutoff_hours": 72,
+        "full_refund_until": "활동 3일 전까지",
+        "note": "3~1일 전 50% / 당일 환불 불가"
+      }
+    },
+    "preparation": {
+      "host_provides": [
+        "촬영 가이드"
+      ],
+      "partner_brings": [
+        "스마트폰 (충전 충분히)",
+        "편한 신발"
+      ],
+      "weather_contingency": "강수 30% 이상이면 다음 회차로 미루거나 인근 카페로 변경해요",
+      "safety_notes": []
+    },
+    "poi_fallback_reason": null
+  },
+  {
+    "spot_id": "EVAL_S0002",
+    "region": "연무동",
+    "category": "필름 사진",
+    "spot_type": "casual_meetup",
+    "host_persona": {
+      "type": "supporter_neutral",
+      "tone": "편안하고 또래스러운",
+      "communication_style": "구체적인 안내, 부담 없는 어투"
+    },
+    "participants": {
+      "expected_count": 4,
+      "persona_mix": []
+    },
+    "schedule": {
+      "date": "2026-05-23",
+      "start_time": "14:00",
+      "duration_minutes": 180
+    },
+    "budget": {
+      "price_band": 2,
+      "expected_cost_per_person": 12000
+    },
+    "activity_constraints": {
+      "indoor": false,
+      "beginner_friendly": true,
+      "supporter_required": true
+    },
+    "plan_outline": [
+      "가볍게 모여 인사",
+      "필름 사진 기본 흐름 같이 해보기",
+      "마무리하면서 결과물/후기 공유"
+    ],
+    "activity_result": null,
+    "skill_topic": "필름 사진",
+    "host_skill_level": 4,
+    "teach_mode": "small_group",
+    "venue_type": "park",
+    "fee_breakdown": {
+      "peer_labor_fee": 12000,
+      "material_cost": 0,
+      "venue_rental": 0,
+      "equipment_rental": 0,
+      "total": 12000,
+      "passthrough_total": 0
+    },
+    "origination_mode": "offer",
+    "originating_voice": "host",
+    "originating_request_summary": null,
+    "responded_at_tick": null,
+    "is_request_matched": false,
+    "had_renegotiation": false,
+    "renegotiation_history": [],
+    "original_target_partner_count": null,
+    "final_partner_count": null,
+    "bonded_partner_count": 0,
+    "bond_updates_at_settlement": [],
+    "friend_upgrades": [],
+    "referrals_triggered": [],
+    "host_reputation_before": null,
+    "host_reputation_after": null,
+    "host_earn_from_this_spot": null,
+    "latitude": 37.2845,
+    "longitude": 127.025,
+    "peer_tone_required": true,
+    "taste_facets": [
+      "필름 색감",
+      "성곽길 구도"
+    ],
+    "recent_obsession": "필름 느낌으로 오래된 길을 찍는 걸 좋아해요",
+    "curiosity_hooks": [
+      "처음 시작하기",
+      "동네에서 같이 해보기"
+    ],
+    "venue_anchors": [
+      {
+        "place_id": 100020,
+        "name": "초록잎 커피",
+        "primary_category": "cafe",
+        "role": "meetup",
+        "lat": 37.2861,
+        "lng": 127.024,
+        "address": "수원시 팔달구 창룡대로 47",
+        "road_address": "수원시 팔달구 창룡대로 47",
+        "confidence": 0.89
+      },
+      {
+        "place_id": 100032,
+        "name": "연무체육공원",
+        "primary_category": "park",
+        "role": "main",
+        "lat": 37.2845,
+        "lng": 127.025,
+        "address": "수원시 팔달구 창룡대로 60",
+        "road_address": "수원시 팔달구 창룡대로 60",
+        "confidence": 0.97
+      },
+      {
+        "place_id": 100017,
+        "name": "느티나무 카페",
+        "primary_category": "cafe",
+        "role": "wrapup",
+        "lat": 37.2853,
+        "lng": 127.022,
+        "address": "수원시 팔달구 연무로 22",
+        "road_address": "수원시 팔달구 연무로 22",
+        "confidence": 0.86
+      }
+    ],
+    "primary_pin": {
+      "place_id": 100032,
+      "name": "연무체육공원",
+      "primary_category": "park",
+      "role": "main",
+      "lat": 37.2845,
+      "lng": 127.025,
+      "address": "수원시 팔달구 창룡대로 60",
+      "road_address": "수원시 팔달구 창룡대로 60",
+      "confidence": 0.97
+    },
+    "plan_steps": [
+      {
+        "time": "14:00",
+        "place": {
+          "place_id": 100020,
+          "name": "초록잎 커피",
+          "primary_category": "cafe",
+          "role": "meetup",
+          "lat": 37.2861,
+          "lng": 127.024,
+          "address": "수원시 팔달구 창룡대로 47",
+          "road_address": "수원시 팔달구 창룡대로 47",
+          "confidence": 0.89
+        },
+        "activity": "가볍게 인사하고 오늘 흐름 소개",
+        "intent": "처음 모이는 사이라 카페에서 스마트폰 사진 흐름을 짧게 안내해요"
+      },
+      {
+        "time": "14:20",
+        "place": {
+          "place_id": 100032,
+          "name": "연무체육공원",
+          "primary_category": "park",
+          "role": "main",
+          "lat": 37.2845,
+          "lng": 127.025,
+          "address": "수원시 팔달구 창룡대로 60",
+          "road_address": "수원시 팔달구 창룡대로 60",
+          "confidence": 0.97
+        },
+        "activity": "스마트폰 사진 본 활동",
+        "intent": "연무체육공원에서 본격적으로 스마트폰 사진 해보기 좋아요"
+      },
+      {
+        "time": "16:30",
+        "place": {
+          "place_id": 100017,
+          "name": "느티나무 카페",
+          "primary_category": "cafe",
+          "role": "wrapup",
+          "lat": 37.2853,
+          "lng": 127.022,
+          "address": "수원시 팔달구 연무로 22",
+          "road_address": "수원시 팔달구 연무로 22",
+          "confidence": 0.86
+        },
+        "activity": "마무리 정리 + 후기 한 줄씩 나누기",
+        "intent": "끝에 가볍게 후기 나누면 다음 모임 기대감이 생겨요"
+      }
+    ],
+    "price_breakdown": {
+      "base_fee": 12000,
+      "included_items": [
+        {
+          "name": "가이드/진행",
+          "value": "호스트의 시간과 진행을 포함"
+        }
+      ],
+      "optional_addons": [],
+      "refund_policy": {
+        "cutoff_hours": 72,
+        "full_refund_until": "활동 3일 전까지",
+        "note": "3~1일 전 50% / 당일 환불 불가"
+      }
+    },
+    "preparation": {
+      "host_provides": [
+        "촬영 가이드"
+      ],
+      "partner_brings": [
+        "스마트폰 (충전 충분히)",
+        "편한 신발"
+      ],
+      "weather_contingency": "강수 30% 이상이면 다음 회차로 미루거나 인근 카페로 변경해요",
+      "safety_notes": []
+    },
+    "poi_fallback_reason": null
+  },
+  {
+    "spot_id": "EVAL_S0003",
+    "region": "연무동",
+    "category": "카페 드로잉",
+    "spot_type": "casual_meetup",
+    "host_persona": {
+      "type": "supporter_neutral",
+      "tone": "편안하고 또래스러운",
+      "communication_style": "구체적인 안내, 부담 없는 어투"
+    },
+    "participants": {
+      "expected_count": 5,
+      "persona_mix": []
+    },
+    "schedule": {
+      "date": "2026-05-24",
+      "start_time": "16:00",
+      "duration_minutes": 180
+    },
+    "budget": {
+      "price_band": 2,
+      "expected_cost_per_person": 15000
+    },
+    "activity_constraints": {
+      "indoor": false,
+      "beginner_friendly": true,
+      "supporter_required": true
+    },
+    "plan_outline": [
+      "가볍게 모여 인사",
+      "카페 드로잉 기본 흐름 같이 해보기",
+      "마무리하면서 결과물/후기 공유"
+    ],
+    "activity_result": null,
+    "skill_topic": "카페 드로잉",
+    "host_skill_level": 4,
+    "teach_mode": "small_group",
+    "venue_type": "park",
+    "fee_breakdown": {
+      "peer_labor_fee": 12000,
+      "material_cost": 0,
+      "venue_rental": 0,
+      "equipment_rental": 0,
+      "total": 12000,
+      "passthrough_total": 0
+    },
+    "origination_mode": "offer",
+    "originating_voice": "host",
+    "originating_request_summary": null,
+    "responded_at_tick": null,
+    "is_request_matched": false,
+    "had_renegotiation": false,
+    "renegotiation_history": [],
+    "original_target_partner_count": null,
+    "final_partner_count": null,
+    "bonded_partner_count": 0,
+    "bond_updates_at_settlement": [],
+    "friend_upgrades": [],
+    "referrals_triggered": [],
+    "host_reputation_before": null,
+    "host_reputation_after": null,
+    "host_earn_from_this_spot": null,
+    "latitude": 37.2845,
+    "longitude": 127.025,
+    "peer_tone_required": true,
+    "taste_facets": [
+      "창가 스케치",
+      "작은 소품"
+    ],
+    "recent_obsession": "카페 창가에서 작은 장면을 그리는 데 꽂혀 있어요",
+    "curiosity_hooks": [
+      "처음 시작하기",
+      "동네에서 같이 해보기"
+    ],
+    "venue_anchors": [
+      {
+        "place_id": 100020,
+        "name": "초록잎 커피",
+        "primary_category": "cafe",
+        "role": "meetup",
+        "lat": 37.2861,
+        "lng": 127.024,
+        "address": "수원시 팔달구 창룡대로 47",
+        "road_address": "수원시 팔달구 창룡대로 47",
+        "confidence": 0.89
+      },
+      {
+        "place_id": 100032,
+        "name": "연무체육공원",
+        "primary_category": "park",
+        "role": "main",
+        "lat": 37.2845,
+        "lng": 127.025,
+        "address": "수원시 팔달구 창룡대로 60",
+        "road_address": "수원시 팔달구 창룡대로 60",
+        "confidence": 0.97
+      },
+      {
+        "place_id": 100017,
+        "name": "느티나무 카페",
+        "primary_category": "cafe",
+        "role": "wrapup",
+        "lat": 37.2853,
+        "lng": 127.022,
+        "address": "수원시 팔달구 연무로 22",
+        "road_address": "수원시 팔달구 연무로 22",
+        "confidence": 0.86
+      }
+    ],
+    "primary_pin": {
+      "place_id": 100032,
+      "name": "연무체육공원",
+      "primary_category": "park",
+      "role": "main",
+      "lat": 37.2845,
+      "lng": 127.025,
+      "address": "수원시 팔달구 창룡대로 60",
+      "road_address": "수원시 팔달구 창룡대로 60",
+      "confidence": 0.97
+    },
+    "plan_steps": [
+      {
+        "time": "14:00",
+        "place": {
+          "place_id": 100020,
+          "name": "초록잎 커피",
+          "primary_category": "cafe",
+          "role": "meetup",
+          "lat": 37.2861,
+          "lng": 127.024,
+          "address": "수원시 팔달구 창룡대로 47",
+          "road_address": "수원시 팔달구 창룡대로 47",
+          "confidence": 0.89
+        },
+        "activity": "가볍게 인사하고 오늘 흐름 소개",
+        "intent": "처음 모이는 사이라 카페에서 스마트폰 사진 흐름을 짧게 안내해요"
+      },
+      {
+        "time": "14:20",
+        "place": {
+          "place_id": 100032,
+          "name": "연무체육공원",
+          "primary_category": "park",
+          "role": "main",
+          "lat": 37.2845,
+          "lng": 127.025,
+          "address": "수원시 팔달구 창룡대로 60",
+          "road_address": "수원시 팔달구 창룡대로 60",
+          "confidence": 0.97
+        },
+        "activity": "스마트폰 사진 본 활동",
+        "intent": "연무체육공원에서 본격적으로 스마트폰 사진 해보기 좋아요"
+      },
+      {
+        "time": "16:30",
+        "place": {
+          "place_id": 100017,
+          "name": "느티나무 카페",
+          "primary_category": "cafe",
+          "role": "wrapup",
+          "lat": 37.2853,
+          "lng": 127.022,
+          "address": "수원시 팔달구 연무로 22",
+          "road_address": "수원시 팔달구 연무로 22",
+          "confidence": 0.86
+        },
+        "activity": "마무리 정리 + 후기 한 줄씩 나누기",
+        "intent": "끝에 가볍게 후기 나누면 다음 모임 기대감이 생겨요"
+      }
+    ],
+    "price_breakdown": {
+      "base_fee": 15000,
+      "included_items": [
+        {
+          "name": "가이드/진행",
+          "value": "호스트의 시간과 진행을 포함"
+        }
+      ],
+      "optional_addons": [],
+      "refund_policy": {
+        "cutoff_hours": 72,
+        "full_refund_until": "활동 3일 전까지",
+        "note": "3~1일 전 50% / 당일 환불 불가"
+      }
+    },
+    "preparation": {
+      "host_provides": [
+        "촬영 가이드"
+      ],
+      "partner_brings": [
+        "스마트폰 (충전 충분히)",
+        "편한 신발"
+      ],
+      "weather_contingency": "강수 30% 이상이면 다음 회차로 미루거나 인근 카페로 변경해요",
+      "safety_notes": []
+    },
+    "poi_fallback_reason": null
+  }
+]

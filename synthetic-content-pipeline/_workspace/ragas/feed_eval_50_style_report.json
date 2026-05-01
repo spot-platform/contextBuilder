@@ -1,0 +1,160 @@
+{
+  "input": "_workspace/ragas/feed_eval_50.jsonl",
+  "summary": {
+    "context_builder": {
+      "n": 50,
+      "distinct_1": 0.2472,
+      "distinct_2": 0.5504,
+      "mean_pairwise_similarity": 0.0466,
+      "generic_phrase_rate": 0.0,
+      "generic_phrase_hits": 0,
+      "generic_phrase_total": 50,
+      "top_generic_phrases": [],
+      "title_pattern_repetition": 0.4,
+      "unique_title_pattern_rate": 0.76,
+      "top_title_patterns": [
+        [
+          "{region} 성곽길 필름 산책",
+          3
+        ],
+        [
+          "{region} 성곽길에서 {skill} 찍어요",
+          3
+        ],
+        [
+          "{region} 창가에서 {skill}",
+          3
+        ],
+        [
+          "{region} 골목에서 {skill} 연습",
+          3
+        ],
+        [
+          "{region} 성곽길에서 {skill} 산책",
+          2
+        ],
+        [
+          "{region} 공원에서 천천히 뛰어봐요",
+          2
+        ],
+        [
+          "{region}에서 버터 향 {skill} 구워봐요",
+          2
+        ],
+        [
+          "{region} 성곽길에서 담는 {skill}",
+          2
+        ],
+        [
+          "{region} 골목, {skill}으로 다시 보기",
+          1
+        ],
+        [
+          "{region} 창가에서 그리는 카페 장면",
+          1
+        ]
+      ],
+      "taste_scene_context_mention_rate": 0.282,
+      "context_keyword_hits_mean": 8.1,
+      "context_keyword_total_mean": 28.6,
+      "avg_title_tokens": 4.84,
+      "avg_summary_tokens": 24.74
+    },
+    "direct_llm": {
+      "n": 50,
+      "distinct_1": 0.1116,
+      "distinct_2": 0.2261,
+      "mean_pairwise_similarity": 0.1316,
+      "generic_phrase_rate": 1.0,
+      "generic_phrase_hits": 50,
+      "generic_phrase_total": 50,
+      "top_generic_phrases": [
+        [
+          "소규모 모임",
+          38
+        ],
+        [
+          "모집합니다",
+          37
+        ],
+        [
+          "모집합니다.",
+          32
+        ],
+        [
+          "예상 인원",
+          27
+        ],
+        [
+          "모임입니다",
+          25
+        ],
+        [
+          "참가비는",
+          20
+        ],
+        [
+          "참가비는 1인",
+          20
+        ],
+        [
+          "함께하실 분",
+          13
+        ],
+        [
+          "함께해요",
+          10
+        ],
+        [
+          "편하게 참여",
+          6
+        ]
+      ],
+      "title_pattern_repetition": 1.0,
+      "unique_title_pattern_rate": 0.18,
+      "top_title_patterns": [
+        [
+          "{region} {skill} 모임",
+          28
+        ],
+        [
+          "{region} {skill} 모임 함께해요",
+          5
+        ],
+        [
+          "{region} {skill} 함께 하실 분 모집합니다",
+          3
+        ],
+        [
+          "{region} {skill} 모임 함께하실 분",
+          3
+        ],
+        [
+          "{region} {skill} 함께해요",
+          3
+        ],
+        [
+          "{region} {skill} 함께하실 분 모집합니다",
+          2
+        ],
+        [
+          "{region} {skill} 산책 모임",
+          2
+        ],
+        [
+          "{region} {skill} 함께하실 분",
+          2
+        ],
+        [
+          "{region} {skill} 모임 참가자 모집",
+          2
+        ]
+      ],
+      "taste_scene_context_mention_rate": 0.055,
+      "context_keyword_hits_mean": 1.6,
+      "context_keyword_total_mean": 28.6,
+      "avg_title_tokens": 4.44,
+      "avg_summary_tokens": 20.8
+    }
+  }
+}
