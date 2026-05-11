@@ -106,7 +106,7 @@ def _compute_counts(
 
 def _density(count: int, area_km2: float | None) -> float:
     if area_km2 is None or area_km2 <= 0:
-        return 0.0
+        return float(count)  # area 미입력 시 raw count로 상대 비교
     return count / area_km2
 
 
