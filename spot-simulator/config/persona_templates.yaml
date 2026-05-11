@@ -60,7 +60,7 @@ night_social:
   # --- Phase 1~3 legacy fields (unchanged) ---
   host_score: 0.70
   join_score: 0.75
-  home_region: "emd_yeonmu"
+  home_region: "emd_ingye"
   preferred_categories: ["food", "bar", "cafe"]
   budget_level: 2
   time_preferences:
@@ -96,7 +96,7 @@ weekend_explorer:
   # --- Phase 1~3 legacy fields (unchanged) ---
   host_score: 0.50
   join_score: 0.80
-  home_region: "emd_sinchon"
+  home_region: "emd_gwanggyo"
   preferred_categories: ["exercise", "nature", "cafe"]
   budget_level: 2
   time_preferences:
@@ -244,7 +244,7 @@ freelancer_daytime:
   # --- Phase 1~3 legacy fields ---
   host_score: 0.55
   join_score: 0.65
-  home_region: "emd_sinchon"
+  home_region: "emd_yeongtong"
   preferred_categories: ["cafe", "learning", "creative"]
   budget_level: 2
   time_preferences:
@@ -284,7 +284,7 @@ parenting_parent:
   # --- Phase 1~3 legacy fields ---
   host_score: 0.50
   join_score: 0.60
-  home_region: "emd_yeonmu"
+  home_region: "emd_hwaseo"
   preferred_categories: ["home", "cafe", "park"]
   budget_level: 2
   time_preferences:
@@ -324,7 +324,7 @@ senior_active:
   # --- Phase 1~3 legacy fields ---
   host_score: 0.60
   join_score: 0.70
-  home_region: "emd_jangan"
+  home_region: "emd_maetan"
   preferred_categories: ["exercise", "nature", "learning"]
   budget_level: 2
   time_preferences:
