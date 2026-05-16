@@ -464,6 +464,7 @@ def build_peer_content_spec(
     region_name = "알 수 없음"
     region_center_lat: Optional[float] = None
     region_center_lng: Optional[float] = None
+    region_character: dict = {}
     if region_id and region_id in region_features:
         rfeat = region_features[region_id]
         region_name = rfeat.get("region_name", region_id)
@@ -471,6 +472,13 @@ def build_peer_content_spec(
             region_center_lat = float(rfeat["center_lat"])
         if rfeat.get("center_lng") is not None:
             region_center_lng = float(rfeat["center_lng"])
+        region_character = {
+            k: rfeat[k]
+            for k in ("density_cafe", "density_food", "density_bar",
+                      "density_nature", "density_exercise",
+                      "night_friendliness", "group_friendliness")
+            if k in rfeat
+        }
     elif region_id:
         region_name = region_id
 
@@ -892,6 +900,7 @@ def build_peer_content_spec(
         price_breakdown=price_breakdown_draft,
         preparation=preparation_draft,
         poi_fallback_reason=poi_fallback_reason,
+        region_character=region_character,
     )
 
 

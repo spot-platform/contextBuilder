@@ -52,6 +52,15 @@
 - 실제 결과: 참여 {{ activity_result.actual_participants }}명 / 노쇼 {{ activity_result.no_show_count }}명 / 전반 {{ activity_result.overall_sentiment }}
 {% endif %}
 
+{% if region_character %}
+## 지역 특성 (톤 힌트 — 사실로 단정하지 말고 자연스럽게 반영)
+{% if region_character.density_cafe is defined and region_character.density_cafe > 0.6 %}카페/커피숍이 많은 동네 → 카페 중심 모임 톤 자연스러움.{% endif %}
+{% if region_character.density_nature is defined and region_character.density_nature > 0.6 %}공원·자연환경이 풍부한 동네 → 야외/자연 친화 톤 자연스러움.{% endif %}
+{% if region_character.density_food is defined and region_character.density_food > 0.75 %}식당/먹거리가 많은 동네 → 음식 연계 활동 톤 자연스러움.{% endif %}
+{% if region_character.night_friendliness is defined and region_character.night_friendliness > 0.7 %}저녁·야간 활동이 활발한 동네 → 퇴근 후/저녁 모임 톤 자연스러움.{% endif %}
+{% if region_character.group_friendliness is defined and region_character.group_friendliness > 0.7 %}모임·그룹 활동 친화 동네.{% endif %}
+{% endif %}
+
 ## 호스트 취향 색깔 (이 카드에서 반드시 살릴 것)
 - 같은 스킬이라도 호스트마다 색이 다르다. 아래 컨텍스트의 **결**을 살리되, 문장을 통째로 옮기지는 마라.
 - `recent_obsession` 의 의미는 살리되 본인 어휘로 다시 쓴다 (한 어구를 그대로 따옴표 인용 X).

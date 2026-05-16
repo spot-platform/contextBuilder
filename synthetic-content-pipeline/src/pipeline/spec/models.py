@@ -346,6 +346,12 @@ class ContentSpec(BaseModel):
         description='None | "region_empty" | "no_match" | "skill_unmapped" 중 하나.',
     )
 
+    # 지역 밀도 특성 — region_features.json 에서 추출, LLM 톤 반영용.
+    region_character: dict = Field(
+        default_factory=dict,
+        description="density_cafe/food/nature/bar, night_friendliness 등 동별 특성. 프롬프트 톤 힌트.",
+    )
+
 
 # ---------------------------------------------------------------------------
 # FE-facing public enums (2026-04-24 회의 반영)
