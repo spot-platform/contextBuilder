@@ -473,7 +473,7 @@ def build_peer_content_spec(
         if rfeat.get("center_lng") is not None:
             region_center_lng = float(rfeat["center_lng"])
         region_character = {
-            k: rfeat[k]
+            k: float(rfeat[k])
             for k in ("density_cafe", "density_food", "density_bar",
                       "density_nature", "density_exercise",
                       "night_friendliness", "group_friendliness")

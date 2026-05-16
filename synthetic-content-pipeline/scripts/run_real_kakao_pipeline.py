@@ -2,7 +2,7 @@
 
 Auto Mode: lcb 의 SQLAlchemy / Postgres / Alembic 인프라 없이도 동작.
 lcb 의 KakaoLocalClient 와 category_mapping_rule 룰을 *그대로* 적용해서
-실제 수원 POI 데이터를 ``data/poi/poi_normalized_real.json`` 으로 저장한다.
+실제 수원 POI 데이터를 ``data/poi/poi_normalized_v1.json`` 으로 저장한다.
 
 차이점 (정공법 대비):
 - DB 미사용 → in-memory dedup
@@ -35,7 +35,7 @@ SCP_ROOT = Path(__file__).resolve().parents[1]
 REGION_CSV = LCB_ROOT / "data" / "region_master_suwon.csv"
 CATEGORY_MAPPING_JSON = LCB_ROOT / "data" / "category_mapping_seed.json"
 
-OUT_PATH = SCP_ROOT / "data" / "poi" / "poi_normalized_real.json"
+OUT_PATH = SCP_ROOT / "data" / "poi" / "poi_normalized_v1.json"
 
 # 기본 수집 대상 — 수원의 도심 / 외곽 / 도서관 등 다양한 region 3 개.
 TARGET_EMD = ("연무동", "인계동", "매탄1동")
@@ -329,6 +329,9 @@ def _load_new_regions() -> list[tuple[str, _Region]]:
                 else:
                     log.warning("CSV에서 %s 를 찾지 못했습니다", emd)
         else:
+            if canonical not in MANUAL_REGION_COORDS:
+                log.warning("수동 좌표가 없습니다: %s — 건너뜁니다", canonical)
+                continue
             lat, lng = MANUAL_REGION_COORDS[canonical]
             out.append((canonical, _Region(
                 region_code="",
