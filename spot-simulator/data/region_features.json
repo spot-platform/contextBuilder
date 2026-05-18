@@ -65,7 +65,7 @@
   },
   "emd_maetan": {
     "region_id": "emd_maetan",
-    "region_name": "매탄동",
+    "region_name": "매탄1동",
     "target_city": "suwon",
     "density_food": 0.6,
     "density_cafe": 0.58,

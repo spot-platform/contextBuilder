@@ -103,6 +103,8 @@ COMMON_VARIABLE_KEYS: frozenset = frozenset({
     "plan_steps",
     "price_breakdown",
     "preparation",
+    # ── 지역 특성 (Phase 3 고도화) ────────────────────────────────────
+    "region_character",
 })
 
 
@@ -332,6 +334,7 @@ class BaseGenerator:
                 if spec.preparation is not None
                 else None
             ),
+            "region_character": spec.region_character,
         }
 
         # 변수 표준 일관성 검사 (개발용 sanity assert).

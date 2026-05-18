@@ -2,7 +2,7 @@
 
 Auto Mode: lcb 의 SQLAlchemy / Postgres / Alembic 인프라 없이도 동작.
 lcb 의 KakaoLocalClient 와 category_mapping_rule 룰을 *그대로* 적용해서
-실제 수원 POI 데이터를 ``data/poi/poi_normalized_real.json`` 으로 저장한다.
+실제 수원 POI 데이터를 ``data/poi/poi_normalized_v1.json`` 으로 저장한다.
 
 차이점 (정공법 대비):
 - DB 미사용 → in-memory dedup
@@ -35,10 +35,26 @@ SCP_ROOT = Path(__file__).resolve().parents[1]
 REGION_CSV = LCB_ROOT / "data" / "region_master_suwon.csv"
 CATEGORY_MAPPING_JSON = LCB_ROOT / "data" / "category_mapping_seed.json"
 
-OUT_PATH = SCP_ROOT / "data" / "poi" / "poi_normalized_real.json"
+OUT_PATH = SCP_ROOT / "data" / "poi" / "poi_normalized_v1.json"
 
 # 기본 수집 대상 — 수원의 도심 / 외곽 / 도서관 등 다양한 region 3 개.
 TARGET_EMD = ("연무동", "인계동", "매탄1동")
+
+# 추가 수집 대상: canonical_name → CSV emd 목록 (세분동 → 큰 동으로 합침)
+# CSV에 없는 동은 None, MANUAL_REGION_COORDS에서 좌표 직접 지정.
+NEW_REGION_MAP: dict[str, list[str] | None] = {
+    "광교동": ["광교1동", "광교2동"],
+    "영통동": ["영통1동", "영통2동", "영통3동"],
+    "화서동": ["화서1동", "화서2동"],
+    "장안동": None,
+    "신촌동": None,
+}
+
+# CSV에 없는 동의 중심 좌표 (spot-simulator/data/region_features.json 기준)
+MANUAL_REGION_COORDS: dict[str, tuple[float, float]] = {
+    "장안동": (37.303, 127.017),
+    "신촌동": (37.286, 127.017),
+}
 
 # Kakao Local search/category 코드 (lcb plan §5-4).
 CATEGORY_CODES: tuple[str, ...] = ("FD6", "CE7", "CT1", "AT4", "AC5")
@@ -283,6 +299,50 @@ def _load_target_regions(target_emds: Sequence[str]) -> list[_Region]:
     return out
 
 
+def _load_new_regions() -> list[tuple[str, _Region]]:
+    """NEW_REGION_MAP 기반으로 (canonical_name, _Region) 목록 반환.
+
+    CSV 있는 동: 세분동 각각 로드 후 canonical_name 부여.
+    CSV 없는 동: MANUAL_REGION_COORDS 좌표로 직접 생성.
+    """
+    # CSV emd → row 매핑 미리 빌드
+    csv_rows: dict[str, dict] = {}
+    with REGION_CSV.open("r", encoding="utf-8") as fh:
+        body = "\n".join(line for line in fh if not line.startswith("#") and line.strip())
+    for row in csv.DictReader(body.splitlines()):
+        if row.get("center_lng") and row.get("center_lat"):
+            csv_rows[row["emd"]] = row
+
+    out: list[tuple[str, _Region]] = []
+    for canonical, csv_emds in NEW_REGION_MAP.items():
+        if csv_emds is not None:
+            for emd in csv_emds:
+                row = csv_rows.get(emd)
+                if row:
+                    out.append((canonical, _Region(
+                        region_code=row["region_code"],
+                        sigungu=row["sigungu"],
+                        emd=emd,
+                        center_lng=float(row["center_lng"]),
+                        center_lat=float(row["center_lat"]),
+                    )))
+                else:
+                    log.warning("CSV에서 %s 를 찾지 못했습니다", emd)
+        else:
+            if canonical not in MANUAL_REGION_COORDS:
+                log.warning("수동 좌표가 없습니다: %s — 건너뜁니다", canonical)
+                continue
+            lat, lng = MANUAL_REGION_COORDS[canonical]
+            out.append((canonical, _Region(
+                region_code="",
+                sigungu="수원시",
+                emd=canonical,
+                center_lng=lng,
+                center_lat=lat,
+            )))
+    return out
+
+
 # ---------------------------------------------------------------------------
 # Main pipeline
 # ---------------------------------------------------------------------------
@@ -299,9 +359,14 @@ def run_pipeline(
         raise SystemExit(f"no matching regions for {target_emds!r}")
     log.info("regions: %s", [r.emd for r in regions])
 
+    # NEW_REGION_MAP 추가 수집 (canonical_name과 함께 관리)
+    new_region_pairs = _load_new_regions()
+    log.info("new regions: %s", [c for c, _ in new_region_pairs])
+
     client = KakaoLocalClient(api_key)
-    raw_buf: list[tuple[_Region, dict, str, Optional[str]]] = []
-    # raw_buf: (region, doc, search_type, search_query)
+    # raw_buf: (canonical_name_or_none, region, doc, search_type, search_query)
+    # canonical_name_or_none=None 이면 기존 방식(region.emd 그대로 사용)
+    raw_buf: list[tuple[Optional[str], _Region, dict, str, Optional[str]]] = []
 
     try:
         for region in regions:
@@ -312,7 +377,7 @@ def run_pipeline(
                 )
                 log.info("  category %s → %d docs", code, len(docs))
                 for d in docs:
-                    raw_buf.append((region, d, "category", None))
+                    raw_buf.append((None, region, d, "category", None))
             for q in KEYWORD_QUERIES:
                 docs = client.search_keyword(
                     q, x=region.center_lng, y=region.center_lat, radius=radius,
@@ -320,7 +385,25 @@ def run_pipeline(
                 if docs:
                     log.info("  keyword '%s' → %d docs", q, len(docs))
                 for d in docs:
-                    raw_buf.append((region, d, "keyword", q))
+                    raw_buf.append((None, region, d, "keyword", q))
+
+        for canonical, region in new_region_pairs:
+            log.info("--- collecting %s (→ %s) ---", region.emd, canonical)
+            for code in CATEGORY_CODES:
+                docs = client.search_category(
+                    code, x=region.center_lng, y=region.center_lat, radius=radius,
+                )
+                log.info("  category %s → %d docs", code, len(docs))
+                for d in docs:
+                    raw_buf.append((canonical, region, d, "category", None))
+            for q in KEYWORD_QUERIES:
+                docs = client.search_keyword(
+                    q, x=region.center_lng, y=region.center_lat, radius=radius,
+                )
+                if docs:
+                    log.info("  keyword '%s' → %d docs", q, len(docs))
+                for d in docs:
+                    raw_buf.append((canonical, region, d, "keyword", q))
     finally:
         client.close()
 
@@ -330,11 +413,12 @@ def run_pipeline(
     mapped_count = 0
     unmapped_count = 0
 
-    for region, doc, _stype, sq in raw_buf:
+    for canonical, region, doc, _stype, sq in raw_buf:
         pid = str(doc.get("id"))
         if pid in seen or not pid or pid == "None":
             continue
         seen.add(pid)
+        region_emd_stored = canonical if canonical is not None else region.emd
 
         primary, tags, confidence = _map_place(doc, rules, sq)
         if primary == "other":
@@ -352,7 +436,7 @@ def run_pipeline(
         normalized.append(
             {
                 "place_id": int(pid) if pid.isdigit() else hash(pid) & 0x7FFFFFFF,
-                "region_emd": region.emd,
+                "region_emd": region_emd_stored,
                 "name": doc.get("place_name") or "",
                 "primary_category": primary,
                 "sub_category": doc.get("category_name") or None,
