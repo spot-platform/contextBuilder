@@ -7,6 +7,8 @@ batch_publish_peer_500.py 의 확장판:
      균등에 가까운 random 샘플로 500개 선택 (seed 고정).
   4. **좌표** — ContentSpec.latitude/longitude 를 통해 feed/detail row 에
      자동 기록 (publisher 가 spec.latitude/longitude 를 읽어 DB insert).
+  5. **manifest 고정 모드** (--manifest) — 시뮬레이터 publish manifest 의
+     spot_id 목록을 그대로 사용. 지도↔AI피드 spot_id 정합성 보장용.
 
 출력:
     _workspace/mvp_feed.db                    ← 최종 DB
@@ -15,6 +17,10 @@ batch_publish_peer_500.py 의 확장판:
 실행:
     python3 scripts/batch_publish_mvp_500.py --limit 500
     python3 scripts/batch_publish_mvp_500.py --limit 500 --mode stub   # dry-run
+
+    # manifest 고정 모드 (지도↔피드 spot_id 일치 보장)
+    python3 scripts/batch_publish_mvp_500.py \\
+        --manifest ../../spot-simulator/publish/output/sim_run_peer_v1.manifest.json
 """
 from __future__ import annotations
 
@@ -57,6 +63,26 @@ from pipeline.spec.builder import build_content_spec  # noqa: E402
 EVENT_LOG = ROOT.parent / "spot-simulator" / "output" / "event_log.jsonl"
 OUT_DIR = ROOT / "_workspace" / "scp_05_qa"
 DB_PATH = ROOT / "_workspace" / "mvp_feed.db"
+
+
+def _spots_from_manifest(manifest_path: Path) -> List[str]:
+    """시뮬레이터 publish manifest에서 spot place_id 목록을 순서대로 반환.
+
+    manifest의 places 배열 중 place_type=="spot" 항목만 추출.
+    이 목록으로 LLM을 돌리면 demo_run_001.* 와 spot_id가 일치해
+    지도 클릭 → AI 피드 연결이 가능해진다 (이슈 #7).
+    """
+    with manifest_path.open(encoding="utf-8") as f:
+        manifest = json.load(f)
+    spot_ids = [
+        p["place_id"]
+        for p in manifest.get("places", [])
+        if p.get("place_type") == "spot"
+    ]
+    if not spot_ids:
+        raise ValueError(f"manifest에 place_type=spot 항목이 없음: {manifest_path}")
+    print(f"manifest에서 {len(spot_ids)}개 spot_id 로드: {manifest_path.name}")
+    return spot_ids
 
 
 def _diverse_sample(limit: int, seed: int) -> List[str]:
@@ -121,6 +147,16 @@ def main() -> int:
         default=DB_PATH,
         help="SQLite file path (default: _workspace/mvp_feed.db)",
     )
+    ap.add_argument(
+        "--manifest",
+        type=Path,
+        default=None,
+        help=(
+            "시뮬레이터 publish manifest JSON 경로. 지정하면 manifest의 spot_id를 "
+            "그대로 사용해 지도↔AI피드 spot_id 정합성을 보장한다 (이슈 #7). "
+            "생략 시 기존 _diverse_sample() 동작."
+        ),
+    )
     args = ap.parse_args()
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -131,7 +167,16 @@ def main() -> int:
     print(f"db_path:         {args.db_path}")
     print(f"dataset_version: {args.dataset_version}")
 
-    spot_ids = _diverse_sample(args.limit, args.seed)
+    if args.manifest is not None:
+        if not args.manifest.exists():
+            print(f"FATAL: manifest not found: {args.manifest}")
+            return 1
+        spot_ids = _spots_from_manifest(args.manifest)
+        print(f"모드: manifest 고정 (spot_id 정합성 보장)")
+    else:
+        spot_ids = _diverse_sample(args.limit, args.seed)
+        print(f"모드: 다양성 랜덤 샘플링 (seed={args.seed})")
+
     if not spot_ids:
         print("FATAL: no spots sampled from event_log")
         return 1
