@@ -95,7 +95,14 @@ from engine.executors import (
     execute_view_feed,
     try_auto_match,
 )
+from engine.hotspot_signal import build_create_spot_signal_payload
 from engine.lifecycle import process_lifecycle
+from engine.mobility import (
+    PendingReturn,
+    process_pending_returns,
+    schedule_returns_for_completed_spot,
+)
+from engine.scheduling import pick_scheduled_tick, pick_spot_duration
 from engine.settlement import process_settlement, resolve_disputes
 
 # ── Peer-pivot Phase B (append-only) — these modules are only imported
@@ -685,7 +692,6 @@ def _run_peer(
     All randomness flows through the injected `rng` for determinism.
     """
 
-    del region_features  # reserved for p_teach region density Phase C
     del persona_affinity  # captured by the caller via the agent factory
 
     reset_event_counter(1)
@@ -695,6 +701,8 @@ def _run_peer(
 
     spots: list[Spot] = []
     open_requests: list[SkillRequest] = []
+    pending_returns: list[PendingReturn] = []
+    returns_scheduled_for: set[str] = set()
     event_log: list[EventLog] = []
 
     # Enrich agents with peer fields from persona yaml once per run.
@@ -746,6 +754,22 @@ def _run_peer(
         # transparent to process_lifecycle (it only touches Phase 2 fields).
         if phase >= 2:
             process_lifecycle(spots, tick, event_log, agents_by_id, rng=rng)
+            for spot in spots:
+                if spot.completed_at_tick != tick:
+                    continue
+                if spot.spot_id in returns_scheduled_for:
+                    continue
+                pending_returns.extend(
+                    schedule_returns_for_completed_spot(
+                        spot=spot,
+                        agents_by_id=agents_by_id,
+                        tick=tick,
+                        rng=rng,
+                        config=config,
+                    )
+                )
+                returns_scheduled_for.add(spot.spot_id)
+            event_log.extend(process_pending_returns(pending_returns, tick))
 
         # 3. (phase>=3) settlement
         if phase >= 3:
@@ -788,6 +812,8 @@ def _run_peer(
             catalog=skills_catalog,
             spot_id_generator=_alloc_spot_id,
             new_spots_collector=new_from_requests,
+            config=config,
+            region_features=region_features,
         )
         event_log.extend(req_events)
         for s in new_from_requests:
@@ -898,7 +924,23 @@ def _run_peer(
                         expected_partners=expected_partners,
                         catalog=skills_catalog,
                     )
-                    scheduled = tick + rng.randint(6, 24)
+                    scheduled = pick_scheduled_tick(
+                        current_tick=tick,
+                        host=agent,
+                        skill=teach_skill,
+                        teach_mode=teach_mode,
+                        venue_type=venue_type,
+                        origination_mode="offer",
+                        rng=rng,
+                        config=config,
+                    )
+                    duration = pick_spot_duration(
+                        skill=teach_skill,
+                        teach_mode=teach_mode,
+                        venue_type=venue_type,
+                        rng=rng,
+                        config=config,
+                    )
                     new_spot = Spot(
                         spot_id=_alloc_spot_id(),
                         host_agent_id=agent.agent_id,
@@ -908,6 +950,7 @@ def _run_peer(
                         min_participants=2,
                         scheduled_tick=scheduled,
                         created_at_tick=tick,
+                        duration=duration,
                         skill_topic=teach_skill,
                         host_skill_level=skills[teach_skill].level,
                         fee_breakdown=fb,
@@ -921,7 +964,7 @@ def _run_peer(
                         # FE handoff 2026-04-24: deterministic expected-close.
                         # Default to scheduled_tick + duration; SPOT_RENEGOTIATED
                         # is the only path that rewrites this.
-                        expected_closed_at_tick=scheduled + 2,
+                        expected_closed_at_tick=scheduled + duration,
                     )
                     spots.append(new_spot)
                     open_teach_spots.append(new_spot)
@@ -944,6 +987,9 @@ def _run_peer(
                                 # instead of scaling-down catalog defaults.
                                 "host_skill_level": skills[teach_skill].level,
                                 "capacity": new_spot.capacity,
+                                "schedule_lead_ticks": scheduled - tick,
+                                "duration_ticks": duration,
+                                "schedule_reason": f"{new_spot.origination_mode}:{teach_mode}:{venue_type}",
                                 "fee_breakdown": {
                                     "peer_labor_fee": fb.peer_labor_fee,
                                     "material_cost": fb.material_cost,
@@ -960,6 +1006,11 @@ def _run_peer(
                                 "scheduled_tick": scheduled,
                                 "expected_closed_at_tick": new_spot.expected_closed_at_tick,
                                 "intent": "offer",
+                                **build_create_spot_signal_payload(
+                                    spot=new_spot,
+                                    host=agent,
+                                    region_features=region_features,
+                                ),
                             },
                         )
                     )
@@ -995,6 +1046,13 @@ def _run_peer(
                                 # `spot.participant_joined` requires tick so
                                 # the BE publisher can convert to ms.
                                 "joined_at_tick": tick,
+                                "join_lead_ticks": target.scheduled_tick - tick,
+                                "participant_count_after_join": len(target.participants),
+                                "capacity": target.capacity,
+                                "join_reason_tags": [
+                                    "skill_match",
+                                    "same_region" if agent.home_region_id == target.region_id else "nearby_region",
+                                ],
                                 "persona_id": agent.agent_id,
                             },
                         )
@@ -1132,6 +1190,14 @@ def _run_peer(
                             )
                         )
 
+    # Drain return-home events scheduled near the end of the run so every
+    # PERSONA_LEAVE_SPOT has a simulator-owned return counterpart. These
+    # tail ticks may be >= total_ticks; consumers should use event tick values.
+    tail_tick = total_ticks
+    while pending_returns:
+        event_log.extend(process_pending_returns(pending_returns, tail_tick))
+        tail_tick += 1
+
     return event_log, spots
 
 
@@ -1156,7 +1222,11 @@ def run_phase(phase: int, config_path: Path) -> None:
         raise KeyError(
             f"simulation_config at {config_path} has no '{phase_key}' block"
         )
-    phase_cfg = sim_cfg[phase_key]
+    phase_cfg = dict(sim_cfg[phase_key])
+    # Keep top-level peer knobs available to _run_peer while preserving the
+    # existing per-phase blocks for agents/ticks/seed.
+    if isinstance(sim_cfg.get("peer"), dict):
+        phase_cfg["peer"] = sim_cfg.get("peer", {})
 
     project_root = config_path.parent.parent
     persona_templates_path = project_root / "config" / "persona_templates.yaml"

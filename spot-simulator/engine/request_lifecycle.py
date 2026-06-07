@@ -17,6 +17,8 @@ import random
 from typing import Callable, Dict, List, Mapping, Sequence
 
 from engine.fee import suggest_fee_breakdown
+from engine.hotspot_signal import build_create_spot_signal_payload
+from engine.scheduling import pick_scheduled_tick, pick_spot_duration
 from engine.time_availability import time_availability
 from engine._peer_math import level_floor_to_teach
 from models.agent import AgentState
@@ -148,6 +150,8 @@ def create_teach_spot_from_request(
     *,
     catalog: Mapping[str, Mapping],
     spot_id_generator: Callable[[], str],
+    rng: random.Random,
+    config: Mapping | None = None,
 ) -> Spot:
     """plan §3-request: 매칭 성립 시 Spot 을 생성. 호출자가 이 Spot 을
     spots 리스트에 append 해야 한다.
@@ -173,7 +177,23 @@ def create_teach_spot_from_request(
 
     # legacy category 필드 — request 경로는 "teach" 로 고정. legacy path 의
     # category_match 어댑터는 peer 경로를 타지 않으므로 충돌 없음.
-    scheduled = tick + _DEFAULT_SCHEDULED_LEAD
+    scheduled = pick_scheduled_tick(
+        current_tick=tick,
+        host=host,
+        skill=request.skill_topic,
+        teach_mode=request.preferred_teach_mode,
+        venue_type=request.preferred_venue,
+        origination_mode="request_matched",
+        rng=rng,
+        config=config,
+    )
+    duration = pick_spot_duration(
+        skill=request.skill_topic,
+        teach_mode=request.preferred_teach_mode,
+        venue_type=request.preferred_venue,
+        rng=rng,
+        config=config,
+    )
     spot = Spot(
         spot_id=spot_id,
         host_agent_id=host.agent_id,
@@ -183,6 +203,7 @@ def create_teach_spot_from_request(
         min_participants=2,
         scheduled_tick=scheduled,
         created_at_tick=tick,
+        duration=duration,
         skill_topic=request.skill_topic,
         host_skill_level=host_level,
         fee_breakdown=fb,
@@ -197,7 +218,7 @@ def create_teach_spot_from_request(
         responded_at_tick=tick,
         # FE handoff 2026-04-24: deterministic expected-close for FE
         # `spot.created` event, mirroring the offer path in runner.py.
-        expected_closed_at_tick=scheduled + 2,
+        expected_closed_at_tick=scheduled + duration,
     )
     # learner 자동 참여 (본인이 올린 요청이니 당연히 join).
     spot.participants.append(request.learner_agent_id)
@@ -218,6 +239,8 @@ def process_open_requests(
     catalog: Mapping[str, Mapping],
     spot_id_generator: Callable[[], str],
     new_spots_collector: List[Spot],
+    config: Mapping | None = None,
+    region_features: Mapping[str, Mapping] | None = None,
 ) -> List[EventLog]:
     """매 tick 호출되는 request_lifecycle top-level 처리기.
 
@@ -287,6 +310,8 @@ def process_open_requests(
                 tick,
                 catalog=catalog,
                 spot_id_generator=spot_id_generator,
+                rng=rng,
+                config=config,
             )
             new_spots_collector.append(spot)
 
@@ -335,6 +360,9 @@ def process_open_requests(
                         "scheduled_tick": spot.scheduled_tick,
                         "expected_closed_at_tick": spot.expected_closed_at_tick,
                         "capacity": spot.capacity,
+                        "schedule_lead_ticks": spot.scheduled_tick - tick,
+                        "duration_ticks": spot.duration,
+                        "schedule_reason": f"{spot.origination_mode}:{spot.teach_mode}:{spot.venue_type}",
                         "host_skill_level": spot.host_skill_level,
                         "fee_breakdown": {
                             "peer_labor_fee": spot.fee_breakdown.peer_labor_fee,
@@ -348,6 +376,11 @@ def process_open_requests(
                         # 보이지만, FE 가 voice 구분이 필요할 때 참고할 수 있도록
                         # intent 필드를 포함한다.
                         "intent": "request",
+                        **build_create_spot_signal_payload(
+                            spot=spot,
+                            host=host,
+                            region_features=region_features or {},
+                        ),
                     },
                 )
             )
