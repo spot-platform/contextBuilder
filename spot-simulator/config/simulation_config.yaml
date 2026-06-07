@@ -13,6 +13,34 @@ peer:
   max_open_requests_per_learner: 2    # 학생 1 명당 동시 open 요청 상한
   region_match_bonus: 1.0             # home_region 동일 시 가중 (p_learn)
 
+  # Phase-2 map realism: the simulator owns timing/location signals so FE can
+  # reduce tick/lifespan inference. All knobs are deterministic under seed.
+  temporal_variance:
+    enabled: true
+    schedule_lead_ticks:
+      offer: [6, 36]
+      request_matched: [4, 30]
+    duration_ticks:
+      "1:1": [1, 2]
+      small_group: [2, 4]
+      workshop: [3, 6]
+    persona_rhythm_offsets:
+      default: [0, 5]
+      morning: [0, 3]
+      social: [1, 7]
+      night: [6, 14]
+      homebody: [0, 2]
+    return_home:
+      linger_ticks_by_persona:
+        default: [0, 3]
+        homebody: [0, 1]
+        social: [1, 4]
+        night_social: [2, 6]
+      travel_ticks:
+        same_region: [0, 1]
+        nearby_region: [1, 2]
+        far_region: [2, 4]
+
 phase_1:
   agents: 50
   total_ticks: 48
