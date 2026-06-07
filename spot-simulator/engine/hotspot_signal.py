@@ -26,11 +26,18 @@ _CATEGORY_BY_VENUE = {
 
 def _unit(seed: str, salt: str) -> float:
     digest = hashlib.sha256(f"{seed}:{salt}".encode("utf-8")).hexdigest()
-    return int(digest[:8], 16) / 0xFFFFFFFF
+    return int(digest[:8], 16) / 0x100000000
 
 
 def _jitter(center: float, seed: str, salt: str, radius: float = 0.004) -> float:
     return center + (_unit(seed, salt) - 0.5) * radius
+
+
+def _float_feature(region: Mapping, key: str, default: float = 0.5) -> float:
+    value = region.get(key, default)
+    if value is None:
+        return default
+    return float(value)
 
 
 def build_map_anchor_payload(
@@ -90,11 +97,11 @@ def build_hotspot_signal_payload(
         "participant_target_count": spot.capacity,
         "reason_tags": reason_tags,
         "region_character": {
-            "density_cafe": region.get("density_cafe"),
-            "density_food": region.get("density_food"),
-            "density_nature": region.get("density_nature"),
-            "night_friendliness": region.get("night_friendliness"),
-            "group_friendliness": region.get("group_friendliness"),
+            "density_cafe": _float_feature(region, "density_cafe"),
+            "density_food": _float_feature(region, "density_food"),
+            "density_nature": _float_feature(region, "density_nature"),
+            "night_friendliness": _float_feature(region, "night_friendliness"),
+            "group_friendliness": _float_feature(region, "group_friendliness"),
         },
     }
 
